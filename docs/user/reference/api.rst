@@ -1,14 +1,14 @@
 API
 ===
 
-.. automodule:: python3_pip_skeleton
+.. automodule:: expeye_utils
 
-    ``python3_pip_skeleton``
+    ``expeye_utils``
     -----------------------------------
 
-This is the internal API reference for python3_pip_skeleton
+This is the internal API reference for expeye_utils
 
-.. data:: python3_pip_skeleton.__version__
+.. data:: expeye_utils.__version__
     :type: str
 
     Version number as calculated by https://github.com/pypa/setuptools_scm
