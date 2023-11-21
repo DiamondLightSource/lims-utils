@@ -25,8 +25,9 @@ Source code    https://github.com/DiamondLightSource/lims-utils
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
     :target: https://opensource.org/licenses/Apache-2.0
     :alt: Apache License
+
 ..
     Anything below this line is used when viewing README.rst and will be replaced
     when included in index.rst
 
-See https://DiamondLightSource.github.io/python3-pip-skeleton-cli for more detailed documentation.
+See https://DiamondLightSource.github.io/expeye_utils for more detailed documentation.
