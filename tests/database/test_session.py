@@ -1,8 +1,8 @@
-from fastapi import HTTPException
-from expeye_utils.database import Database, get_session
-from fastapi import Request
-import pytest
 from unittest.mock import patch
+
+import pytest
+
+from expeye_utils.database import Database, get_session
 
 
 class FakeSession:
