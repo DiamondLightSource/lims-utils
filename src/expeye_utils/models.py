@@ -1,4 +1,5 @@
 from typing import Generic, Sequence, TypeVar
+
 from fastapi import Query
 from pydantic import BaseModel, ConfigDict
 
