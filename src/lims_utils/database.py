@@ -19,6 +19,7 @@ class Database:
     def session(cls) -> Session:
         try:
             current_session = _inner_session.get()
+            print(current_session)
             if current_session is None:
                 raise AttributeError
             return current_session
@@ -34,6 +35,7 @@ def get_session(session_maker: sessionmaker[Session]) -> Generator[Session, None
     :params sessionmaker[:class:`Session`] session_maker: Session maker, returned by SQLAlchemy ORM's `sessionmaker`
     builder."""
     inner_db_session = session_maker()
+    print(inner_db_session)
     try:
         Database.set_session(inner_db_session)
         yield inner_db_session
