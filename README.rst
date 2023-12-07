@@ -14,7 +14,7 @@ Source code    https://github.com/DiamondLightSource/lims-utils
     :target: https://github.com/DiamondLightSource/lims-utils/actions/workflows/code.yml
     :alt: Code CI
 
-.. |coverage| image:: https://codecov.io/gh/DiamondLightSource/lims-utils/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/DiamondLightSource/lims-utils/graph/badge.svg?token=JNTP2oGsLB 
     :target: https://codecov.io/gh/DiamondLightSource/lims-utils
     :alt: Test Coverage
 
