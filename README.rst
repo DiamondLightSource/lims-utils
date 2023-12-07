@@ -14,8 +14,8 @@ Source code    https://github.com/DiamondLightSource/lims-utils
     :target: https://gitlab.diamond.ac.uk/expeye/utils/-/pipelines
     :alt: Code CI
 
-.. |coverage| image:: https://gitlab.diamond.ac.uk/expeye/utils/badges/master/coverage.svg
-    :target: https://gitlab.diamond.ac.uk/expeye/utils/-/pipelines
+.. |coverage| image:: https://codecov.io/gh/DiamondLightSource/lims-utils/graph/badge.svg
+    :target: https://codecov.io/gh/DiamondLightSource/lims-utils
     :alt: Test Coverage
 
 .. |pypi_version| image:: https://img.shields.io/pypi/v/python3-pip-skeleton.svg
