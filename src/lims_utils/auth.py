@@ -31,9 +31,12 @@ class CookieOrHTTPBearer(HTTPBearer):
         auto_error: bool = True,
         cookie_key: str = "cookie_auth",
     ):
-        """:param str cookie_key: Cookie key to look for in requests
+        """
+        Cookie/HTTP authorisation header dependency. Extends FastAPIs HTTPBearer.
 
-        Otherwise, extends FastAPIs HTTPBearer."""
+        Args:
+            cookie_key: Cookie key to look for in requests
+        """
         super().__init__(
             bearerFormat=bearerFormat,
             scheme_name=scheme_name,

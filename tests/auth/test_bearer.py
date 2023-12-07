@@ -1,7 +1,7 @@
 import pytest
 from fastapi import HTTPException, Request
 
-from expeye_utils.auth import CookieOrHTTPBearer
+from lims_utils.auth import CookieOrHTTPBearer
 
 default_scope = {
     "type": "http",

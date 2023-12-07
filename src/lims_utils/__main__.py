@@ -11,6 +11,6 @@ def main(args=None):
     args = parser.parse_args(args)
 
 
-# test with: python -m expeye_utils
+# test with: python -m lims_utils
 if __name__ == "__main__":
     main()
