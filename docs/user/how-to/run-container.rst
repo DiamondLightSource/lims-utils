@@ -1,15 +1,15 @@
 Run in a container
 ==================
 
-Pre-built containers with expeye_utils and its dependencies already
+Pre-built containers with lims-utils and its dependencies already
 installed are available on `Github Container Registry
-<https://ghcr.io/DiamondLightSource/expeye_utils>`_.
+<https://ghcr.io/DiamondLightSource/lims-utils>`_.
 
 Starting the container
 ----------------------
 
 To pull the container from github container registry and run::
 
-    $ docker run ghcr.io/DiamondLightSource/expeye_utils:main --version
+    $ docker run ghcr.io/DiamondLightSource/lims-utils:main --version
 
 To get a released version, use a numbered release instead of ``main``.

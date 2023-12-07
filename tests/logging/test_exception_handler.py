@@ -1,7 +1,7 @@
 import pytest
 from fastapi import HTTPException, Request, status
 
-from expeye_utils.logging import log_exception_handler
+from lims_utils.logging import log_exception_handler
 
 default_scope = {
     "type": "http",

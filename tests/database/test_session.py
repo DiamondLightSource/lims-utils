@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from expeye_utils.database import Database, get_session
+from lims_utils.database import Database, get_session
 
 
 class FakeSession:

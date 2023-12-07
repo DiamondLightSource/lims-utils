@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "setuptools_scm[toml]>=6.2", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "expeye_utils"
+name = "lims-utils"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: Apache Software License",
@@ -18,7 +18,8 @@ dependencies = [
     "fastapi~=0.103.2",
     "mysqlclient~=2.1.1",
     "mysql-connector-python~=8.0.33",
-    "pydantic~=2.5.1"
+    "pydantic~=2.5.1",
+    "types-requests"
 ]
 dynamic = ["version"]
 license.file = "LICENSE"
@@ -44,10 +45,10 @@ dev = [
 ]
 
 [project.scripts]
-expeye_utils = "expeye_utils.__main__:main"
+lims_utils = "lims_utils.__main__:main"
 
 [project.urls]
-GitHub = "https://github.com/DiamondLightSource/expeye_utils"
+GitHub = "https://github.com/DiamondLightSource/lims-api-utils"
 
 [[project.authors]] # Further authors may be added by duplicating this section
 email = "guilherme.de-freitas@diamond.ac.uk"
@@ -55,7 +56,7 @@ name = "Guilherme de Freitas"
 
 
 [tool.setuptools_scm]
-write_to = "src/expeye_utils/_version.py"
+write_to = "src/lims_utils/_version.py"
 
 [tool.mypy]
 ignore_missing_imports = true # Ignore missing stubs in imported modules
@@ -71,7 +72,7 @@ filterwarnings = "error"
 testpaths = "docs src tests"
 
 [tool.coverage.run]
-data_file = "/tmp/expeye_utils.coverage"
+data_file = "/tmp/lims_utils.coverage"
 omit = [
     "__init__.py",
     "__main__.py",
@@ -89,7 +90,7 @@ legacy_tox_ini = """
 [tox]
 skipsdist=True
 
-[testenv:{pre-commit,mypy,pytest}]
+[testenv:{pre-commit,mypy,pytest,docs}]
 # Don't create a virtualenv for the command, requires tox-direct plugin
 direct = True
 passenv = *
@@ -100,10 +101,10 @@ allowlist_externals =
     sphinx-build
     sphinx-autobuild
 commands =
-    pytest: pytest tests --cov=expeye_utils --cov-report term --cov-report xml:cov.xml {posargs}
+    pytest: pytest tests --cov=lims_utils --cov-report term --cov-report xml:cov.xml {posargs}
     mypy: mypy src tests {posargs}
     pre-commit: pre-commit run --all-files {posargs}
-    #docs: sphinx-{posargs:build -EW --keep-going} -T docs build/html
+    docs: sphinx-{posargs:build -EW --keep-going} -T docs build/html
 """
 
 

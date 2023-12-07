@@ -1,6 +1,6 @@
 import pytest
 
-from expeye_utils.logging import register_loggers, uvicorn_logger
+from lims_utils.logging import register_loggers, uvicorn_logger
 
 
 @pytest.mark.asyncio
