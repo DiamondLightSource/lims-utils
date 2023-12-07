@@ -1,4 +1,4 @@
-Expeye Utils
+LIMS API Utils
 ===========================
 
 |code_ci| |coverage| |pypi_version| |license|
@@ -6,11 +6,11 @@ Expeye Utils
 Commonly used utility functions for Expeye and adjacent projects/APIs.
 
 ============== ==============================================================
-PyPI           ``pip install expeye_utils``
-Source code    https://gitlab.diamond.ac.uk/expeye/utils
+PyPI           ``pip install lims-utils``
+Source code    https://github.com/DiamondLightSource/lims-utils
 ============== ==============================================================
 
-.. |code_ci| image:: https://gitlab.diamond.ac.uk/expeye/utils/badges/master/pipeline.svg
+.. |code_ci| image:: https://github.com/DiamondLightSource/lims-utils/actions/workflows/code.yml/badge.svg
     :target: https://gitlab.diamond.ac.uk/expeye/utils/-/pipelines
     :alt: Code CI
 
@@ -18,7 +18,15 @@ Source code    https://gitlab.diamond.ac.uk/expeye/utils
     :target: https://gitlab.diamond.ac.uk/expeye/utils/-/pipelines
     :alt: Test Coverage
 
+.. |pypi_version| image:: https://img.shields.io/pypi/v/python3-pip-skeleton.svg
+    :target: https://pypi.org/project/python3-pip-skeleton
+    :alt: Latest PyPI version
+
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
     :target: https://opensource.org/licenses/Apache-2.0
     :alt: Apache License
+..
+    Anything below this line is used when viewing README.rst and will be replaced
+    when included in index.rst
 
+See https://DiamondLightSource.github.io/python3-pip-skeleton-cli for more detailed documentation.

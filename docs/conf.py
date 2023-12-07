@@ -10,15 +10,15 @@ from subprocess import check_output
 
 import requests
 
-import expeye_utils
+import lims_utils
 
 # -- General configuration ------------------------------------------------
 
 # General information about the project.
-project = "expeye_utils"
+project = "lims-utils"
 
 # The full version, including alpha/beta/rc tags.
-release = expeye_utils.__version__
+release = lims_utils.__version__
 
 # The short X.Y version.
 if "+" in release:
