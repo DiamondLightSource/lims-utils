@@ -6,9 +6,5 @@
   {
     "version": "fix_ci",
     "url": "https://DiamondLightSource.github.io/lims-utils/fix_ci/"
-  },
-  {
-    "version": "master1",
-    "url": "https://DiamondLightSource.github.io/lims-utils/master1/"
   }
 ]
