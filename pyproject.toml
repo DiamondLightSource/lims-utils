@@ -48,7 +48,7 @@ dev = [
 lims_utils = "lims_utils.__main__:main"
 
 [project.urls]
-GitHub = "https://github.com/DiamondLightSource/lims-api-utils"
+GitHub = "https://github.com/DiamondLightSource/lims-utils"
 
 [[project.authors]] # Further authors may be added by duplicating this section
 email = "guilherme.de-freitas@diamond.ac.uk"
