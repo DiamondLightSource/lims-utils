@@ -114,6 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       # this permission is mandatory for trusted publishing To PyPI
+      contents: write
       id-token: write
     # Specify the GitHub Environment to publish to
     environment: release
