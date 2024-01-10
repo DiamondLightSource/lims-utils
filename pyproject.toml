@@ -76,7 +76,8 @@ data_file = "/tmp/lims_utils.coverage"
 omit = [
     "__init__.py",
     "__main__.py",
-    "_version.py"
+    "_version.py",
+    "tables.py"
 ]
 
 [tool.coverage.paths]
