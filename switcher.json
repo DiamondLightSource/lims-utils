@@ -12,6 +12,10 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/fix_ci/"
   },
   {
+    "version": "improvement_lims-1177_ispyb-models",
+    "url": "https://DiamondLightSource.github.io/lims-utils/improvement_lims-1177_ispyb-models/"
+  },
+  {
     "version": "master1",
     "url": "https://DiamondLightSource.github.io/lims-utils/master1/"
   }
