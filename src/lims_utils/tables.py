@@ -1,3 +1,6 @@
+# ruff: noqa: E501
+# type: ignore
+
 from sqlalchemy import (
     BINARY,
     DECIMAL,
@@ -28,9 +31,13 @@ from sqlalchemy.dialects.mysql import (
     TINYTEXT,
     VARCHAR,
 )
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import DeclarativeBase, relationship
 
-Base = declarative_base()
+
+class Base(DeclarativeBase):
+    pass
+
+
 metadata = Base.metadata
 
 
