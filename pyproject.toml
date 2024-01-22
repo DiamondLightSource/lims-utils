@@ -15,7 +15,7 @@ description = "Commonly used utility functions for Expeye and adjacent projects/
 dependencies = [
     "typing-extensions;python_version<'3.8'",
     "SQLAlchemy~=2.0.16",
-    "fastapi~=0.104.1",
+    "fastapi>=0.104.1,<0.110.0",
     "mysqlclient>=2.1.1,<2.3.0",
     "mysql-connector-python~=8.2.0",
     "pydantic~=2.5.1",
@@ -76,7 +76,8 @@ data_file = "/tmp/lims_utils.coverage"
 omit = [
     "__init__.py",
     "__main__.py",
-    "_version.py"
+    "_version.py",
+    "tables.py"
 ]
 
 [tool.coverage.paths]
