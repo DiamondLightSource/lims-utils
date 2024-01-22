@@ -4,18 +4,6 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/master/"
   },
   {
-    "version": "v0.1.0",
-    "url": "https://DiamondLightSource.github.io/lims-utils/v0.1.0/"
-  },
-  {
-    "version": "v0.0.1",
-    "url": "https://DiamondLightSource.github.io/lims-utils/v0.0.1/"
-  },
-  {
-    "version": "dependabot_pip_mysqlclient-gte-2.1.1-and-lt-2.3.0",
-    "url": "https://DiamondLightSource.github.io/lims-utils/dependabot_pip_mysqlclient-gte-2.1.1-and-lt-2.3.0/"
-  },
-  {
     "version": "fix_ci",
     "url": "https://DiamondLightSource.github.io/lims-utils/fix_ci/"
   },
@@ -26,5 +14,13 @@
   {
     "version": "master1",
     "url": "https://DiamondLightSource.github.io/lims-utils/master1/"
+  },
+  {
+    "version": "v0.0.1",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.0.1/"
+  },
+  {
+    "version": "v0.1.0",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.1.0/"
   }
 ]
