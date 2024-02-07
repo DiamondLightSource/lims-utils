@@ -18,8 +18,8 @@ Source code    https://github.com/DiamondLightSource/lims-utils
     :target: https://codecov.io/gh/DiamondLightSource/lims-utils
     :alt: Test Coverage
 
-.. |pypi_version| image:: https://img.shields.io/pypi/v/python3-pip-skeleton.svg
-    :target: https://pypi.org/project/python3-pip-skeleton
+.. |pypi_version| image:: https://img.shields.io/pypi/v/lims-utils.svg
+    :target: https://pypi.org/project/lims-utils/
     :alt: Latest PyPI version
 
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
