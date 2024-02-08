@@ -24,6 +24,10 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/fix_no-ticket_remove-unused-dependencies/"
   },
   {
+    "version": "fix_no-ticket_table-models",
+    "url": "https://DiamondLightSource.github.io/lims-utils/fix_no-ticket_table-models/"
+  },
+  {
     "version": "improvement_lims-1177_ispyb-models",
     "url": "https://DiamondLightSource.github.io/lims-utils/improvement_lims-1177_ispyb-models/"
   },
