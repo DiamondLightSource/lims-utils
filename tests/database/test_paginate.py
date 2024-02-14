@@ -4,7 +4,7 @@ from sqlalchemy import Select, select
 from tests.mocks import FakeSession
 
 from lims_utils.database import Database, get_session
-from lims_utils.tables import Proposal
+from lims_utils.tables import Proposal  # type: ignore
 
 query = select(Proposal).filter(Proposal.proposalId == 1)
 
