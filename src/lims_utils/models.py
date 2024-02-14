@@ -1,7 +1,7 @@
 from typing import Generic, Sequence, TypeVar
 
 from fastapi import Query
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 def pagination(
@@ -27,3 +27,40 @@ class Paged(BaseModel, Generic[T]):
     limit: int
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
+
+
+class ProposalReference(BaseModel):
+    code: str = Field(max_length=2)
+    number: int
+    visit_number: int | None = None
+
+    @field_validator("code")
+    def code_validator(cls, v):
+        # This allows us to set a more descriptive error message compared to regex
+        assert v.isalpha(), "Proposal code must be a two letter code"
+
+        return v
+
+
+def parse_proposal(proposal_reference: str, visit_number: int | None = None):
+    """Parse proposal string and return ProposalReference object
+
+    Args:
+        proposal_reference: Proposal reference, formatted as ab12345
+        visit_number: Visit number
+
+    Returns:
+        ProposalReference object"""
+
+    if len(proposal_reference) < 3:
+        raise ValueError("Proposal reference must be at least three characters long")
+
+    code = proposal_reference[0:2]
+    number = proposal_reference[2:]
+
+    # Pydantic does str to int coercion on its own
+    return ProposalReference(
+        code=code,
+        number=number,  # type: ignore
+        visit_number=visit_number,
+    )
