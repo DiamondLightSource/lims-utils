@@ -1,18 +1,12 @@
 from unittest.mock import patch
 
 from sqlalchemy import Select, select
-from tests.mocks import FakeSession
+from tests.mocks import FakeSession, query_eq
 
 from lims_utils.database import Database, get_session
 from lims_utils.tables import Proposal  # type: ignore
 
 query = select(Proposal).filter(Proposal.proposalId == 1)
-
-
-def query_eq(q1: Select, q2: Select):
-    return str(q1.compile(compile_kwargs={"literal_binds": True})) == str(
-        q2.compile(compile_kwargs={"literal_binds": True})
-    )
 
 
 db = Database()
