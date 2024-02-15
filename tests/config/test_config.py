@@ -6,7 +6,7 @@ from lims_utils.settings import Settings
 
 
 @pytest.mark.asyncio
-@patch("lims_utils.config.json.loads")
+@patch("lims_utils.settings.json.loads")
 async def test_return_default(mock_json_loads):
     """Should return default values"""
     mock_json_loads.return_value = {"auth": {}, "db": {}}
@@ -17,7 +17,7 @@ async def test_return_default(mock_json_loads):
 
 
 @pytest.mark.asyncio
-@patch("lims_utils.config.json.loads")
+@patch("lims_utils.settings.json.loads")
 async def test_custom(mock_json_loads):
     """Should return custom values"""
     mock_json_loads.return_value = {
