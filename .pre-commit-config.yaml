@@ -13,6 +13,7 @@ repos:
         stages: [commit]
         language: system
         entry: black --check --diff
+        exclude: src/tables.py
         types: [python]
 
       - id: ruff

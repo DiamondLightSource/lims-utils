@@ -5,8 +5,13 @@ import pytest
 from lims_utils.settings import Settings
 
 
+def new_read_all(_, _1):
+    return ""
+
+
 @pytest.mark.asyncio
 @patch("lims_utils.settings.json.loads")
+@patch("lims_utils.settings.Path.read_text", new=new_read_all)
 async def test_return_default(mock_json_loads):
     """Should return default values"""
     mock_json_loads.return_value = {"auth": {}, "db": {}}
@@ -18,6 +23,7 @@ async def test_return_default(mock_json_loads):
 
 @pytest.mark.asyncio
 @patch("lims_utils.settings.json.loads")
+@patch("lims_utils.settings.Path.read_text", new=new_read_all)
 async def test_custom(mock_json_loads):
     """Should return custom values"""
     mock_json_loads.return_value = {
