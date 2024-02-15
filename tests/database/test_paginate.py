@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from sqlalchemy import Select, select
+from sqlalchemy import select
 from tests.mocks import FakeSession, query_eq
 
 from lims_utils.database import Database, get_session
