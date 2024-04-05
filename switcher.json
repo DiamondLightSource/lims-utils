@@ -32,6 +32,10 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/fix_ci/"
   },
   {
+    "version": "fix_lims-1284_schema-updates",
+    "url": "https://DiamondLightSource.github.io/lims-utils/fix_lims-1284_schema-updates/"
+  },
+  {
     "version": "fix_no-ticket_remove-unused-dependencies",
     "url": "https://DiamondLightSource.github.io/lims-utils/fix_no-ticket_remove-unused-dependencies/"
   },
