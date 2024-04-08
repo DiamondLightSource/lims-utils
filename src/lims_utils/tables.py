@@ -8,7 +8,6 @@ from typing import List, Optional
 from sqlalchemy import (
     BINARY,
     TIMESTAMP,
-    CheckConstraint,
     Column,
     Computed,
     Date,
@@ -18,9 +17,7 @@ from sqlalchemy import (
     Float,
     ForeignKeyConstraint,
     Index,
-    Integer,
     LargeBinary,
-    SmallInteger,
     String,
     Table,
     Text,
@@ -28,7 +25,6 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.dialects.mysql import (
-    ENUM,
     INTEGER,
     LONGBLOB,
     LONGTEXT,
@@ -52,7 +48,7 @@ class AdminActivity(Base):
         Index("username", "username", unique=True),
     )
 
-    adminActivityId: Mapped[int] = mapped_column(Integer, primary_key=True)
+    adminActivityId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     username: Mapped[str] = mapped_column(String(45), server_default=text("''"))
     action: Mapped[Optional[str]] = mapped_column(String(45))
     comments: Mapped[Optional[str]] = mapped_column(String(100))
@@ -67,7 +63,7 @@ class AdminVar(Base):
         {"comment": "ISPyB administration values"},
     )
 
-    varId: Mapped[int] = mapped_column(Integer, primary_key=True)
+    varId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(32))
     value: Mapped[Optional[str]] = mapped_column(String(1024))
 
@@ -75,7 +71,7 @@ class AdminVar(Base):
 class Aperture(Base):
     __tablename__ = "Aperture"
 
-    apertureId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    apertureId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     sizeX: Mapped[Optional[float]] = mapped_column(Float)
 
 
@@ -91,15 +87,14 @@ class AutoProc(Base):
             "refinedCell_alpha",
             "refinedCell_beta",
             "refinedCell_gamma",
-            "spaceGroup",
         ),
     )
 
     autoProcId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(10), primary_key=True, comment="Primary key (auto-incremented)"
     )
     autoProcProgramId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related program item"
+        INTEGER(10), comment="Related program item"
     )
     spaceGroup: Mapped[Optional[str]] = mapped_column(String(45), comment="Space group")
     refinedCell_a: Mapped[Optional[float]] = mapped_column(
@@ -141,7 +136,7 @@ class AutoProcProgram(Base):
     )
 
     autoProcProgramId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(10), primary_key=True, comment="Primary key (auto-incremented)"
     )
     processingCommandLine: Mapped[Optional[str]] = mapped_column(
         String(255), comment="Command line for running the automatic processing"
@@ -167,7 +162,7 @@ class AutoProcProgram(Base):
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
         DateTime, comment="Creation or last update date/time"
     )
-    processingJobId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    processingJobId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     ProcessingJob: Mapped["ProcessingJob"] = relationship(
         "ProcessingJob", back_populates="AutoProcProgram_"
@@ -196,12 +191,15 @@ class AutoProcProgram(Base):
     MXMRRun: Mapped[List["MXMRRun"]] = relationship(
         "MXMRRun", back_populates="AutoProcProgram_"
     )
+    PDBEntry_has_AutoProcProgram: Mapped[List["PDBEntryHasAutoProcProgram"]] = (
+        relationship("PDBEntryHasAutoProcProgram", back_populates="AutoProcProgram_")
+    )
+    XRFFluorescenceMapping: Mapped[List["XRFFluorescenceMapping"]] = relationship(
+        "XRFFluorescenceMapping", back_populates="AutoProcProgram_"
+    )
     MotionCorrection: Mapped[List["MotionCorrection"]] = relationship(
         "MotionCorrection", back_populates="AutoProcProgram_"
     )
-    PDBEntry_has_AutoProcProgram: Mapped[
-        List["PDBEntryHasAutoProcProgram"]
-    ] = relationship("PDBEntryHasAutoProcProgram", back_populates="AutoProcProgram_")
     CTF: Mapped[List["CTF"]] = relationship("CTF", back_populates="AutoProcProgram_")
     ParticlePicker: Mapped[List["ParticlePicker"]] = relationship(
         "ParticlePicker", back_populates="AutoProcProgram_"
@@ -209,18 +207,15 @@ class AutoProcProgram(Base):
     RelativeIceThickness: Mapped[List["RelativeIceThickness"]] = relationship(
         "RelativeIceThickness", back_populates="AutoProcProgram_"
     )
-    ParticleClassificationGroup: Mapped[
-        List["ParticleClassificationGroup"]
-    ] = relationship("ParticleClassificationGroup", back_populates="AutoProcProgram_")
-    XRFFluorescenceMapping: Mapped[List["XRFFluorescenceMapping"]] = relationship(
-        "XRFFluorescenceMapping", back_populates="AutoProcProgram_"
+    ParticleClassificationGroup: Mapped[List["ParticleClassificationGroup"]] = (
+        relationship("ParticleClassificationGroup", back_populates="AutoProcProgram_")
     )
 
 
 class BFAutomationError(Base):
     __tablename__ = "BF_automationError"
 
-    automationErrorId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    automationErrorId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     errorType: Mapped[str] = mapped_column(String(40))
     solution: Mapped[Optional[str]] = mapped_column(Text)
 
@@ -232,7 +227,7 @@ class BFAutomationError(Base):
 class BFSystem(Base):
     __tablename__ = "BF_system"
 
-    systemId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    systemId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(100))
     description: Mapped[Optional[str]] = mapped_column(String(200))
 
@@ -285,15 +280,15 @@ class BLSample(Base):
         Index("crystalId", "crystalId", "containerId"),
     )
 
-    blSampleId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    blSampleId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
-    diffractionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    crystalId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    containerId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    diffractionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    crystalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    containerId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     name: Mapped[Optional[str]] = mapped_column(String(45))
     code: Mapped[Optional[str]] = mapped_column(String(45))
     location: Mapped[Optional[str]] = mapped_column(String(45))
@@ -313,14 +308,14 @@ class BLSample(Base):
     blSampleStatus: Mapped[Optional[str]] = mapped_column(String(20))
     isInSampleChanger: Mapped[Optional[int]] = mapped_column(TINYINT(1))
     lastKnownCenteringPosition: Mapped[Optional[str]] = mapped_column(String(255))
-    POSITIONID: Mapped[Optional[int]] = mapped_column(INTEGER)
+    POSITIONID: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     SMILES: Mapped[Optional[str]] = mapped_column(
         String(400),
         comment="the symbolic description of the structure of a chemical compound",
     )
-    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     lastImageURL: Mapped[Optional[str]] = mapped_column(String(255))
-    screenComponentGroupId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    screenComponentGroupId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     volume: Mapped[Optional[float]] = mapped_column(Float)
     dimension1: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True)
@@ -334,29 +329,32 @@ class BLSample(Base):
     shape: Mapped[Optional[str]] = mapped_column(String(15))
     packingFraction: Mapped[Optional[float]] = mapped_column(Float)
     preparationTemeprature: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Sample preparation temperature, Units: kelvin"
+        MEDIUMINT(9), comment="Sample preparation temperature, Units: kelvin"
     )
     preparationHumidity: Mapped[Optional[float]] = mapped_column(
         Float, comment="Sample preparation humidity, Units: %"
     )
     blottingTime: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Blotting time, Units: sec"
+        INTEGER(11), comment="Blotting time, Units: sec"
     )
     blottingForce: Mapped[Optional[float]] = mapped_column(
         Float, comment="Force used when blotting sample, Units: N?"
     )
     blottingDrainTime: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Time sample left to drain after blotting, Units: sec"
+        INTEGER(11), comment="Time sample left to drain after blotting, Units: sec"
     )
     support: Mapped[Optional[str]] = mapped_column(
         String(50), comment="Sample support material"
     )
     subLocation: Mapped[Optional[int]] = mapped_column(
-        SMALLINT,
+        SMALLINT(5),
         comment="Indicates the sample's location on a multi-sample pin, where 1 is closest to the pin base",
     )
     staffComments: Mapped[Optional[str]] = mapped_column(
         String(255), comment="Any staff comments on the sample"
+    )
+    source: Mapped[Optional[str]] = mapped_column(
+        String(50), server_default=text("current_user()")
     )
 
     BLSubSample: Mapped["BLSubSample"] = relationship(
@@ -392,9 +390,9 @@ class BLSample(Base):
     BLSampleGroup_has_BLSample: Mapped[List["BLSampleGroupHasBLSample"]] = relationship(
         "BLSampleGroupHasBLSample", back_populates="BLSample_"
     )
-    BLSample_has_DataCollectionPlan: Mapped[
-        List["BLSampleHasDataCollectionPlan"]
-    ] = relationship("BLSampleHasDataCollectionPlan", back_populates="BLSample_")
+    BLSample_has_DataCollectionPlan: Mapped[List["BLSampleHasDataCollectionPlan"]] = (
+        relationship("BLSampleHasDataCollectionPlan", back_populates="BLSample_")
+    )
     DataCollectionGroup: Mapped[List["DataCollectionGroup"]] = relationship(
         "DataCollectionGroup", back_populates="BLSample_"
     )
@@ -441,25 +439,25 @@ class BLSampleImage(Base):
         Index("BLSampleImage_imageFullPath", "imageFullPath", unique=True),
     )
 
-    blSampleImageId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blSampleId: Mapped[int] = mapped_column(INTEGER)
+    blSampleImageId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    blSampleId: Mapped[int] = mapped_column(INTEGER(11))
     offsetX: Mapped[int] = mapped_column(
-        Integer,
-        server_default=text("'0'"),
+        INTEGER(11),
+        server_default=text("0"),
         comment="The x offset of the image relative to the canvas",
     )
     offsetY: Mapped[int] = mapped_column(
-        Integer,
-        server_default=text("'0'"),
+        INTEGER(11),
+        server_default=text("0"),
         comment="The y offset of the image relative to the canvas",
     )
     micronsPerPixelX: Mapped[Optional[float]] = mapped_column(Float)
     micronsPerPixelY: Mapped[Optional[float]] = mapped_column(Float)
     imageFullPath: Mapped[Optional[str]] = mapped_column(String(255))
-    blSampleImageScoreId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSampleImageScoreId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     comments: Mapped[Optional[str]] = mapped_column(String(255))
     blTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
-    containerInspectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerInspectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     modifiedTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
 
     BLSample_: Mapped["BLSample"] = relationship(
@@ -480,12 +478,12 @@ class BLSampleImage(Base):
     BLSampleImageMeasurement: Mapped[List["BLSampleImageMeasurement"]] = relationship(
         "BLSampleImageMeasurement", back_populates="BLSampleImage_"
     )
-    BLSampleImage_has_Positioner: Mapped[
-        List["BLSampleImageHasPositioner"]
-    ] = relationship("BLSampleImageHasPositioner", back_populates="BLSampleImage_")
-    BLSampleImage_has_AutoScoreClass: Mapped[
-        List["BLSampleImageHasAutoScoreClass"]
-    ] = relationship("BLSampleImageHasAutoScoreClass", back_populates="BLSampleImage_")
+    BLSampleImage_has_Positioner: Mapped[List["BLSampleImageHasPositioner"]] = (
+        relationship("BLSampleImageHasPositioner", back_populates="BLSampleImage_")
+    )
+    BLSampleImage_has_AutoScoreClass: Mapped[List["BLSampleImageHasAutoScoreClass"]] = (
+        relationship("BLSampleImageHasAutoScoreClass", back_populates="BLSampleImage_")
+    )
 
 
 class BLSampleImageAutoScoreSchema(Base):
@@ -493,29 +491,29 @@ class BLSampleImageAutoScoreSchema(Base):
     __table_args__ = {"comment": "Scoring schema name and whether it is enabled"}
 
     blSampleImageAutoScoreSchemaId: Mapped[int] = mapped_column(
-        TINYINT, primary_key=True
+        TINYINT(3), primary_key=True
     )
     schemaName: Mapped[str] = mapped_column(
         String(25), comment="Name of the schema e.g. Hampton, MARCO"
     )
     enabled: Mapped[Optional[int]] = mapped_column(
         TINYINT(1),
-        server_default=text("'1'"),
+        server_default=text("1"),
         comment="Whether this schema is enabled (could be configurable in the UI)",
     )
 
-    BLSampleImageAutoScoreClass: Mapped[
-        List["BLSampleImageAutoScoreClass"]
-    ] = relationship(
-        "BLSampleImageAutoScoreClass",
-        back_populates="BLSampleImageAutoScoreSchema_",
+    BLSampleImageAutoScoreClass: Mapped[List["BLSampleImageAutoScoreClass"]] = (
+        relationship(
+            "BLSampleImageAutoScoreClass",
+            back_populates="BLSampleImageAutoScoreSchema_",
+        )
     )
 
 
 class BLSampleImageScore(Base):
     __tablename__ = "BLSampleImageScore"
 
-    blSampleImageScoreId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    blSampleImageScoreId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(45))
     score: Mapped[Optional[float]] = mapped_column(Float)
     colour: Mapped[Optional[str]] = mapped_column(String(15))
@@ -528,11 +526,11 @@ class BLSampleImageScore(Base):
 class BLSampleType(Base):
     __tablename__ = "BLSampleType"
 
-    blSampleTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    blSampleTypeId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(100))
     proposalType: Mapped[Optional[str]] = mapped_column(String(10))
     active: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'1'"), comment="1=active, 0=inactive"
+        TINYINT(1), server_default=text("1"), comment="1=active, 0=inactive"
     )
 
     BLSampleGroup_has_BLSample: Mapped[List["BLSampleGroupHasBLSample"]] = relationship(
@@ -583,33 +581,33 @@ class BLSubSample(Base):
             onupdate="CASCADE",
             name="BLSubSample_positionfk_1",
         ),
-        Index("BLSubSample_FKIndex1", "blSampleId"),
         Index("BLSubSample_FKIndex2", "diffractionPlanId"),
         Index("BLSubSample_FKIndex3", "positionId"),
         Index("BLSubSample_FKIndex4", "motorPositionId"),
         Index("BLSubSample_FKIndex5", "position2Id"),
+        Index("BLSubSample_blSampleId_source", "blSampleId", "source"),
         Index("BLSubSample_blSampleImagefk_1", "blSampleImageId"),
     )
 
     blSubSampleId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
-    blSampleId: Mapped[int] = mapped_column(INTEGER, comment="sample")
+    blSampleId: Mapped[int] = mapped_column(INTEGER(10), comment="sample")
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
     diffractionPlanId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="eventually diffractionPlan"
+        INTEGER(10), comment="eventually diffractionPlan"
     )
-    blSampleImageId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSampleImageId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     positionId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="position of the subsample"
+        INTEGER(11), comment="position of the subsample"
     )
-    position2Id: Mapped[Optional[int]] = mapped_column(INTEGER)
+    position2Id: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     motorPositionId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="motor position"
+        INTEGER(11), comment="motor position"
     )
     blSubSampleUUID: Mapped[Optional[str]] = mapped_column(
         String(45), comment="uuid of the blsubsample"
@@ -675,7 +673,7 @@ class BLSubSample(Base):
 class BeamCalendar(Base):
     __tablename__ = "BeamCalendar"
 
-    beamCalendarId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    beamCalendarId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     run: Mapped[str] = mapped_column(String(7))
     beamStatus: Mapped[str] = mapped_column(String(24))
     startDate: Mapped[datetime.datetime] = mapped_column(DateTime)
@@ -689,7 +687,7 @@ class BeamCalendar(Base):
 class BeamlineStats(Base):
     __tablename__ = "BeamlineStats"
 
-    beamlineStatsId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    beamlineStatsId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     beamline: Mapped[Optional[str]] = mapped_column(String(10))
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     ringCurrent: Mapped[Optional[float]] = mapped_column(Float)
@@ -716,7 +714,7 @@ class CalendarHash(Base):
         "private (hash) url"
     }
 
-    calendarHashId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    calendarHashId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     ckey: Mapped[Optional[str]] = mapped_column(String(50))
     hash: Mapped[Optional[str]] = mapped_column(String(128))
     beamline: Mapped[Optional[int]] = mapped_column(TINYINT(1))
@@ -725,12 +723,12 @@ class CalendarHash(Base):
 class ComponentSubType(Base):
     __tablename__ = "ComponentSubType"
 
-    componentSubTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    componentSubTypeId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(String(31))
-    hasPh: Mapped[Optional[int]] = mapped_column(TINYINT(1), server_default=text("'0'"))
+    hasPh: Mapped[Optional[int]] = mapped_column(TINYINT(1), server_default=text("0"))
     proposalType: Mapped[Optional[str]] = mapped_column(String(10))
     active: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'1'"), comment="1=active, 0=inactive"
+        TINYINT(1), server_default=text("1"), comment="1=active, 0=inactive"
     )
 
     Protein: Mapped[List["Protein"]] = relationship(
@@ -742,7 +740,7 @@ class ComponentType(Base):
     __tablename__ = "ComponentType"
     __table_args__ = (Index("name", "name", unique=True),)
 
-    componentTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    componentTypeId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(String(31))
 
     Component: Mapped[List["Component"]] = relationship(
@@ -756,12 +754,12 @@ class ComponentType(Base):
 class ConcentrationType(Base):
     __tablename__ = "ConcentrationType"
 
-    concentrationTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    concentrationTypeId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(String(31))
     symbol: Mapped[str] = mapped_column(String(8))
     proposalType: Mapped[Optional[str]] = mapped_column(String(10))
     active: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'1'"), comment="1=active, 0=inactive"
+        TINYINT(1), server_default=text("1"), comment="1=active, 0=inactive"
     )
 
     Protein: Mapped[List["Protein"]] = relationship(
@@ -779,20 +777,20 @@ class ContainerRegistry(Base):
     __tablename__ = "ContainerRegistry"
     __table_args__ = (Index("ContainerRegistry_uniq_barcode", "barcode", unique=True),)
 
-    containerRegistryId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    containerRegistryId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     barcode: Mapped[str] = mapped_column(String(20))
     comments: Mapped[Optional[str]] = mapped_column(String(255))
     recordTimestamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
 
     ContainerReport: Mapped[List["ContainerReport"]] = relationship(
         "ContainerReport", back_populates="ContainerRegistry_"
     )
-    ContainerRegistry_has_Proposal: Mapped[
-        List["ContainerRegistryHasProposal"]
-    ] = relationship(
-        "ContainerRegistryHasProposal", back_populates="ContainerRegistry_"
+    ContainerRegistry_has_Proposal: Mapped[List["ContainerRegistryHasProposal"]] = (
+        relationship(
+            "ContainerRegistryHasProposal", back_populates="ContainerRegistry_"
+        )
     )
     Container: Mapped[List["Container"]] = relationship(
         "Container", back_populates="ContainerRegistry_"
@@ -803,21 +801,21 @@ class ContainerType(Base):
     __tablename__ = "ContainerType"
     __table_args__ = {"comment": "A lookup table for different types of containers"}
 
-    containerTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    containerTypeId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(100))
     proposalType: Mapped[Optional[str]] = mapped_column(String(10))
     active: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'1'"), comment="1=active, 0=inactive"
+        TINYINT(1), server_default=text("1"), comment="1=active, 0=inactive"
     )
-    capacity: Mapped[Optional[int]] = mapped_column(Integer)
-    wellPerRow: Mapped[Optional[int]] = mapped_column(SmallInteger)
-    dropPerWellX: Mapped[Optional[int]] = mapped_column(SmallInteger)
-    dropPerWellY: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    capacity: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    wellPerRow: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
+    dropPerWellX: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
+    dropPerWellY: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
     dropHeight: Mapped[Optional[float]] = mapped_column(Float)
     dropWidth: Mapped[Optional[float]] = mapped_column(Float)
     dropOffsetX: Mapped[Optional[float]] = mapped_column(Float)
     dropOffsetY: Mapped[Optional[float]] = mapped_column(Float)
-    wellDrop: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    wellDrop: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
 
     Screen: Mapped[List["Screen"]] = relationship(
         "Screen", back_populates="ContainerType_"
@@ -831,11 +829,11 @@ class CryoemInitialModel(Base):
     __tablename__ = "CryoemInitialModel"
     __table_args__ = {"comment": "Initial cryo-EM model generation results"}
 
-    cryoemInitialModelId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    cryoemInitialModelId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     resolution: Mapped[Optional[float]] = mapped_column(
         Float, comment="Unit: Angstroms"
     )
-    numberOfParticles: Mapped[Optional[int]] = mapped_column(INTEGER)
+    numberOfParticles: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     ParticleClassification: Mapped[List["ParticleClassification"]] = relationship(
         "ParticleClassification",
@@ -847,8 +845,8 @@ class CryoemInitialModel(Base):
 class DataAcquisition(Base):
     __tablename__ = "DataAcquisition"
 
-    dataAcquisitionId: Mapped[int] = mapped_column(Integer, primary_key=True)
-    sampleCellId: Mapped[int] = mapped_column(Integer)
+    dataAcquisitionId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    sampleCellId: Mapped[int] = mapped_column(INTEGER(10))
     framesCount: Mapped[Optional[str]] = mapped_column(String(45))
     energy: Mapped[Optional[str]] = mapped_column(String(45))
     waitTime: Mapped[Optional[str]] = mapped_column(String(45))
@@ -912,17 +910,17 @@ class DataCollection(Base):
     )
 
     dataCollectionId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     dataCollectionGroupId: Mapped[int] = mapped_column(
-        Integer, comment="references DataCollectionGroup table"
+        INTEGER(11), comment="references DataCollectionGroup table"
     )
-    BLSAMPLEID: Mapped[Optional[int]] = mapped_column(INTEGER)
+    BLSAMPLEID: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     SESSIONID: Mapped[Optional[int]] = mapped_column(
-        INTEGER, server_default=text("'0'")
+        INTEGER(11), server_default=text("0")
     )
     experimenttype: Mapped[Optional[str]] = mapped_column(String(24))
-    dataCollectionNumber: Mapped[Optional[int]] = mapped_column(INTEGER)
+    dataCollectionNumber: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     startTime: Mapped[Optional[datetime.datetime]] = mapped_column(
         DateTime, comment="Start time of the dataCollection"
     )
@@ -934,9 +932,9 @@ class DataCollection(Base):
     axisEnd: Mapped[Optional[float]] = mapped_column(Float)
     axisRange: Mapped[Optional[float]] = mapped_column(Float)
     overlap: Mapped[Optional[float]] = mapped_column(Float)
-    numberOfImages: Mapped[Optional[int]] = mapped_column(INTEGER)
-    startImageNumber: Mapped[Optional[int]] = mapped_column(INTEGER)
-    numberOfPasses: Mapped[Optional[int]] = mapped_column(INTEGER)
+    numberOfImages: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    startImageNumber: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    numberOfPasses: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     exposureTime: Mapped[Optional[float]] = mapped_column(Float)
     imageDirectory: Mapped[Optional[str]] = mapped_column(
         String(255),
@@ -956,7 +954,7 @@ class DataCollection(Base):
     yBeam: Mapped[Optional[float]] = mapped_column(Float)
     comments: Mapped[Optional[str]] = mapped_column(String(1024))
     printableForReport: Mapped[Optional[int]] = mapped_column(
-        TINYINT, server_default=text("'1'")
+        TINYINT(1), server_default=text("1")
     )
     CRYSTALCLASS: Mapped[Optional[str]] = mapped_column(String(20))
     slitGapVertical: Mapped[Optional[float]] = mapped_column(Float)
@@ -983,27 +981,27 @@ class DataCollection(Base):
     centeringMethod: Mapped[Optional[str]] = mapped_column(String(255))
     averageTemperature: Mapped[Optional[float]] = mapped_column(Float)
     ACTUALSAMPLEBARCODE: Mapped[Optional[str]] = mapped_column(String(45))
-    ACTUALSAMPLESLOTINCONTAINER: Mapped[Optional[int]] = mapped_column(INTEGER)
+    ACTUALSAMPLESLOTINCONTAINER: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     ACTUALCONTAINERBARCODE: Mapped[Optional[str]] = mapped_column(String(45))
-    ACTUALCONTAINERSLOTINSC: Mapped[Optional[int]] = mapped_column(INTEGER)
+    ACTUALCONTAINERSLOTINSC: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     actualCenteringPosition: Mapped[Optional[str]] = mapped_column(String(255))
     beamShape: Mapped[Optional[str]] = mapped_column(String(45))
-    POSITIONID: Mapped[Optional[int]] = mapped_column(INTEGER)
+    POSITIONID: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     detectorId: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="references Detector table"
+        INTEGER(11), comment="references Detector table"
     )
     FOCALSPOTSIZEATSAMPLEX: Mapped[Optional[float]] = mapped_column(Float)
     POLARISATION: Mapped[Optional[float]] = mapped_column(Float)
     FOCALSPOTSIZEATSAMPLEY: Mapped[Optional[float]] = mapped_column(Float)
-    APERTUREID: Mapped[Optional[int]] = mapped_column(INTEGER)
-    screeningOrigId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    startPositionId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    endPositionId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    APERTUREID: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    screeningOrigId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    startPositionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    endPositionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     flux: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     strategySubWedgeOrigId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="references ScreeningStrategySubWedge table"
+        INTEGER(10), comment="references ScreeningStrategySubWedge table"
     )
-    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     flux_end: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True), comment="flux measured after the collect"
     )
@@ -1018,7 +1016,7 @@ class DataCollection(Base):
     )
     binning: Mapped[Optional[int]] = mapped_column(
         TINYINT(1),
-        server_default=text("'1'"),
+        server_default=text("1"),
         comment="1 or 2. Number of pixels to process as 1. (Use mean value.)",
     )
     particleDiameter: Mapped[Optional[float]] = mapped_column(Float, comment="Unit: nm")
@@ -1048,10 +1046,11 @@ class DataCollection(Base):
         Float, comment="Nominal defocus, Units: A"
     )
     imageSizeX: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Image size in x, incase crop has been used, Units: pixels"
+        MEDIUMINT(8),
+        comment="Image size in x, incase crop has been used, Units: pixels",
     )
     imageSizeY: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Image size in y, Units: pixels"
+        MEDIUMINT(8), comment="Image size in y, Units: pixels"
     )
     pixelSizeOnImage: Mapped[Optional[float]] = mapped_column(
         Float,
@@ -1060,7 +1059,7 @@ class DataCollection(Base):
     phasePlate: Mapped[Optional[int]] = mapped_column(
         TINYINT(1), comment="Whether the phase plate was used"
     )
-    dataCollectionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    dataCollectionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     BLSubSample_: Mapped["BLSubSample"] = relationship(
         "BLSubSample", back_populates="DataCollection"
@@ -1094,9 +1093,9 @@ class DataCollection(Base):
     AutoProcIntegration: Mapped[List["AutoProcIntegration"]] = relationship(
         "AutoProcIntegration", back_populates="DataCollection_"
     )
-    DataCollectionFileAttachment: Mapped[
-        List["DataCollectionFileAttachment"]
-    ] = relationship("DataCollectionFileAttachment", back_populates="DataCollection_")
+    DataCollectionFileAttachment: Mapped[List["DataCollectionFileAttachment"]] = (
+        relationship("DataCollectionFileAttachment", back_populates="DataCollection_")
+    )
     EventChain: Mapped[List["EventChain"]] = relationship(
         "EventChain", back_populates="DataCollection_"
     )
@@ -1105,9 +1104,6 @@ class DataCollection(Base):
     )
     Image: Mapped[List["Image"]] = relationship(
         "Image", back_populates="DataCollection_"
-    )
-    Movie: Mapped[List["Movie"]] = relationship(
-        "Movie", back_populates="DataCollection_"
     )
     ProcessingJobImageSweep: Mapped[List["ProcessingJobImageSweep"]] = relationship(
         "ProcessingJobImageSweep", back_populates="DataCollection_"
@@ -1118,11 +1114,14 @@ class DataCollection(Base):
     DataCollectionComment: Mapped[List["DataCollectionComment"]] = relationship(
         "DataCollectionComment", back_populates="DataCollection_"
     )
-    MotionCorrection: Mapped[List["MotionCorrection"]] = relationship(
-        "MotionCorrection", back_populates="DataCollection_"
-    )
     GridInfo: Mapped[List["GridInfo"]] = relationship(
         "GridInfo", back_populates="DataCollection_"
+    )
+    Movie: Mapped[List["Movie"]] = relationship(
+        "Movie", back_populates="DataCollection_"
+    )
+    MotionCorrection: Mapped[List["MotionCorrection"]] = relationship(
+        "MotionCorrection", back_populates="DataCollection_"
     )
 
 
@@ -1142,7 +1141,7 @@ class Detector(Base):
     )
 
     detectorId: Mapped[int] = mapped_column(
-        Integer, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     detectorType: Mapped[Optional[str]] = mapped_column(String(255))
     detectorManufacturer: Mapped[Optional[str]] = mapped_column(String(255))
@@ -1172,10 +1171,10 @@ class Detector(Base):
     density: Mapped[Optional[float]] = mapped_column(Float)
     composition: Mapped[Optional[str]] = mapped_column(String(16))
     numberOfPixelsX: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Detector number of pixels in x"
+        MEDIUMINT(9), comment="Detector number of pixels in x"
     )
     numberOfPixelsY: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Detector number of pixels in y"
+        MEDIUMINT(9), comment="Detector number of pixels in y"
     )
     detectorRollMin: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True), comment="unit: degrees"
@@ -1187,10 +1186,10 @@ class Detector(Base):
         String(40), comment="Colloquial name for the detector"
     )
     numberOfROIPixelsX: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Detector number of pixels in x in ROI mode"
+        MEDIUMINT(9), comment="Detector number of pixels in x in ROI mode"
     )
     numberOfROIPixelsY: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Detector number of pixels in y in ROI mode"
+        MEDIUMINT(9), comment="Detector number of pixels in y in ROI mode"
     )
 
     DataCollection_: Mapped[List["DataCollection"]] = relationship(
@@ -1202,16 +1201,16 @@ class Detector(Base):
     DiffractionPlan: Mapped[List["DiffractionPlan"]] = relationship(
         "DiffractionPlan", back_populates="Detector_"
     )
-    DataCollectionPlan_has_Detector: Mapped[
-        List["DataCollectionPlanHasDetector"]
-    ] = relationship("DataCollectionPlanHasDetector", back_populates="Detector_")
+    DataCollectionPlan_has_Detector: Mapped[List["DataCollectionPlanHasDetector"]] = (
+        relationship("DataCollectionPlanHasDetector", back_populates="Detector_")
+    )
 
 
 class DewarLocation(Base):
     __tablename__ = "DewarLocation"
     __table_args__ = {"comment": "ISPyB Dewar location table"}
 
-    eventId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    eventId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     dewarNumber: Mapped[str] = mapped_column(String(128), comment="Dewar number")
     userId: Mapped[Optional[str]] = mapped_column(
         String(128), comment="User who locates the dewar"
@@ -1234,7 +1233,7 @@ class DewarLocationList(Base):
     __tablename__ = "DewarLocationList"
     __table_args__ = {"comment": "List of locations for dewars"}
 
-    locationId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    locationId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     locationName: Mapped[str] = mapped_column(
         String(128), server_default=text("''"), comment="Location"
     )
@@ -1250,8 +1249,8 @@ class EventType(Base):
         },
     )
 
-    eventTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    name: Mapped[str] = mapped_column(String(30, "utf8mb4_general_ci"))
+    eventTypeId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
 
     Event: Mapped[List["Event"]] = relationship("Event", back_populates="EventType_")
 
@@ -1260,11 +1259,11 @@ class ExperimentType(Base):
     __tablename__ = "ExperimentType"
     __table_args__ = {"comment": "A lookup table for different types of experients"}
 
-    experimentTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    experimentTypeId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(100))
     proposalType: Mapped[Optional[str]] = mapped_column(String(10))
     active: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'1'"), comment="1=active, 0=inactive"
+        TINYINT(1), server_default=text("1"), comment="1=active, 0=inactive"
     )
 
     DiffractionPlan: Mapped[List["DiffractionPlan"]] = relationship(
@@ -1281,8 +1280,8 @@ class ExperimentType(Base):
 class GeometryClassname(Base):
     __tablename__ = "GeometryClassname"
 
-    geometryClassnameId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    geometryOrder: Mapped[int] = mapped_column(Integer)
+    geometryClassnameId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    geometryOrder: Mapped[int] = mapped_column(INTEGER(2))
     geometryClassname: Mapped[Optional[str]] = mapped_column(String(45))
 
     SpaceGroup: Mapped[List["SpaceGroup"]] = relationship(
@@ -1293,23 +1292,23 @@ class GeometryClassname(Base):
 class ImageQualityIndicators(Base):
     __tablename__ = "ImageQualityIndicators"
 
-    dataCollectionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    imageNumber: Mapped[int] = mapped_column(MEDIUMINT, primary_key=True)
-    imageId: Mapped[Optional[int]] = mapped_column(Integer)
+    dataCollectionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    imageNumber: Mapped[int] = mapped_column(MEDIUMINT(8), primary_key=True)
+    imageId: Mapped[Optional[int]] = mapped_column(INTEGER(12))
     autoProcProgramId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Foreign key to the AutoProcProgram table"
+        INTEGER(10), comment="Foreign key to the AutoProcProgram table"
     )
     spotTotal: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Total number of spots"
+        INTEGER(10), comment="Total number of spots"
     )
     inResTotal: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Total number of spots in resolution range"
+        INTEGER(10), comment="Total number of spots in resolution range"
     )
     goodBraggCandidates: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Total number of Bragg diffraction spots"
+        INTEGER(10), comment="Total number of Bragg diffraction spots"
     )
     iceRings: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Number of ice rings identified"
+        INTEGER(10), comment="Number of ice rings identified"
     )
     method1Res: Mapped[Optional[float]] = mapped_column(
         Float, comment="Resolution estimate 1 (see publication)"
@@ -1324,7 +1323,7 @@ class ImageQualityIndicators(Base):
         Float, comment="The fraction of the dynamic range being used"
     )
     inResolutionOvrlSpots: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Number of spots overloaded"
+        INTEGER(10), comment="Number of spots overloaded"
     )
     binPopCutOffMethod2Res: Mapped[Optional[float]] = mapped_column(
         Float, comment="Cut off used in resolution limit calculation"
@@ -1346,11 +1345,11 @@ class ImageQualityIndicators(Base):
 class Imager(Base):
     __tablename__ = "Imager"
 
-    imagerId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    imagerId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(String(45))
     temperature: Mapped[Optional[float]] = mapped_column(Float)
     serial: Mapped[Optional[str]] = mapped_column(String(45))
-    capacity: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    capacity: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
 
     Container: Mapped[List["Container"]] = relationship(
         "Container", foreign_keys="[Container.imagerId]", back_populates="Imager_"
@@ -1368,7 +1367,7 @@ class Imager(Base):
 class InspectionType(Base):
     __tablename__ = "InspectionType"
 
-    inspectionTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    inspectionTypeId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(45))
 
     ScheduleComponent: Mapped[List["ScheduleComponent"]] = relationship(
@@ -1383,7 +1382,7 @@ class IspybCrystalClass(Base):
     __tablename__ = "IspybCrystalClass"
     __table_args__ = {"comment": "ISPyB crystal class values"}
 
-    crystalClassId: Mapped[int] = mapped_column(Integer, primary_key=True)
+    crystalClassId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     crystalClass_code: Mapped[str] = mapped_column(String(20))
     crystalClass_name: Mapped[str] = mapped_column(String(255))
 
@@ -1392,7 +1391,7 @@ class IspybReference(Base):
     __tablename__ = "IspybReference"
 
     referenceId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     referenceName: Mapped[Optional[str]] = mapped_column(
         String(255), comment="reference name"
@@ -1416,27 +1415,23 @@ class LDAPSearchParameters(Base):
         "base"
     }
 
-    ldapSearchParametersId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    ldapSearchParametersId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     accountType: Mapped[str] = mapped_column(
-        ENUM("group_member", "staff_account", "functional_account"),
+        Enum("group_member", "staff_account", "functional_account"),
         comment="The entity type returned by the search",
     )
     oneOrMany: Mapped[str] = mapped_column(
-        ENUM("one", "many"), comment="Expected number of search results"
+        Enum("one", "many"), comment="Expected number of search results"
     )
-    hostURL: Mapped[str] = mapped_column(
-        String(200, "utf8mb4_general_ci"), comment="URL for the LDAP host"
-    )
+    hostURL: Mapped[str] = mapped_column(String(200), comment="URL for the LDAP host")
     attributes: Mapped[str] = mapped_column(
-        String(255, "utf8mb4_general_ci"),
-        comment="Comma-separated list of search attributes",
+        String(255), comment="Comma-separated list of search attributes"
     )
     accountTypeGroupName: Mapped[Optional[str]] = mapped_column(
-        String(100, "utf8mb4_general_ci"),
-        comment="all accounts of this type must be members of this group",
+        String(100), comment="all accounts of this type must be members of this group"
     )
     filter: Mapped[Optional[str]] = mapped_column(
-        String(200, "utf8mb4_general_ci"), comment="A filter string for the search"
+        String(200), comment="A filter string for the search"
     )
 
     LDAPSearchBase: Mapped[List["LDAPSearchBase"]] = relationship(
@@ -1452,10 +1447,10 @@ class LDAPSearchParameters(Base):
 class Laboratory(Base):
     __tablename__ = "Laboratory"
 
-    laboratoryId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    laboratoryId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
     laboratoryUUID: Mapped[Optional[str]] = mapped_column(String(45))
@@ -1465,7 +1460,7 @@ class Laboratory(Base):
     country: Mapped[Optional[str]] = mapped_column(String(45))
     url: Mapped[Optional[str]] = mapped_column(String(255))
     organization: Mapped[Optional[str]] = mapped_column(String(45))
-    laboratoryPk: Mapped[Optional[int]] = mapped_column(Integer)
+    laboratoryPk: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     postcode: Mapped[Optional[str]] = mapped_column(String(15))
     EORINumber: Mapped[Optional[str]] = mapped_column(
         String(17),
@@ -1481,11 +1476,11 @@ class MotorPosition(Base):
     __tablename__ = "MotorPosition"
 
     motorPositionId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
     phiX: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
@@ -1497,8 +1492,8 @@ class MotorPosition(Base):
     kappa: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     phi: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     chi: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
-    gridIndexY: Mapped[Optional[int]] = mapped_column(Integer)
-    gridIndexZ: Mapped[Optional[int]] = mapped_column(Integer)
+    gridIndexY: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    gridIndexZ: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     BLSubSample_: Mapped[List["BLSubSample"]] = relationship(
         "BLSubSample", back_populates="MotorPosition"
@@ -1521,7 +1516,7 @@ class MotorPosition(Base):
 class PDB(Base):
     __tablename__ = "PDB"
 
-    pdbId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    pdbId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(255))
     contents: Mapped[Optional[str]] = mapped_column(MEDIUMTEXT)
     code: Mapped[Optional[str]] = mapped_column(String(4))
@@ -1537,7 +1532,7 @@ class PDB(Base):
 class Permission(Base):
     __tablename__ = "Permission"
 
-    permissionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    permissionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     type: Mapped[str] = mapped_column(String(15))
     description: Mapped[Optional[str]] = mapped_column(String(100))
 
@@ -1550,7 +1545,7 @@ class PhasingAnalysis(Base):
     __tablename__ = "PhasingAnalysis"
 
     phasingAnalysisId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
         DateTime, comment="Creation or last update date/time"
@@ -1577,7 +1572,7 @@ class PhasingProgramRun(Base):
     __tablename__ = "PhasingProgramRun"
 
     phasingProgramRunId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     phasingCommandLine: Mapped[Optional[str]] = mapped_column(
         String(255), comment="Command line for phasing"
@@ -1601,7 +1596,7 @@ class PhasingProgramRun(Base):
         String(255), comment="Cpus, Nodes,..."
     )
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
 
     PhasingProgramAttachment: Mapped[List["PhasingProgramAttachment"]] = relationship(
@@ -1638,10 +1633,10 @@ class Position(Base):
     )
 
     positionId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     relativePositionId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="relative position, null otherwise"
+        INTEGER(11), comment="relative position, null otherwise"
     )
     posX: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     posY: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
@@ -1686,13 +1681,13 @@ class Positioner(Base):
         "subsample"
     }
 
-    positionerId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    positionerId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     positioner: Mapped[str] = mapped_column(String(50))
     value: Mapped[float] = mapped_column(Float)
 
-    BLSampleImage_has_Positioner: Mapped[
-        List["BLSampleImageHasPositioner"]
-    ] = relationship("BLSampleImageHasPositioner", back_populates="Positioner_")
+    BLSampleImage_has_Positioner: Mapped[List["BLSampleImageHasPositioner"]] = (
+        relationship("BLSampleImageHasPositioner", back_populates="Positioner_")
+    )
     BLSample_has_Positioner: Mapped[List["BLSampleHasPositioner"]] = relationship(
         "BLSampleHasPositioner", back_populates="Positioner_"
     )
@@ -1713,13 +1708,13 @@ class ProcessingJob(Base):
         {"comment": "From this we get both job times and lag times"},
     )
 
-    processingJobId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    processingJobId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     recordTimestamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="When job was submitted",
     )
-    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     displayName: Mapped[Optional[str]] = mapped_column(
         String(80), comment="xia2, fast_dp, dimple, etc"
     )
@@ -1755,7 +1750,9 @@ class ProcessingPipelineCategory(Base):
         "comment": "A lookup table for the category of processing pipeline"
     }
 
-    processingPipelineCategoryId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    processingPipelineCategoryId: Mapped[int] = mapped_column(
+        INTEGER(11), primary_key=True
+    )
     name: Mapped[str] = mapped_column(String(20))
 
     ProcessingPipeline: Mapped[List["ProcessingPipeline"]] = relationship(
@@ -1769,10 +1766,10 @@ class PurificationColumn(Base):
         "comment": "Size exclusion chromotography (SEC) lookup table for BioSAXS"
     }
 
-    purificationColumnId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    purificationColumnId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(100))
     active: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'1'"), comment="1=active, 0=inactive"
+        TINYINT(1), server_default=text("1"), comment="1=active, 0=inactive"
     )
 
     DiffractionPlan: Mapped[List["DiffractionPlan"]] = relationship(
@@ -1783,7 +1780,7 @@ class PurificationColumn(Base):
 class ScanParametersService(Base):
     __tablename__ = "ScanParametersService"
 
-    scanParametersServiceId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    scanParametersServiceId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(45))
     description: Mapped[Optional[str]] = mapped_column(String(45))
 
@@ -1795,7 +1792,7 @@ class ScanParametersService(Base):
 class Schedule(Base):
     __tablename__ = "Schedule"
 
-    scheduleId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    scheduleId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(45))
 
     ScheduleComponent: Mapped[List["ScheduleComponent"]] = relationship(
@@ -1810,10 +1807,10 @@ class SchemaStatus(Base):
     __tablename__ = "SchemaStatus"
     __table_args__ = (Index("scriptName", "scriptName", unique=True),)
 
-    schemaStatusId: Mapped[int] = mapped_column(Integer, primary_key=True)
+    schemaStatusId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     scriptName: Mapped[str] = mapped_column(String(100))
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     schemaStatus: Mapped[Optional[str]] = mapped_column(String(10))
 
@@ -1846,20 +1843,21 @@ class Screening(Base):
         Index("dcgroupId", "dataCollectionGroupId"),
     )
 
-    screeningId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    screeningId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     bltimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+        TIMESTAMP,
+        server_default=text("current_timestamp() ON UPDATE current_timestamp()"),
     )
-    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     programVersion: Mapped[Optional[str]] = mapped_column(String(45))
     comments: Mapped[Optional[str]] = mapped_column(String(255))
     shortComments: Mapped[Optional[str]] = mapped_column(String(20))
     diffractionPlanId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="references DiffractionPlan"
+        INTEGER(10), comment="references DiffractionPlan"
     )
-    dataCollectionGroupId: Mapped[Optional[int]] = mapped_column(Integer)
+    dataCollectionGroupId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     xmlSampleInformation: Mapped[Optional[bytes]] = mapped_column(LONGBLOB)
-    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="Screening"
@@ -1894,31 +1892,29 @@ class ScreeningOutput(Base):
         Index("ScreeningOutput_FKIndex1", "screeningId"),
     )
 
-    screeningOutputId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    screeningId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    screeningOutputId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    screeningId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     mosaicityEstimated: Mapped[int] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
+        TINYINT(1), server_default=text("0")
     )
-    indexingSuccess: Mapped[int] = mapped_column(TINYINT(1), server_default=text("'0'"))
-    strategySuccess: Mapped[int] = mapped_column(TINYINT(1), server_default=text("'0'"))
-    alignmentSuccess: Mapped[int] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
-    )
+    indexingSuccess: Mapped[int] = mapped_column(TINYINT(1), server_default=text("0"))
+    strategySuccess: Mapped[int] = mapped_column(TINYINT(1), server_default=text("0"))
+    alignmentSuccess: Mapped[int] = mapped_column(TINYINT(1), server_default=text("0"))
     statusDescription: Mapped[Optional[str]] = mapped_column(String(1024))
-    rejectedReflections: Mapped[Optional[int]] = mapped_column(INTEGER)
+    rejectedReflections: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     resolutionObtained: Mapped[Optional[float]] = mapped_column(Float)
     spotDeviationR: Mapped[Optional[float]] = mapped_column(Float)
     spotDeviationTheta: Mapped[Optional[float]] = mapped_column(Float)
     beamShiftX: Mapped[Optional[float]] = mapped_column(Float)
     beamShiftY: Mapped[Optional[float]] = mapped_column(Float)
-    numSpotsFound: Mapped[Optional[int]] = mapped_column(INTEGER)
-    numSpotsUsed: Mapped[Optional[int]] = mapped_column(INTEGER)
-    numSpotsRejected: Mapped[Optional[int]] = mapped_column(INTEGER)
+    numSpotsFound: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    numSpotsUsed: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    numSpotsRejected: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     mosaicity: Mapped[Optional[float]] = mapped_column(Float)
     iOverSigma: Mapped[Optional[float]] = mapped_column(Float)
     diffractionRings: Mapped[Optional[int]] = mapped_column(TINYINT(1))
     SCREENINGSUCCESS: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'0'"), comment="Column to be deleted"
+        TINYINT(1), server_default=text("0"), comment="Column to be deleted"
     )
     rankingResolution: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True)
@@ -1931,7 +1927,7 @@ class ScreeningOutput(Base):
     totalRotationRange: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True)
     )
-    totalNumberOfImages: Mapped[Optional[int]] = mapped_column(Integer)
+    totalNumberOfImages: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     rFriedel: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
 
     Screening_: Mapped["Screening"] = relationship(
@@ -1948,7 +1944,7 @@ class ScreeningOutput(Base):
 class ScreeningRankSet(Base):
     __tablename__ = "ScreeningRankSet"
 
-    screeningRankSetId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    screeningRankSetId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     rankEngine: Mapped[Optional[str]] = mapped_column(String(255))
     rankingProjectFileName: Mapped[Optional[str]] = mapped_column(String(255))
     rankingSummaryFileName: Mapped[Optional[str]] = mapped_column(String(255))
@@ -1971,9 +1967,11 @@ class ScreeningStrategy(Base):
         Index("ScreeningStrategy_FKIndex1", "screeningOutputId"),
     )
 
-    screeningStrategyId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    screeningOutputId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
-    anomalous: Mapped[int] = mapped_column(TINYINT(1), server_default=text("'0'"))
+    screeningStrategyId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    screeningOutputId: Mapped[int] = mapped_column(
+        INTEGER(10), server_default=text("0")
+    )
+    anomalous: Mapped[int] = mapped_column(TINYINT(1), server_default=text("0"))
     phiStart: Mapped[Optional[float]] = mapped_column(Float)
     phiEnd: Mapped[Optional[float]] = mapped_column(Float)
     rotation: Mapped[Optional[float]] = mapped_column(Float)
@@ -2009,13 +2007,13 @@ class ScreeningStrategySubWedge(Base):
     )
 
     screeningStrategySubWedgeId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key"
+        INTEGER(10), primary_key=True, comment="Primary key"
     )
     screeningStrategyWedgeId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Foreign key to parent table"
+        INTEGER(10), comment="Foreign key to parent table"
     )
     subWedgeNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="The number of this subwedge within the wedge"
+        INTEGER(10), comment="The number of this subwedge within the wedge"
     )
     rotationAxis: Mapped[Optional[str]] = mapped_column(
         String(45), comment="Angle where subwedge starts"
@@ -2038,7 +2036,7 @@ class ScreeningStrategySubWedge(Base):
         Float, comment="Total dose for this subwedge"
     )
     numberOfImages: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Number of images for this subwedge"
+        INTEGER(10), comment="Number of images for this subwedge"
     )
     comments: Mapped[Optional[str]] = mapped_column(String(255))
 
@@ -2064,13 +2062,13 @@ class ScreeningStrategyWedge(Base):
     )
 
     screeningStrategyWedgeId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key"
+        INTEGER(10), primary_key=True, comment="Primary key"
     )
     screeningStrategyId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Foreign key to parent table"
+        INTEGER(10), comment="Foreign key to parent table"
     )
     wedgeNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="The number of this wedge within the strategy"
+        INTEGER(10), comment="The number of this wedge within the strategy"
     )
     resolution: Mapped[Optional[float]] = mapped_column(Float)
     completeness: Mapped[Optional[float]] = mapped_column(Float)
@@ -2079,7 +2077,7 @@ class ScreeningStrategyWedge(Base):
         Float, comment="Total dose for this wedge"
     )
     numberOfImages: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Number of images for this wedge"
+        INTEGER(10), comment="Number of images for this wedge"
     )
     phi: Mapped[Optional[float]] = mapped_column(Float)
     kappa: Mapped[Optional[float]] = mapped_column(Float)
@@ -2089,10 +2087,10 @@ class ScreeningStrategyWedge(Base):
         Double(asdecimal=True)
     )
 
-    ScreeningStrategySubWedge_: Mapped[
-        List["ScreeningStrategySubWedge"]
-    ] = relationship(
-        "ScreeningStrategySubWedge", back_populates="ScreeningStrategyWedge"
+    ScreeningStrategySubWedge_: Mapped[List["ScreeningStrategySubWedge"]] = (
+        relationship(
+            "ScreeningStrategySubWedge", back_populates="ScreeningStrategyWedge"
+        )
     )
     ScreeningStrategy_: Mapped["ScreeningStrategy"] = relationship(
         "ScreeningStrategy", back_populates="ScreeningStrategyWedge"
@@ -2107,18 +2105,18 @@ class Sleeve(Base):
     }
 
     sleeveId: Mapped[int] = mapped_column(
-        TINYINT,
+        TINYINT(3),
         primary_key=True,
         comment="The unique sleeve id 1...255 which also identifies its home location in the freezer",
     )
     lastMovedToFreezer: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     location: Mapped[Optional[int]] = mapped_column(
-        TINYINT, comment="NULL == freezer, 1...255 for local storage locations"
+        TINYINT(3), comment="NULL == freezer, 1...255 for local storage locations"
     )
     lastMovedFromFreezer: Mapped[Optional[datetime.datetime]] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
 
 
@@ -2126,7 +2124,7 @@ class UserGroup(Base):
     __tablename__ = "UserGroup"
     __table_args__ = (Index("UserGroup_idx1", "name", unique=True),)
 
-    userGroupId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    userGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(String(31))
 
     Permission_: Mapped[List["Permission"]] = relationship(
@@ -2144,7 +2142,7 @@ class VRun(Base):
     __tablename__ = "v_run"
     __table_args__ = (Index("v_run_idx1", "startDate", "endDate"),)
 
-    runId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    runId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     run: Mapped[str] = mapped_column(String(7), server_default=text("''"))
     startDate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     endDate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
@@ -2172,19 +2170,19 @@ class AutoProcIntegration(Base):
     )
 
     autoProcIntegrationId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(10), primary_key=True, comment="Primary key (auto-incremented)"
     )
     dataCollectionId: Mapped[int] = mapped_column(
-        INTEGER, comment="DataCollection item"
+        INTEGER(11), comment="DataCollection item"
     )
     autoProcProgramId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related program item"
+        INTEGER(10), comment="Related program item"
     )
     startImageNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="start image number"
+        INTEGER(10), comment="start image number"
     )
     endImageNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="end image number"
+        INTEGER(10), comment="end image number"
     )
     refinedDetectorDistance: Mapped[Optional[float]] = mapped_column(
         Float, comment="Refined DataCollection.detectorDistance"
@@ -2217,9 +2215,7 @@ class AutoProcIntegration(Base):
         DateTime, comment="Creation or last update date/time"
     )
     anomalous: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1),
-        server_default=text("'0'"),
-        comment="boolean type:0 noanoum - 1 anoum",
+        TINYINT(1), server_default=text("0"), comment="boolean type:0 noanoum - 1 anoum"
     )
 
     AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
@@ -2250,10 +2246,10 @@ class AutoProcProgramAttachment(Base):
     )
 
     autoProcProgramAttachmentId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(10), primary_key=True, comment="Primary key (auto-incremented)"
     )
     autoProcProgramId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related autoProcProgram item"
+        INTEGER(10), comment="Related autoProcProgram item"
     )
     fileType: Mapped[Optional[str]] = mapped_column(
         Enum("Log", "Result", "Graph", "Debug", "Input"),
@@ -2269,7 +2265,7 @@ class AutoProcProgramAttachment(Base):
         DateTime, comment="Creation or last update date/time"
     )
     importanceRank: Mapped[Optional[int]] = mapped_column(
-        TINYINT,
+        TINYINT(3),
         comment="For the particular autoProcProgramId and fileType, indicate the importance of the attachment. Higher numbers are more important",
     )
 
@@ -2289,12 +2285,12 @@ class AutoProcProgramMessage(Base):
         Index("AutoProcProgramMessage_fk1", "autoProcProgramId"),
     )
 
-    autoProcProgramMessageId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    autoProcProgramMessageId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
-    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    severity: Mapped[Optional[str]] = mapped_column(Enum("ERROR", "WARNING", "INFO"))
+    severity: Mapped[str] = mapped_column(Enum("ERROR", "WARNING", "INFO"))
+    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     message: Mapped[Optional[str]] = mapped_column(String(200))
     description: Mapped[Optional[str]] = mapped_column(Text)
 
@@ -2318,10 +2314,10 @@ class AutoProcScaling(Base):
     )
 
     autoProcScalingId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(10), primary_key=True, comment="Primary key (auto-incremented)"
     )
     autoProcId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related autoProc item (used by foreign key)"
+        INTEGER(10), comment="Related autoProc item (used by foreign key)"
     )
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
         DateTime, comment="Creation or last update date/time"
@@ -2356,8 +2352,8 @@ class BFComponent(Base):
         Index("bf_component_FK1", "systemId"),
     )
 
-    componentId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    systemId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    componentId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    systemId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     name: Mapped[Optional[str]] = mapped_column(String(100))
     description: Mapped[Optional[str]] = mapped_column(String(200))
 
@@ -2381,8 +2377,8 @@ class BFSystemBeamline(Base):
         Index("bf_system_beamline_FK1", "systemId"),
     )
 
-    system_beamlineId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    systemId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    system_beamlineId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    systemId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     beamlineName: Mapped[Optional[str]] = mapped_column(String(20))
 
     BF_system: Mapped["BFSystem"] = relationship(
@@ -2401,17 +2397,17 @@ class BLSampleImageAnalysis(Base):
         Index("BLSampleImageAnalysis_ibfk1", "blSampleImageId"),
     )
 
-    blSampleImageAnalysisId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blSampleImageId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSampleImageAnalysisId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    blSampleImageId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     oavSnapshotBefore: Mapped[Optional[str]] = mapped_column(String(255))
     oavSnapshotAfter: Mapped[Optional[str]] = mapped_column(String(255))
-    deltaX: Mapped[Optional[int]] = mapped_column(Integer)
-    deltaY: Mapped[Optional[int]] = mapped_column(Integer)
+    deltaX: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    deltaY: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     goodnessOfFit: Mapped[Optional[float]] = mapped_column(Float)
     scaleFactor: Mapped[Optional[float]] = mapped_column(Float)
     resultCode: Mapped[Optional[str]] = mapped_column(String(15))
     matchStartTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     matchEndTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(TIMESTAMP)
 
@@ -2434,23 +2430,23 @@ class BLSampleImageAutoScoreClass(Base):
     )
 
     blSampleImageAutoScoreClassId: Mapped[int] = mapped_column(
-        TINYINT, primary_key=True
+        TINYINT(3), primary_key=True
     )
     scoreClass: Mapped[str] = mapped_column(
         String(15), comment="Thing being scored e.g. crystal, precipitant"
     )
-    blSampleImageAutoScoreSchemaId: Mapped[Optional[int]] = mapped_column(TINYINT)
+    blSampleImageAutoScoreSchemaId: Mapped[Optional[int]] = mapped_column(TINYINT(3))
 
-    BLSampleImageAutoScoreSchema_: Mapped[
-        "BLSampleImageAutoScoreSchema"
-    ] = relationship(
-        "BLSampleImageAutoScoreSchema", back_populates="BLSampleImageAutoScoreClass"
+    BLSampleImageAutoScoreSchema_: Mapped["BLSampleImageAutoScoreSchema"] = (
+        relationship(
+            "BLSampleImageAutoScoreSchema", back_populates="BLSampleImageAutoScoreClass"
+        )
     )
-    BLSampleImage_has_AutoScoreClass: Mapped[
-        List["BLSampleImageHasAutoScoreClass"]
-    ] = relationship(
-        "BLSampleImageHasAutoScoreClass",
-        back_populates="BLSampleImageAutoScoreClass_",
+    BLSampleImage_has_AutoScoreClass: Mapped[List["BLSampleImageHasAutoScoreClass"]] = (
+        relationship(
+            "BLSampleImageHasAutoScoreClass",
+            back_populates="BLSampleImageAutoScoreClass_",
+        )
     )
 
 
@@ -2474,9 +2470,11 @@ class BLSampleImageMeasurement(Base):
         {"comment": "For measuring crystal growth over time"},
     )
 
-    blSampleImageMeasurementId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blSampleImageId: Mapped[int] = mapped_column(INTEGER)
-    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSampleImageMeasurementId: Mapped[int] = mapped_column(
+        INTEGER(11), primary_key=True
+    )
+    blSampleImageId: Mapped[int] = mapped_column(INTEGER(11))
+    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     startPosX: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     startPosY: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     endPosX: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
@@ -2512,9 +2510,11 @@ class BLSampleImageHasPositioner(Base):
         },
     )
 
-    blSampleImageHasPositionerId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blSampleImageId: Mapped[int] = mapped_column(INTEGER)
-    positionerId: Mapped[int] = mapped_column(INTEGER)
+    blSampleImageHasPositionerId: Mapped[int] = mapped_column(
+        INTEGER(10), primary_key=True
+    )
+    blSampleImageId: Mapped[int] = mapped_column(INTEGER(10))
+    positionerId: Mapped[int] = mapped_column(INTEGER(10))
     value: Mapped[Optional[float]] = mapped_column(
         Float, comment="The position of this positioner for this blsampleimage"
     )
@@ -2542,9 +2542,9 @@ class BLSampleHasPositioner(Base):
         Index("BLSampleHasPositioner_ibfk2", "positionerId"),
     )
 
-    blSampleHasPositioner: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blSampleId: Mapped[int] = mapped_column(INTEGER)
-    positionerId: Mapped[int] = mapped_column(INTEGER)
+    blSampleHasPositioner: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    blSampleId: Mapped[int] = mapped_column(INTEGER(10))
+    positionerId: Mapped[int] = mapped_column(INTEGER(10))
 
     BLSample_: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="BLSample_has_Positioner"
@@ -2571,9 +2571,9 @@ class BLSubSampleHasPositioner(Base):
         Index("BLSubSampleHasPositioner_ibfk2", "positionerId"),
     )
 
-    blSubSampleHasPositioner: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blSubSampleId: Mapped[int] = mapped_column(INTEGER)
-    positionerId: Mapped[int] = mapped_column(INTEGER)
+    blSubSampleHasPositioner: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    blSubSampleId: Mapped[int] = mapped_column(INTEGER(10))
+    positionerId: Mapped[int] = mapped_column(INTEGER(10))
 
     BLSubSample_: Mapped["BLSubSample"] = relationship(
         "BLSubSample", back_populates="BLSubSample_has_Positioner"
@@ -2595,12 +2595,12 @@ class BeamApertures(Base):
         Index("beamapertures_FK1", "beamlineStatsId"),
     )
 
-    beamAperturesid: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    beamlineStatsId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    beamAperturesid: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    beamlineStatsId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     flux: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     x: Mapped[Optional[float]] = mapped_column(Float)
     y: Mapped[Optional[float]] = mapped_column(Float)
-    apertureSize: Mapped[Optional[int]] = mapped_column(SMALLINT)
+    apertureSize: Mapped[Optional[int]] = mapped_column(SMALLINT(5))
 
     BeamlineStats_: Mapped["BeamlineStats"] = relationship(
         "BeamlineStats", back_populates="BeamApertures"
@@ -2619,11 +2619,11 @@ class BeamCentres(Base):
         Index("beamCentres_FK1", "beamlineStatsId"),
     )
 
-    beamCentresid: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    beamlineStatsId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    beamCentresid: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    beamlineStatsId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     x: Mapped[Optional[float]] = mapped_column(Float)
     y: Mapped[Optional[float]] = mapped_column(Float)
-    zoom: Mapped[Optional[int]] = mapped_column(TINYINT)
+    zoom: Mapped[Optional[int]] = mapped_column(TINYINT(3))
 
     BeamlineStats_: Mapped["BeamlineStats"] = relationship(
         "BeamlineStats", back_populates="BeamCentres"
@@ -2639,14 +2639,14 @@ class BeamLineSetup(Base):
         Index("BeamLineSetup_ibfk_1", "detectorId"),
     )
 
-    beamLineSetupId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    beamLineSetupId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
-    active: Mapped[int] = mapped_column(TINYINT(1), server_default=text("'0'"))
-    detectorId: Mapped[Optional[int]] = mapped_column(Integer)
+    active: Mapped[int] = mapped_column(TINYINT(1), server_default=text("0"))
+    detectorId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     synchrotronMode: Mapped[Optional[str]] = mapped_column(String(255))
     undulatorType1: Mapped[Optional[str]] = mapped_column(String(45))
     undulatorType2: Mapped[Optional[str]] = mapped_column(String(45))
@@ -2701,8 +2701,8 @@ class BeamLineSetup(Base):
     kappaMax: Mapped[Optional[float]] = mapped_column(Float, comment="unit: degrees")
     phiMin: Mapped[Optional[float]] = mapped_column(Float, comment="unit: degrees")
     phiMax: Mapped[Optional[float]] = mapped_column(Float, comment="unit: degrees")
-    numberOfImagesMax: Mapped[Optional[int]] = mapped_column(MEDIUMINT)
-    numberOfImagesMin: Mapped[Optional[int]] = mapped_column(MEDIUMINT)
+    numberOfImagesMax: Mapped[Optional[int]] = mapped_column(MEDIUMINT(8))
+    numberOfImagesMin: Mapped[Optional[int]] = mapped_column(MEDIUMINT(8))
     boxSizeXMin: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True), comment="For gridscans, unit: um"
     )
@@ -2751,12 +2751,12 @@ class DataCollectionFileAttachment(Base):
     )
 
     dataCollectionFileAttachmentId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True
+        INTEGER(11), primary_key=True
     )
-    dataCollectionId: Mapped[int] = mapped_column(INTEGER)
+    dataCollectionId: Mapped[int] = mapped_column(INTEGER(11))
     fileFullPath: Mapped[str] = mapped_column(String(255))
     createTime: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     fileType: Mapped[Optional[str]] = mapped_column(
         Enum("snapshot", "log", "xy", "recip", "pia", "warning", "params")
@@ -2781,9 +2781,9 @@ class EventChain(Base):
         {"comment": "Groups events together in a data collection."},
     )
 
-    eventChainId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    dataCollectionId: Mapped[int] = mapped_column(INTEGER)
-    name: Mapped[Optional[str]] = mapped_column(String(255, "utf8mb4_general_ci"))
+    eventChainId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    dataCollectionId: Mapped[int] = mapped_column(INTEGER(11))
+    name: Mapped[Optional[str]] = mapped_column(String(255))
 
     DataCollection_: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="EventChain"
@@ -2802,10 +2802,10 @@ class GridImageMap(Base):
         Index("_GridImageMap_ibfk1", "dataCollectionId"),
     )
 
-    gridImageMapId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    gridImageMapId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     imageNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Movie number, sequential 1-n in time order"
+        INTEGER(11), comment="Movie number, sequential 1-n in time order"
     )
     outputFileId: Mapped[Optional[str]] = mapped_column(
         String(80), comment="File number, file 1 may not be movie 1"
@@ -2845,17 +2845,17 @@ class Image(Base):
         Index("motorPositionId", "motorPositionId"),
     )
 
-    imageId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    dataCollectionId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    imageId: Mapped[int] = mapped_column(INTEGER(12), primary_key=True)
+    dataCollectionId: Mapped[int] = mapped_column(INTEGER(11), server_default=text("0"))
     BLTIMESTAMP: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
-    imageNumber: Mapped[Optional[int]] = mapped_column(INTEGER)
+    imageNumber: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     fileName: Mapped[Optional[str]] = mapped_column(String(255))
     fileLocation: Mapped[Optional[str]] = mapped_column(String(255))
     measuredIntensity: Mapped[Optional[float]] = mapped_column(Float)
@@ -2866,7 +2866,7 @@ class Image(Base):
     synchrotronCurrent: Mapped[Optional[float]] = mapped_column(Float)
     comments: Mapped[Optional[str]] = mapped_column(String(1024))
     machineMessage: Mapped[Optional[str]] = mapped_column(String(1024))
-    motorPositionId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    motorPositionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     DataCollection_: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="Image"
@@ -2891,67 +2891,21 @@ class LDAPSearchBase(Base):
         },
     )
 
-    ldapSearchBaseId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    ldapSearchBaseId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     ldapSearchParametersId: Mapped[int] = mapped_column(
-        INTEGER,
+        INTEGER(11),
         comment="The other LDAP search parameters to be used with this search base",
     )
     searchBase: Mapped[str] = mapped_column(
-        String(200, "utf8mb4_general_ci"), comment="Name of the object we search for"
+        String(200), comment="Name of the object we search for"
     )
     sequenceNumber: Mapped[int] = mapped_column(
-        TINYINT,
+        TINYINT(3),
         comment="The number in the sequence of searches where this search base should be attempted",
     )
 
     LDAPSearchParameters_: Mapped["LDAPSearchParameters"] = relationship(
         "LDAPSearchParameters", back_populates="LDAPSearchBase"
-    )
-
-
-class Movie(Base):
-    __tablename__ = "Movie"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["dataCollectionId"],
-            ["DataCollection.dataCollectionId"],
-            name="Movie_ibfk1",
-        ),
-        Index("Movie_ibfk1", "dataCollectionId"),
-    )
-
-    movieId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    createdTimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    )
-    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    movieNumber: Mapped[Optional[int]] = mapped_column(MEDIUMINT)
-    movieFullPath: Mapped[Optional[str]] = mapped_column(String(255))
-    positionX: Mapped[Optional[float]] = mapped_column(Float)
-    positionY: Mapped[Optional[float]] = mapped_column(Float)
-    nominalDefocus: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Nominal defocus, Units: A"
-    )
-    angle: Mapped[Optional[float]] = mapped_column(
-        Float, comment="unit: degrees relative to perpendicular to beam"
-    )
-    fluence: Mapped[Optional[float]] = mapped_column(
-        Float,
-        comment="accumulated electron fluence from start to end of acquisition of this movie (commonly, but incorrectly, referred to as ‘dose’)",
-    )
-    numberOfFrames: Mapped[Optional[int]] = mapped_column(
-        INTEGER,
-        comment="number of frames per movie. This should be equivalent to the number of\xa0MotionCorrectionDrift\xa0entries, but the latter is a property of data analysis, whereas the number of frames is an intrinsic property of acquisition.",
-    )
-
-    DataCollection_: Mapped["DataCollection"] = relationship(
-        "DataCollection", back_populates="Movie"
-    )
-    MotionCorrection: Mapped[List["MotionCorrection"]] = relationship(
-        "MotionCorrection", back_populates="Movie_"
-    )
-    TiltImageAlignment: Mapped[List["TiltImageAlignment"]] = relationship(
-        "TiltImageAlignment", back_populates="Movie_"
     )
 
 
@@ -2967,8 +2921,8 @@ class PDBEntry(Base):
         Index("pdbEntryIdx1", "autoProcProgramId"),
     )
 
-    pdbEntryId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    autoProcProgramId: Mapped[int] = mapped_column(INTEGER)
+    pdbEntryId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    autoProcProgramId: Mapped[int] = mapped_column(INTEGER(11))
     code: Mapped[Optional[str]] = mapped_column(String(4))
     cell_a: Mapped[Optional[float]] = mapped_column(Float)
     cell_b: Mapped[Optional[float]] = mapped_column(Float)
@@ -2983,17 +2937,17 @@ class PDBEntry(Base):
     pdbBeamlineName: Mapped[Optional[str]] = mapped_column(String(50))
     beamlines: Mapped[Optional[str]] = mapped_column(String(100))
     distance: Mapped[Optional[float]] = mapped_column(Float)
-    autoProcCount: Mapped[Optional[int]] = mapped_column(SmallInteger)
-    dataCollectionCount: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    autoProcCount: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
+    dataCollectionCount: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
     beamlineMatch: Mapped[Optional[int]] = mapped_column(TINYINT(1))
     authorMatch: Mapped[Optional[int]] = mapped_column(TINYINT(1))
 
     AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="PDBEntry"
     )
-    PDBEntry_has_AutoProcProgram: Mapped[
-        List["PDBEntryHasAutoProcProgram"]
-    ] = relationship("PDBEntryHasAutoProcProgram", back_populates="PDBEntry_")
+    PDBEntry_has_AutoProcProgram: Mapped[List["PDBEntryHasAutoProcProgram"]] = (
+        relationship("PDBEntryHasAutoProcProgram", back_populates="PDBEntry_")
+    )
 
 
 class Person(Base):
@@ -3008,14 +2962,14 @@ class Person(Base):
         Index("siteId", "siteId"),
     )
 
-    personId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    personId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
-    laboratoryId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    siteId: Mapped[Optional[int]] = mapped_column(Integer)
+    laboratoryId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    siteId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     personUUID: Mapped[Optional[str]] = mapped_column(String(45))
     familyName: Mapped[Optional[str]] = mapped_column(String(100))
     givenName: Mapped[Optional[str]] = mapped_column(String(45))
@@ -3048,9 +3002,9 @@ class Person(Base):
     Proposal: Mapped[List["Proposal"]] = relationship(
         "Proposal", back_populates="Person_"
     )
-    ContainerRegistry_has_Proposal: Mapped[
-        List["ContainerRegistryHasProposal"]
-    ] = relationship("ContainerRegistryHasProposal", back_populates="Person_")
+    ContainerRegistry_has_Proposal: Mapped[List["ContainerRegistryHasProposal"]] = (
+        relationship("ContainerRegistryHasProposal", back_populates="Person_")
+    )
     LabContact: Mapped[List["LabContact"]] = relationship(
         "LabContact", back_populates="Person_"
     )
@@ -3100,10 +3054,10 @@ class PhasingProgramAttachment(Base):
     )
 
     phasingProgramAttachmentId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     phasingProgramRunId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related program item"
+        INTEGER(11), comment="Related program item"
     )
     fileType: Mapped[Optional[str]] = mapped_column(
         Enum("Map", "Logfile", "PDB", "CSV", "INS", "RES", "TXT"), comment="file type"
@@ -3137,11 +3091,13 @@ class ProcessingJobImageSweep(Base):
         {"comment": "This allows multiple sweeps per processing job for multi-xia2"},
     )
 
-    processingJobImageSweepId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    processingJobId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    startImage: Mapped[Optional[int]] = mapped_column(MEDIUMINT)
-    endImage: Mapped[Optional[int]] = mapped_column(MEDIUMINT)
+    processingJobImageSweepId: Mapped[int] = mapped_column(
+        INTEGER(11), primary_key=True
+    )
+    processingJobId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    startImage: Mapped[Optional[int]] = mapped_column(MEDIUMINT(8))
+    endImage: Mapped[Optional[int]] = mapped_column(MEDIUMINT(8))
 
     DataCollection_: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="ProcessingJobImageSweep"
@@ -3160,10 +3116,15 @@ class ProcessingJobParameter(Base):
             name="ProcessingJobParameter_ibfk1",
         ),
         Index("ProcessingJobParameter_ibfk1", "processingJobId"),
+        Index(
+            "ProcessingJobParameter_idx_paramKey_procJobId",
+            "parameterKey",
+            "processingJobId",
+        ),
     )
 
-    processingJobParameterId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    processingJobId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    processingJobParameterId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    processingJobId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     parameterKey: Mapped[Optional[str]] = mapped_column(
         String(80), comment="E.g. resolution, spacegroup, pipeline"
     )
@@ -3189,17 +3150,17 @@ class ProcessingPipeline(Base):
         },
     )
 
-    processingPipelineId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    processingPipelineId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(String(20))
     discipline: Mapped[str] = mapped_column(String(10))
-    processingPipelineCategoryId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    processingPipelineCategoryId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     pipelineStatus: Mapped[Optional[str]] = mapped_column(
         Enum("automatic", "optional", "deprecated"),
         comment="Is the pipeline in operation or available",
     )
     reprocessing: Mapped[Optional[int]] = mapped_column(
         TINYINT(1),
-        server_default=text("'1'"),
+        server_default=text("1"),
         comment="Pipeline is available for re-processing",
     )
 
@@ -3225,13 +3186,13 @@ class SSXDataCollection(DataCollection):
     )
 
     dataCollectionId: Mapped[int] = mapped_column(
-        INTEGER,
+        INTEGER(11),
         primary_key=True,
         comment="Primary key is same as dataCollection (1 to 1).",
     )
     repetitionRate: Mapped[Optional[float]] = mapped_column(Float)
     energyBandwidth: Mapped[Optional[float]] = mapped_column(Float)
-    monoStripe: Mapped[Optional[str]] = mapped_column(String(255, "utf8mb4_general_ci"))
+    monoStripe: Mapped[Optional[str]] = mapped_column(String(255))
     jetSpeed: Mapped[Optional[float]] = mapped_column(
         Float, comment="For jet experiments."
     )
@@ -3239,19 +3200,17 @@ class SSXDataCollection(DataCollection):
         Float, comment="For jet experiments."
     )
     chipPattern: Mapped[Optional[str]] = mapped_column(
-        String(255, "utf8mb4_general_ci"), comment="For chip experiments."
+        String(255), comment="For chip experiments."
     )
     chipModel: Mapped[Optional[str]] = mapped_column(
-        String(255, "utf8mb4_general_ci"), comment="For chip experiments."
+        String(255), comment="For chip experiments."
     )
     reactionDuration: Mapped[Optional[float]] = mapped_column(
         Float,
         comment="When images are taken at constant time relative to reaction start.",
     )
     laserEnergy: Mapped[Optional[float]] = mapped_column(Float)
-    experimentName: Mapped[Optional[str]] = mapped_column(
-        String(255, "utf8mb4_general_ci")
-    )
+    experimentName: Mapped[Optional[str]] = mapped_column(String(255))
 
 
 class ScheduleComponent(Base):
@@ -3274,10 +3233,10 @@ class ScheduleComponent(Base):
         Index("ScheduleComponent_idx1", "scheduleId"),
     )
 
-    scheduleComponentId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    scheduleId: Mapped[int] = mapped_column(INTEGER)
-    offset_hours: Mapped[Optional[int]] = mapped_column(Integer)
-    inspectionTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    scheduleComponentId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    scheduleId: Mapped[int] = mapped_column(INTEGER(11))
+    offset_hours: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    inspectionTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     InspectionType_: Mapped["InspectionType"] = relationship(
         "InspectionType", back_populates="ScheduleComponent"
@@ -3303,8 +3262,8 @@ class ScreeningInput(Base):
         Index("ScreeningInput_FKIndex1", "screeningId"),
     )
 
-    screeningInputId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    screeningId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    screeningInputId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    screeningId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     beamX: Mapped[Optional[float]] = mapped_column(Float)
     beamY: Mapped[Optional[float]] = mapped_column(Float)
     rmsErrorLimits: Mapped[Optional[float]] = mapped_column(Float)
@@ -3312,7 +3271,7 @@ class ScreeningInput(Base):
     maximumFractionRejected: Mapped[Optional[float]] = mapped_column(Float)
     minimumSignalToNoise: Mapped[Optional[float]] = mapped_column(Float)
     diffractionPlanId: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="references DiffractionPlan table"
+        INTEGER(10), comment="references DiffractionPlan table"
     )
     xmlSampleInformation: Mapped[Optional[bytes]] = mapped_column(LONGBLOB)
 
@@ -3334,10 +3293,13 @@ class ScreeningOutputLattice(Base):
         Index("ScreeningOutputLattice_FKIndex1", "screeningOutputId"),
     )
 
-    screeningOutputLatticeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    screeningOutputId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    screeningOutputLatticeId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    screeningOutputId: Mapped[int] = mapped_column(
+        INTEGER(10), server_default=text("0")
+    )
     bltimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+        TIMESTAMP,
+        server_default=text("current_timestamp() ON UPDATE current_timestamp()"),
     )
     spaceGroup: Mapped[Optional[str]] = mapped_column(String(45))
     pointGroup: Mapped[Optional[str]] = mapped_column(String(45))
@@ -3358,7 +3320,7 @@ class ScreeningOutputLattice(Base):
     unitCell_beta: Mapped[Optional[float]] = mapped_column(Float)
     unitCell_gamma: Mapped[Optional[float]] = mapped_column(Float)
     labelitIndexing: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
+        TINYINT(1), server_default=text("0")
     )
 
     ScreeningOutput_: Mapped["ScreeningOutput"] = relationship(
@@ -3387,9 +3349,11 @@ class ScreeningRank(Base):
         Index("ScreeningRank_FKIndex2", "screeningRankSetId"),
     )
 
-    screeningRankId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    screeningRankSetId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
-    screeningId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    screeningRankId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    screeningRankSetId: Mapped[int] = mapped_column(
+        INTEGER(10), server_default=text("0")
+    )
+    screeningId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     rankValue: Mapped[Optional[float]] = mapped_column(Float)
     rankInformation: Mapped[Optional[str]] = mapped_column(String(1024))
 
@@ -3416,13 +3380,13 @@ class SpaceGroup(Base):
     )
 
     spaceGroupId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key"
+        INTEGER(10), primary_key=True, comment="Primary key"
     )
     MX_used: Mapped[int] = mapped_column(
-        TINYINT(1), server_default=text("'0'"), comment="1 if used in the crystal form"
+        TINYINT(1), server_default=text("0"), comment="1 if used in the crystal form"
     )
     spaceGroupNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="ccp4 number pr IUCR"
+        INTEGER(10), comment="ccp4 number pr IUCR"
     )
     spaceGroupShortName: Mapped[Optional[str]] = mapped_column(
         String(45), comment="short name without blank"
@@ -3437,7 +3401,7 @@ class SpaceGroup(Base):
         String(45), comment="verbose name"
     )
     pointGroup: Mapped[Optional[str]] = mapped_column(String(45), comment="point group")
-    geometryClassnameId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    geometryClassnameId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     GeometryClassname_: Mapped["GeometryClassname"] = relationship(
         "GeometryClassname", back_populates="SpaceGroup"
@@ -3484,12 +3448,13 @@ class Tomogram(Base):
         },
     )
 
-    tomogramId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    tomogramId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     dataCollectionId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="FK to\xa0DataCollection\xa0table"
+        INTEGER(11), comment="FK to\xa0DataCollection\xa0table"
     )
     autoProcProgramId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="FK, gives processing times/status and software information"
+        INTEGER(10),
+        comment="FK, gives processing times/status and software information",
     )
     volumeFile: Mapped[Optional[str]] = mapped_column(
         String(255),
@@ -3499,9 +3464,9 @@ class Tomogram(Base):
         String(255),
         comment=".mrc\xa0file containing the motion corrected images ordered by angle used as input for the reconstruction",
     )
-    sizeX: Mapped[Optional[int]] = mapped_column(INTEGER, comment="unit: pixels")
-    sizeY: Mapped[Optional[int]] = mapped_column(INTEGER, comment="unit: pixels")
-    sizeZ: Mapped[Optional[int]] = mapped_column(INTEGER, comment="unit: pixels")
+    sizeX: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
+    sizeY: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
+    sizeZ: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
     pixelSpacing: Mapped[Optional[float]] = mapped_column(
         Float, comment="Angstrom/pixel conversion factor"
     )
@@ -3540,7 +3505,7 @@ class Tomogram(Base):
     )
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
         DateTime,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
     globalAlignmentQuality: Mapped[Optional[float]] = mapped_column(
@@ -3579,12 +3544,10 @@ class UserGroupHasLDAPSearchParameters(Base):
         },
     )
 
-    userGroupId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    ldapSearchParametersId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    userGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    ldapSearchParametersId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(
-        String(200, "utf8mb4_general_ci"),
-        primary_key=True,
-        comment="Name of the object we search for",
+        String(200), primary_key=True, comment="Name of the object we search for"
     )
 
     LDAPSearchParameters_: Mapped["LDAPSearchParameters"] = relationship(
@@ -3598,8 +3561,8 @@ class UserGroupHasLDAPSearchParameters(Base):
 t_UserGroup_has_Permission = Table(
     "UserGroup_has_Permission",
     Base.metadata,
-    Column("userGroupId", INTEGER, primary_key=True, nullable=False),
-    Column("permissionId", INTEGER, primary_key=True, nullable=False),
+    Column("userGroupId", INTEGER(11), primary_key=True, nullable=False),
+    Column("permissionId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["permissionId"],
         ["Permission.permissionId"],
@@ -3629,7 +3592,9 @@ class XRFFluorescenceMappingROI(Base):
         Index("XRFFluorescenceMappingROI_FKblSampleId", "blSampleId"),
     )
 
-    xrfFluorescenceMappingROIId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    xrfFluorescenceMappingROIId: Mapped[int] = mapped_column(
+        INTEGER(11), primary_key=True
+    )
     startEnergy: Mapped[float] = mapped_column(Float)
     endEnergy: Mapped[float] = mapped_column(Float)
     element: Mapped[Optional[str]] = mapped_column(String(2))
@@ -3637,11 +3602,11 @@ class XRFFluorescenceMappingROI(Base):
         String(15),
         comment="Edge type i.e. Ka1, could be a custom edge in case of overlap Ka1-noCa",
     )
-    r: Mapped[Optional[int]] = mapped_column(TINYINT, comment="R colour component")
-    g: Mapped[Optional[int]] = mapped_column(TINYINT, comment="G colour component")
-    b: Mapped[Optional[int]] = mapped_column(TINYINT, comment="B colour component")
+    r: Mapped[Optional[int]] = mapped_column(TINYINT(3), comment="R colour component")
+    g: Mapped[Optional[int]] = mapped_column(TINYINT(3), comment="G colour component")
+    b: Mapped[Optional[int]] = mapped_column(TINYINT(3), comment="B colour component")
     blSampleId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="ROIs can be created within the context of a sample"
+        INTEGER(10), comment="ROIs can be created within the context of a sample"
     )
     scalar: Mapped[Optional[str]] = mapped_column(
         String(50),
@@ -3669,13 +3634,17 @@ class ZcZocaloBuffer(Base):
     )
 
     AutoProcProgramID: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Reference to an existing AutoProcProgram"
+        INTEGER(10),
+        primary_key=True,
+        comment="Reference to an existing AutoProcProgram",
     )
     UUID: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="AutoProcProgram-specific unique identifier"
+        INTEGER(10),
+        primary_key=True,
+        comment="AutoProcProgram-specific unique identifier",
     )
     Reference: Mapped[Optional[int]] = mapped_column(
-        INTEGER,
+        INTEGER(10),
         comment="Context-dependent reference to primary key IDs in other ISPyB tables",
     )
 
@@ -3703,7 +3672,7 @@ class AutoProcScalingStatistics(Base):
     )
 
     autoProcScalingStatisticsId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(10), primary_key=True, comment="Primary key (auto-incremented)"
     )
     scalingStatisticsType: Mapped[str] = mapped_column(
         Enum("overall", "innerShell", "outerShell"),
@@ -3711,7 +3680,7 @@ class AutoProcScalingStatistics(Base):
         comment="Scaling statistics type",
     )
     autoProcScalingId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related autoProcScaling item (used by foreign key)"
+        INTEGER(10), comment="Related autoProcScaling item (used by foreign key)"
     )
     comments: Mapped[Optional[str]] = mapped_column(String(255), comment="Comments...")
     resolutionLimitLow: Mapped[Optional[float]] = mapped_column(
@@ -3737,10 +3706,10 @@ class AutoProcScalingStatistics(Base):
         Float, comment="Fractional partial bias"
     )
     nTotalObservations: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Total number of observations"
+        INTEGER(10), comment="Total number of observations"
     )
     nTotalUniqueObservations: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Total number unique"
+        INTEGER(10), comment="Total number unique"
     )
     meanIOverSigI: Mapped[Optional[float]] = mapped_column(
         Float, comment="Mean((I)/sd(I))"
@@ -3757,9 +3726,7 @@ class AutoProcScalingStatistics(Base):
         DateTime, comment="Creation or last update date/time"
     )
     anomalous: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1),
-        server_default=text("'0'"),
-        comment="boolean type:0 noanoum - 1 anoum",
+        TINYINT(1), server_default=text("0"), comment="boolean type:0 noanoum - 1 anoum"
     )
     ccHalf: Mapped[Optional[float]] = mapped_column(
         Float, comment="information from XDS"
@@ -3800,13 +3767,13 @@ class AutoProcScalingHasInt(Base):
     )
 
     autoProcScaling_has_IntId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(10), primary_key=True, comment="Primary key (auto-incremented)"
     )
     autoProcIntegrationId: Mapped[int] = mapped_column(
-        INTEGER, comment="AutoProcIntegration item"
+        INTEGER(10), comment="AutoProcIntegration item"
     )
     autoProcScalingId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="AutoProcScaling item"
+        INTEGER(10), comment="AutoProcScaling item"
     )
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
         DateTime, comment="Creation or last update date/time"
@@ -3835,9 +3802,9 @@ class AutoProcStatus(Base):
     )
 
     autoProcStatusId: Mapped[int] = mapped_column(
-        Integer, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
-    autoProcIntegrationId: Mapped[int] = mapped_column(INTEGER)
+    autoProcIntegrationId: Mapped[int] = mapped_column(INTEGER(10))
     step: Mapped[str] = mapped_column(
         Enum("Indexing", "Integration", "Correction", "Scaling", "Importing"),
         comment="autoprocessing step",
@@ -3846,7 +3813,8 @@ class AutoProcStatus(Base):
         Enum("Launched", "Successful", "Failed"), comment="autoprocessing status"
     )
     bltimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+        TIMESTAMP,
+        server_default=text("current_timestamp() ON UPDATE current_timestamp()"),
     )
     comments: Mapped[Optional[str]] = mapped_column(String(1024), comment="comments")
 
@@ -3866,8 +3834,8 @@ class BFComponentBeamline(Base):
         Index("bf_component_beamline_FK1", "componentId"),
     )
 
-    component_beamlineId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    componentId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    component_beamlineId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    componentId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     beamlinename: Mapped[Optional[str]] = mapped_column(String(20))
 
     BF_component: Mapped["BFComponent"] = relationship(
@@ -3884,8 +3852,8 @@ class BFSubcomponent(Base):
         Index("bf_subcomponent_FK1", "componentId"),
     )
 
-    subcomponentId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    componentId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    subcomponentId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    componentId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     name: Mapped[Optional[str]] = mapped_column(String(100))
     description: Mapped[Optional[str]] = mapped_column(String(200))
 
@@ -3925,9 +3893,9 @@ class BLSampleImageHasAutoScoreClass(Base):
         },
     )
 
-    blSampleImageId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    blSampleImageId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     blSampleImageAutoScoreClassId: Mapped[int] = mapped_column(
-        TINYINT, primary_key=True
+        TINYINT(3), primary_key=True
     )
     probability: Mapped[Optional[float]] = mapped_column(Float)
 
@@ -3954,10 +3922,10 @@ class ContainerReport(Base):
         Index("ContainerReport_ibfk2", "personId"),
     )
 
-    containerReportId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    containerRegistryId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerReportId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    containerRegistryId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     personId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Person making report"
+        INTEGER(10), comment="Person making report"
     )
     report: Mapped[Optional[str]] = mapped_column(Text)
     attachmentFilePath: Mapped[Optional[str]] = mapped_column(String(255))
@@ -3990,11 +3958,11 @@ class DataCollectionComment(Base):
         Index("dataCollectionComment_fk2", "personId"),
     )
 
-    dataCollectionCommentId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    dataCollectionId: Mapped[int] = mapped_column(INTEGER)
-    personId: Mapped[int] = mapped_column(INTEGER)
+    dataCollectionCommentId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    dataCollectionId: Mapped[int] = mapped_column(INTEGER(11))
+    personId: Mapped[int] = mapped_column(INTEGER(10))
     createTime: Mapped[datetime.datetime] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
     comments: Mapped[Optional[str]] = mapped_column(String(4000))
     modTime: Mapped[Optional[datetime.date]] = mapped_column(Date)
@@ -4024,8 +3992,8 @@ class MXMRRun(Base):
         Index("mxMRRun_FK2", "autoProcProgramId"),
     )
 
-    mxMRRunId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    autoProcScalingId: Mapped[int] = mapped_column(INTEGER)
+    mxMRRunId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    autoProcScalingId: Mapped[int] = mapped_column(INTEGER(11))
     rValueStart: Mapped[Optional[float]] = mapped_column(Float)
     rValueEnd: Mapped[Optional[float]] = mapped_column(Float)
     rFreeValueStart: Mapped[Optional[float]] = mapped_column(Float)
@@ -4037,7 +4005,7 @@ class MXMRRun(Base):
     spaceGroup: Mapped[Optional[str]] = mapped_column(
         String(45), comment="Space group of the MR solution"
     )
-    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="MXMRRun"
@@ -4080,16 +4048,16 @@ class ModelBuilding(Base):
     )
 
     modelBuildingId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     phasingAnalysisId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related phasing analysis item"
+        INTEGER(11), comment="Related phasing analysis item"
     )
     phasingProgramRunId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related program item"
+        INTEGER(11), comment="Related program item"
     )
     spaceGroupId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related spaceGroup"
+        INTEGER(10), comment="Related spaceGroup"
     )
     lowRes: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     highRes: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
@@ -4105,92 +4073,6 @@ class ModelBuilding(Base):
     )
     SpaceGroup_: Mapped["SpaceGroup"] = relationship(
         "SpaceGroup", back_populates="ModelBuilding"
-    )
-
-
-class MotionCorrection(Base):
-    __tablename__ = "MotionCorrection"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["autoProcProgramId"],
-            ["AutoProcProgram.autoProcProgramId"],
-            name="MotionCorrection_ibfk2",
-        ),
-        ForeignKeyConstraint(
-            ["dataCollectionId"],
-            ["DataCollection.dataCollectionId"],
-            name="_MotionCorrection_ibfk1",
-        ),
-        ForeignKeyConstraint(
-            ["movieId"], ["Movie.movieId"], name="MotionCorrection_ibfk3"
-        ),
-        Index("MotionCorrection_ibfk2", "autoProcProgramId"),
-        Index("MotionCorrection_ibfk3", "movieId"),
-        Index("_MotionCorrection_ibfk1", "dataCollectionId"),
-    )
-
-    motionCorrectionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    imageNumber: Mapped[Optional[int]] = mapped_column(
-        SMALLINT, comment="Movie number, sequential in time 1-n"
-    )
-    firstFrame: Mapped[Optional[int]] = mapped_column(
-        SMALLINT, comment="First frame of movie used"
-    )
-    lastFrame: Mapped[Optional[int]] = mapped_column(
-        SMALLINT, comment="Last frame of movie used"
-    )
-    dosePerFrame: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Dose per frame, Units: e-/A^2"
-    )
-    doseWeight: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Dose weight, Units: dimensionless"
-    )
-    totalMotion: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Total motion, Units: A"
-    )
-    averageMotionPerFrame: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Average motion per frame, Units: A"
-    )
-    driftPlotFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Full path to the drift plot"
-    )
-    micrographFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Full path to the micrograph"
-    )
-    micrographSnapshotFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Full path to a snapshot (jpg) of the micrograph"
-    )
-    patchesUsedX: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Number of patches used in x (for motioncor2)"
-    )
-    patchesUsedY: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Number of patches used in y (for motioncor2)"
-    )
-    fftFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Full path to the jpg image of the raw micrograph FFT"
-    )
-    fftCorrectedFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment="Full path to the jpg image of the drift corrected micrograph FFT",
-    )
-    comments: Mapped[Optional[str]] = mapped_column(String(255))
-    movieId: Mapped[Optional[int]] = mapped_column(INTEGER)
-
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
-        "AutoProcProgram", back_populates="MotionCorrection"
-    )
-    DataCollection_: Mapped["DataCollection"] = relationship(
-        "DataCollection", back_populates="MotionCorrection"
-    )
-    Movie_: Mapped["Movie"] = relationship("Movie", back_populates="MotionCorrection")
-    CTF: Mapped[List["CTF"]] = relationship("CTF", back_populates="MotionCorrection_")
-    ParticlePicker: Mapped[List["ParticlePicker"]] = relationship(
-        "ParticlePicker", back_populates="MotionCorrection_"
-    )
-    RelativeIceThickness: Mapped[List["RelativeIceThickness"]] = relationship(
-        "RelativeIceThickness", back_populates="MotionCorrection_"
     )
 
 
@@ -4213,9 +4095,9 @@ class PDBEntryHasAutoProcProgram(Base):
         Index("pdbEntry_AutoProcProgramIdx2", "autoProcProgramId"),
     )
 
-    pdbEntryHasAutoProcId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    pdbEntryId: Mapped[int] = mapped_column(INTEGER)
-    autoProcProgramId: Mapped[int] = mapped_column(INTEGER)
+    pdbEntryHasAutoProcId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    pdbEntryId: Mapped[int] = mapped_column(INTEGER(11))
+    autoProcProgramId: Mapped[int] = mapped_column(INTEGER(11))
     distance: Mapped[Optional[float]] = mapped_column(Float)
 
     AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
@@ -4256,16 +4138,16 @@ class Phasing(Base):
     )
 
     phasingId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     phasingAnalysisId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related phasing analysis item"
+        INTEGER(11), comment="Related phasing analysis item"
     )
     phasingProgramRunId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related program item"
+        INTEGER(11), comment="Related program item"
     )
     spaceGroupId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related spaceGroup"
+        INTEGER(10), comment="Related spaceGroup"
     )
     method: Mapped[Optional[str]] = mapped_column(
         Enum("solvent flattening", "solvent flipping", "e", "SAD", "shelxe"),
@@ -4278,7 +4160,7 @@ class Phasing(Base):
     lowRes: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     highRes: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
 
     PhasingAnalysis_: Mapped["PhasingAnalysis"] = relationship(
@@ -4314,15 +4196,15 @@ class PhasingStep(Base):
         Index("FK_spacegroup_id", "spaceGroupId"),
     )
 
-    phasingStepId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    phasingStepId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
-    previousPhasingStepId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    programRunId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    spaceGroupId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    autoProcScalingId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    phasingAnalysisId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    previousPhasingStepId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    programRunId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    spaceGroupId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    autoProcScalingId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    phasingAnalysisId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     phasingStepType: Mapped[Optional[str]] = mapped_column(
         Enum("PREPARE", "SUBSTRUCTUREDETERMINATION", "PHASING", "MODELBUILDING")
     )
@@ -4368,20 +4250,20 @@ class PhasingHasScaling(Base):
     )
 
     phasingHasScalingId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     phasingAnalysisId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related phasing analysis item"
+        INTEGER(11), comment="Related phasing analysis item"
     )
     autoProcScalingId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related autoProcScaling item"
+        INTEGER(10), comment="Related autoProcScaling item"
     )
     datasetNumber: Mapped[Optional[int]] = mapped_column(
-        Integer,
+        INTEGER(11),
         comment="serial number of the dataset and always reserve 0 for the reference",
     )
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
 
     AutoProcScaling_: Mapped["AutoProcScaling"] = relationship(
@@ -4432,16 +4314,16 @@ class PreparePhasingData(Base):
     )
 
     preparePhasingDataId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     phasingAnalysisId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related phasing analysis item"
+        INTEGER(11), comment="Related phasing analysis item"
     )
     phasingProgramRunId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related program item"
+        INTEGER(11), comment="Related program item"
     )
     spaceGroupId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related spaceGroup"
+        INTEGER(10), comment="Related spaceGroup"
     )
     lowRes: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     highRes: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
@@ -4467,8 +4349,8 @@ class Project(Base):
         Index("Project_FK1", "personId"),
     )
 
-    projectId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    personId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    projectId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    personId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     title: Mapped[Optional[str]] = mapped_column(String(200))
     acronym: Mapped[Optional[str]] = mapped_column(String(100))
     owner: Mapped[Optional[str]] = mapped_column(String(50))
@@ -4523,10 +4405,10 @@ class Proposal(Base):
         ),
     )
 
-    proposalId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    personId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    proposalId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    personId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     bltimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     title: Mapped[Optional[str]] = mapped_column(String(200))
     proposalCode: Mapped[Optional[str]] = mapped_column(String(45))
@@ -4549,9 +4431,9 @@ class Proposal(Base):
     Component: Mapped[List["Component"]] = relationship(
         "Component", back_populates="Proposal_"
     )
-    ContainerRegistry_has_Proposal: Mapped[
-        List["ContainerRegistryHasProposal"]
-    ] = relationship("ContainerRegistryHasProposal", back_populates="Proposal_")
+    ContainerRegistry_has_Proposal: Mapped[List["ContainerRegistryHasProposal"]] = (
+        relationship("ContainerRegistryHasProposal", back_populates="Proposal_")
+    )
     DiffractionPlan: Mapped[List["DiffractionPlan"]] = relationship(
         "DiffractionPlan", back_populates="Proposal_"
     )
@@ -4612,16 +4494,16 @@ class SubstructureDetermination(Base):
     )
 
     substructureDeterminationId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     phasingAnalysisId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related phasing analysis item"
+        INTEGER(11), comment="Related phasing analysis item"
     )
     phasingProgramRunId: Mapped[int] = mapped_column(
-        INTEGER, comment="Related program item"
+        INTEGER(11), comment="Related program item"
     )
     spaceGroupId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related spaceGroup"
+        INTEGER(10), comment="Related spaceGroup"
     )
     method: Mapped[Optional[str]] = mapped_column(
         Enum("SAD", "MAD", "SIR", "SIRAS", "MR", "MIR", "MIRAS", "RIP", "RIPAS"),
@@ -4644,66 +4526,11 @@ class SubstructureDetermination(Base):
     )
 
 
-class TiltImageAlignment(Base):
-    __tablename__ = "TiltImageAlignment"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["movieId"],
-            ["Movie.movieId"],
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-            name="TiltImageAlignment_fk_movieId",
-        ),
-        ForeignKeyConstraint(
-            ["tomogramId"],
-            ["Tomogram.tomogramId"],
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-            name="TiltImageAlignment_fk_tomogramId",
-        ),
-        Index("TiltImageAlignment_fk_tomogramId", "tomogramId"),
-        {"comment": "For storing per-movie analysis results (reconstruction)"},
-    )
-
-    movieId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="FK to\xa0Movie\xa0table"
-    )
-    tomogramId: Mapped[int] = mapped_column(
-        INTEGER,
-        primary_key=True,
-        comment="FK to\xa0Tomogram\xa0table; tuple (movieID, tomogramID) is unique",
-    )
-    defocusU: Mapped[Optional[float]] = mapped_column(Float, comment="unit: Angstroms")
-    defocusV: Mapped[Optional[float]] = mapped_column(Float, comment="unit: Angstroms")
-    psdFile: Mapped[Optional[str]] = mapped_column(String(255))
-    resolution: Mapped[Optional[float]] = mapped_column(
-        Float, comment="unit: Angstroms"
-    )
-    fitQuality: Mapped[Optional[float]] = mapped_column(Float)
-    refinedMagnification: Mapped[Optional[float]] = mapped_column(
-        Float, comment="unitless"
-    )
-    refinedTiltAngle: Mapped[Optional[float]] = mapped_column(
-        Float, comment="units: degrees"
-    )
-    refinedTiltAxis: Mapped[Optional[float]] = mapped_column(
-        Float, comment="units: degrees"
-    )
-    residualError: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Residual error, unit: nm"
-    )
-
-    Movie_: Mapped["Movie"] = relationship("Movie", back_populates="TiltImageAlignment")
-    Tomogram_: Mapped["Tomogram"] = relationship(
-        "Tomogram", back_populates="TiltImageAlignment"
-    )
-
-
 t_UserGroup_has_Person = Table(
     "UserGroup_has_Person",
     Base.metadata,
-    Column("userGroupId", INTEGER, primary_key=True, nullable=False),
-    Column("personId", INTEGER, primary_key=True, nullable=False),
+    Column("userGroupId", INTEGER(11), primary_key=True, nullable=False),
+    Column("personId", INTEGER(10), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["personId"],
         ["Person.personId"],
@@ -4733,8 +4560,8 @@ class BFSubcomponentBeamline(Base):
         Index("bf_subcomponent_beamline_FK1", "subcomponentId"),
     )
 
-    subcomponent_beamlineId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    subcomponentId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    subcomponent_beamlineId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    subcomponentId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     beamlinename: Mapped[Optional[str]] = mapped_column(String(20))
 
     BF_subcomponent: Mapped["BFSubcomponent"] = relationship(
@@ -4755,11 +4582,11 @@ class BLSampleGroup(Base):
         Index("BLSampleGroup_fk_proposalId", "proposalId"),
     )
 
-    blSampleGroupId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    blSampleGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(
         String(100), comment="Human-readable name"
     )
-    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     Proposal_: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="BLSampleGroup"
@@ -4801,27 +4628,27 @@ class BLSession(Base):
         Index("proposalId", "proposalId", "visit_number", unique=True),
     )
 
-    sessionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    proposalId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    sessionId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    proposalId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     bltimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     lastUpdate: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="last update timestamp: by default the end of the session, the last collect...",
     )
-    beamLineSetupId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    beamCalendarId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    beamLineSetupId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    beamCalendarId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     startDate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     endDate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     beamLineName: Mapped[Optional[str]] = mapped_column(String(45))
     scheduled: Mapped[Optional[int]] = mapped_column(TINYINT(1))
-    nbShifts: Mapped[Optional[int]] = mapped_column(INTEGER)
+    nbShifts: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     comments: Mapped[Optional[str]] = mapped_column(String(2000))
     beamLineOperator: Mapped[Optional[str]] = mapped_column(String(255))
     visit_number: Mapped[Optional[int]] = mapped_column(
-        INTEGER, server_default=text("'0'")
+        INTEGER(10), server_default=text("0")
     )
     usedFlag: Mapped[Optional[int]] = mapped_column(
         TINYINT(1),
@@ -4830,7 +4657,7 @@ class BLSession(Base):
     externalId: Mapped[Optional[bytes]] = mapped_column(BINARY(16))
     archived: Mapped[Optional[int]] = mapped_column(
         TINYINT(1),
-        server_default=text("'0'"),
+        server_default=text("0"),
         comment="The data for the session is archived and no longer available on disk",
     )
     riskRating: Mapped[Optional[str]] = mapped_column(
@@ -4884,64 +4711,6 @@ class BLSession(Base):
     )
 
 
-class CTF(Base):
-    __tablename__ = "CTF"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["autoProcProgramId"],
-            ["AutoProcProgram.autoProcProgramId"],
-            name="CTF_ibfk2",
-        ),
-        ForeignKeyConstraint(
-            ["motionCorrectionId"],
-            ["MotionCorrection.motionCorrectionId"],
-            name="CTF_ibfk1",
-        ),
-        Index("CTF_ibfk1", "motionCorrectionId"),
-        Index("CTF_ibfk2", "autoProcProgramId"),
-    )
-
-    ctfId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    motionCorrectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    boxSizeX: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Box size in x, Units: pixels"
-    )
-    boxSizeY: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Box size in y, Units: pixels"
-    )
-    minResolution: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Minimum resolution for CTF, Units: A"
-    )
-    maxResolution: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
-    minDefocus: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
-    maxDefocus: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
-    defocusStepSize: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
-    astigmatism: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
-    astigmatismAngle: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Units: deg?"
-    )
-    estimatedResolution: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Units: A"
-    )
-    estimatedDefocus: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
-    amplitudeContrast: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Units: %?"
-    )
-    ccValue: Mapped[Optional[float]] = mapped_column(Float, comment="Correlation value")
-    fftTheoreticalFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Full path to the jpg image of the simulated FFT"
-    )
-    comments: Mapped[Optional[str]] = mapped_column(String(255))
-
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
-        "AutoProcProgram", back_populates="CTF"
-    )
-    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
-        "MotionCorrection", back_populates="CTF"
-    )
-
-
 class Component(Base):
     __tablename__ = "Component"
     __table_args__ = (
@@ -4965,13 +4734,11 @@ class Component(Base):
         },
     )
 
-    componentId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    componentTypeId: Mapped[int] = mapped_column(INTEGER)
-    name: Mapped[str] = mapped_column(String(255, "utf8mb4_general_ci"))
-    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    composition: Mapped[Optional[str]] = mapped_column(
-        String(255, "utf8mb4_general_ci")
-    )
+    componentId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    componentTypeId: Mapped[int] = mapped_column(INTEGER(11))
+    name: Mapped[str] = mapped_column(String(255))
+    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    composition: Mapped[Optional[str]] = mapped_column(String(255))
 
     ComponentType_: Mapped["ComponentType"] = relationship(
         "ComponentType", back_populates="Component"
@@ -5010,15 +4777,15 @@ class ContainerRegistryHasProposal(Base):
     )
 
     containerRegistryHasProposalId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True
+        INTEGER(11), primary_key=True
     )
-    containerRegistryId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerRegistryId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     personId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Person registering the container"
+        INTEGER(10), comment="Person registering the container"
     )
     recordTimestamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
 
     ContainerRegistry_: Mapped["ContainerRegistry"] = relationship(
@@ -5035,8 +4802,6 @@ class ContainerRegistryHasProposal(Base):
 class DiffractionPlan(Base):
     __tablename__ = "DiffractionPlan"
     __table_args__ = (
-        CheckConstraint("json_valid(`scanParameters`)", name="DiffractionPlan_chk_2"),
-        CheckConstraint("json_valid(`strategyOption`)", name="DiffractionPlan_chk_1"),
         ForeignKeyConstraint(
             ["detectorId"],
             ["Detector.detectorId"],
@@ -5064,10 +4829,10 @@ class DiffractionPlan(Base):
         Index("DiffractionPlan_ibfk3", "experimentTypeId"),
     )
 
-    diffractionPlanId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    diffractionPlanId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
     name: Mapped[Optional[str]] = mapped_column(String(20))
@@ -5121,11 +4886,11 @@ class DiffractionPlan(Base):
         Double(asdecimal=True)
     )
     anomalousData: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
+        TINYINT(1), server_default=text("0")
     )
     complexity: Mapped[Optional[str]] = mapped_column(String(45))
     estimateRadiationDamage: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
+        TINYINT(1), server_default=text("0")
     )
     forcedSpaceGroup: Mapped[Optional[str]] = mapped_column(String(45))
     requiredCompleteness: Mapped[Optional[decimal.Decimal]] = mapped_column(
@@ -5139,7 +4904,7 @@ class DiffractionPlan(Base):
     )
     strategyOption: Mapped[Optional[str]] = mapped_column(VARCHAR(200))
     kappaStrategyOption: Mapped[Optional[str]] = mapped_column(String(45))
-    numberOfPositions: Mapped[Optional[int]] = mapped_column(Integer)
+    numberOfPositions: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     minDimAccrossSpindleAxis: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True), comment="minimum dimension accross the spindle axis"
     )
@@ -5166,17 +4931,17 @@ class DiffractionPlan(Base):
     axisStart: Mapped[Optional[float]] = mapped_column(Float, comment="degrees")
     axisRange: Mapped[Optional[float]] = mapped_column(Float, comment="degrees")
     numberOfImages: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="The number of images requested"
+        MEDIUMINT(9), comment="The number of images requested"
     )
     presetForProposalId: Mapped[Optional[int]] = mapped_column(
-        INTEGER,
+        INTEGER(10),
         comment="Indicates this plan is available to all sessions on given proposal",
     )
     beamLineName: Mapped[Optional[str]] = mapped_column(
         String(45),
         comment="Indicates this plan is available to all sessions on given beamline",
     )
-    detectorId: Mapped[Optional[int]] = mapped_column(Integer)
+    detectorId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     distance: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     orientation: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True)
@@ -5197,14 +4962,14 @@ class DiffractionPlan(Base):
     exposureTemperature: Mapped[Optional[float]] = mapped_column(
         Float, comment="units: kelvin"
     )
-    experimentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    purificationColumnId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    experimentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    purificationColumnId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     collectionMode: Mapped[Optional[str]] = mapped_column(
         Enum("auto", "manual"),
         comment="The requested collection mode, possible values are auto, manual",
     )
     priority: Mapped[Optional[int]] = mapped_column(
-        Integer,
+        INTEGER(4),
         comment="The priority of this sample relative to others in the shipment",
     )
     qMin: Mapped[Optional[float]] = mapped_column(
@@ -5243,15 +5008,15 @@ class DiffractionPlan(Base):
     PurificationColumn_: Mapped["PurificationColumn"] = relationship(
         "PurificationColumn", back_populates="DiffractionPlan"
     )
-    BLSample_has_DataCollectionPlan: Mapped[
-        List["BLSampleHasDataCollectionPlan"]
-    ] = relationship("BLSampleHasDataCollectionPlan", back_populates="DiffractionPlan_")
+    BLSample_has_DataCollectionPlan: Mapped[List["BLSampleHasDataCollectionPlan"]] = (
+        relationship("BLSampleHasDataCollectionPlan", back_populates="DiffractionPlan_")
+    )
     Crystal: Mapped[List["Crystal"]] = relationship(
         "Crystal", back_populates="DiffractionPlan_"
     )
-    DataCollectionPlan_has_Detector: Mapped[
-        List["DataCollectionPlanHasDetector"]
-    ] = relationship("DataCollectionPlanHasDetector", back_populates="DiffractionPlan_")
+    DataCollectionPlan_has_Detector: Mapped[List["DataCollectionPlanHasDetector"]] = (
+        relationship("DataCollectionPlanHasDetector", back_populates="DiffractionPlan_")
+    )
     ExperimentKindDetails: Mapped[List["ExperimentKindDetails"]] = relationship(
         "ExperimentKindDetails", back_populates="DiffractionPlan_"
     )
@@ -5285,19 +5050,19 @@ class LabContact(Base):
         Index("personAndProposal", "personId", "proposalId", unique=True),
     )
 
-    labContactId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    personId: Mapped[int] = mapped_column(INTEGER)
+    labContactId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    personId: Mapped[int] = mapped_column(INTEGER(10))
     cardName: Mapped[str] = mapped_column(String(40))
-    proposalId: Mapped[int] = mapped_column(INTEGER)
+    proposalId: Mapped[int] = mapped_column(INTEGER(10))
     dewarAvgCustomsValue: Mapped[int] = mapped_column(
-        INTEGER, server_default=text("'0'")
+        INTEGER(10), server_default=text("0")
     )
     dewarAvgTransportValue: Mapped[int] = mapped_column(
-        INTEGER, server_default=text("'0'")
+        INTEGER(10), server_default=text("0")
     )
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
     defaultCourrierCompany: Mapped[Optional[str]] = mapped_column(String(45))
@@ -5335,8 +5100,8 @@ class MXMRRunBlob(Base):
         Index("mxMRRunBlob_FK1", "mxMRRunId"),
     )
 
-    mxMRRunBlobId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    mxMRRunId: Mapped[int] = mapped_column(INTEGER)
+    mxMRRunBlobId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    mxMRRunId: Mapped[int] = mapped_column(INTEGER(11))
     view1: Mapped[Optional[str]] = mapped_column(String(255))
     view2: Mapped[Optional[str]] = mapped_column(String(255))
     view3: Mapped[Optional[str]] = mapped_column(String(255))
@@ -5369,7 +5134,7 @@ class MXMRRunBlob(Base):
         String(4), comment="Residue name of nearest atom"
     )
     nearestAtomResSeq: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Residue sequence number of nearest atom"
+        MEDIUMINT(8), comment="Residue sequence number of nearest atom"
     )
     nearestAtomDistance: Mapped[Optional[float]] = mapped_column(
         Float, comment="Distance in Angstrom to nearest atom"
@@ -5380,50 +5145,6 @@ class MXMRRunBlob(Base):
     )
 
     MXMRRun_: Mapped["MXMRRun"] = relationship("MXMRRun", back_populates="MXMRRunBlob")
-
-
-class ParticlePicker(Base):
-    __tablename__ = "ParticlePicker"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["firstMotionCorrectionId"],
-            ["MotionCorrection.motionCorrectionId"],
-            onupdate="CASCADE",
-            name="ParticlePicker_fk_motionCorrectionId",
-        ),
-        ForeignKeyConstraint(
-            ["programId"],
-            ["AutoProcProgram.autoProcProgramId"],
-            onupdate="CASCADE",
-            name="ParticlePicker_fk_programId",
-        ),
-        Index("ParticlePicker_fk_motionCorrectionId", "firstMotionCorrectionId"),
-        Index("ParticlePicker_fk_particlePickerProgramId", "programId"),
-        {"comment": "An instance of a particle picker program that was run"},
-    )
-
-    particlePickerId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    programId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    firstMotionCorrectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    particlePickingTemplate: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Cryolo model"
-    )
-    particleDiameter: Mapped[Optional[float]] = mapped_column(Float, comment="Unit: nm")
-    numberOfParticles: Mapped[Optional[int]] = mapped_column(INTEGER)
-    summaryImageFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment="Generated summary micrograph image with highlighted particles",
-    )
-
-    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
-        "MotionCorrection", back_populates="ParticlePicker"
-    )
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
-        "AutoProcProgram", back_populates="ParticlePicker"
-    )
-    ParticleClassificationGroup: Mapped[
-        List["ParticleClassificationGroup"]
-    ] = relationship("ParticleClassificationGroup", back_populates="ParticlePicker_")
 
 
 class PhasingStatistics(Base):
@@ -5454,21 +5175,21 @@ class PhasingStatistics(Base):
     )
 
     phasingStatisticsId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     phasingHasScalingId1: Mapped[int] = mapped_column(
-        INTEGER, comment="the dataset in question"
+        INTEGER(11), comment="the dataset in question"
     )
     phasingHasScalingId2: Mapped[Optional[int]] = mapped_column(
-        INTEGER,
+        INTEGER(11),
         comment="if this is MIT or MAD, which scaling are being compared, null otherwise",
     )
-    phasingStepId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    phasingStepId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     numberOfBins: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="the total number of bins"
+        INTEGER(11), comment="the total number of bins"
     )
     binNumber: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="binNumber, 999 for overall"
+        INTEGER(11), comment="binNumber, 999 for overall"
     )
     lowRes: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True), comment="low resolution cutoff of this binfloat"
@@ -5498,9 +5219,9 @@ class PhasingStatistics(Base):
     statisticsValue: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True), comment="the statistics value"
     )
-    nReflections: Mapped[Optional[int]] = mapped_column(Integer)
+    nReflections: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
 
     Phasing_has_Scaling: Mapped["PhasingHasScaling"] = relationship(
@@ -5521,8 +5242,8 @@ class PhasingStatistics(Base):
 t_Project_has_BLSample = Table(
     "Project_has_BLSample",
     Base.metadata,
-    Column("projectId", INTEGER, primary_key=True, nullable=False),
-    Column("blSampleId", INTEGER, primary_key=True, nullable=False),
+    Column("projectId", INTEGER(11), primary_key=True, nullable=False),
+    Column("blSampleId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["blSampleId"],
         ["BLSample.blSampleId"],
@@ -5544,8 +5265,8 @@ t_Project_has_BLSample = Table(
 t_Project_has_Person = Table(
     "Project_has_Person",
     Base.metadata,
-    Column("projectId", INTEGER, primary_key=True, nullable=False),
-    Column("personId", INTEGER, primary_key=True, nullable=False),
+    Column("projectId", INTEGER(11), primary_key=True, nullable=False),
+    Column("personId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["personId"],
         ["Person.personId"],
@@ -5571,8 +5292,8 @@ class ProjectHasUser(Base):
         Index("Project_Has_user_FK1", "projectid"),
     )
 
-    projecthasuserid: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    projectid: Mapped[int] = mapped_column(INTEGER)
+    projecthasuserid: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    projectid: Mapped[int] = mapped_column(INTEGER(11))
     username: Mapped[Optional[str]] = mapped_column(String(15))
 
     Project_: Mapped["Project"] = relationship(
@@ -5595,9 +5316,9 @@ class ProposalHasPerson(Base):
         Index("fk_ProposalHasPerson_Proposal", "proposalId"),
     )
 
-    proposalHasPersonId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    proposalId: Mapped[int] = mapped_column(INTEGER)
-    personId: Mapped[int] = mapped_column(INTEGER)
+    proposalHasPersonId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    proposalId: Mapped[int] = mapped_column(INTEGER(10))
+    personId: Mapped[int] = mapped_column(INTEGER(10))
     role: Mapped[Optional[str]] = mapped_column(
         Enum(
             "Co-Investigator",
@@ -5647,18 +5368,18 @@ class Protein(Base):
         Index("protein_fk4", "concentrationTypeId"),
     )
 
-    proteinId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    proposalId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    proteinId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    proposalId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     hazardGroup: Mapped[int] = mapped_column(
-        TINYINT, server_default=text("'1'"), comment="A.k.a. risk group"
+        TINYINT(3), server_default=text("1"), comment="A.k.a. risk group"
     )
     containmentLevel: Mapped[int] = mapped_column(
-        TINYINT,
-        server_default=text("'1'"),
+        TINYINT(3),
+        server_default=text("1"),
         comment="A.k.a. biosafety level, which indicates the level of containment required",
     )
     bltimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     name: Mapped[Optional[str]] = mapped_column(String(255))
     acronym: Mapped[Optional[str]] = mapped_column(String(45))
@@ -5670,16 +5391,16 @@ class Protein(Base):
         Double(asdecimal=True)
     )
     proteinType: Mapped[Optional[str]] = mapped_column(String(45))
-    personId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    personId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     isCreatedBySampleSheet: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
+        TINYINT(1), server_default=text("0")
     )
     sequence: Mapped[Optional[str]] = mapped_column(Text)
     MOD_ID: Mapped[Optional[str]] = mapped_column(String(20))
-    componentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    concentrationTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    componentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    concentrationTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     global_: Mapped[Optional[int]] = mapped_column(
-        "global", TINYINT(1), server_default=text("'0'")
+        "global", TINYINT(1), server_default=text("0")
     )
     externalId: Mapped[Optional[bytes]] = mapped_column(BINARY(16))
     density: Mapped[Optional[float]] = mapped_column(Float)
@@ -5716,48 +5437,6 @@ class Protein(Base):
     )
 
 
-class RelativeIceThickness(Base):
-    __tablename__ = "RelativeIceThickness"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["autoProcProgramId"],
-            ["AutoProcProgram.autoProcProgramId"],
-            onupdate="CASCADE",
-            name="RelativeIceThickness_fk_programId",
-        ),
-        ForeignKeyConstraint(
-            ["motionCorrectionId"],
-            ["MotionCorrection.motionCorrectionId"],
-            onupdate="CASCADE",
-            name="RelativeIceThickness_fk_motionCorrectionId",
-        ),
-        Index("RelativeIceThickness_fk_motionCorrectionId", "motionCorrectionId"),
-        Index("RelativeIceThickness_fk_programId", "autoProcProgramId"),
-    )
-
-    relativeIceThicknessId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    motionCorrectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    minimum: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Minimum relative ice thickness, Unitless"
-    )
-    q1: Mapped[Optional[float]] = mapped_column(Float, comment="Quartile 1, unitless")
-    median: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Median relative ice thickness, Unitless"
-    )
-    q3: Mapped[Optional[float]] = mapped_column(Float, comment="Quartile 3, unitless")
-    maximum: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Minimum relative ice thickness, Unitless"
-    )
-
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
-        "AutoProcProgram", back_populates="RelativeIceThickness"
-    )
-    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
-        "MotionCorrection", back_populates="RelativeIceThickness"
-    )
-
-
 class SWOnceToken(Base):
     __tablename__ = "SW_onceToken"
     __table_args__ = (
@@ -5776,13 +5455,13 @@ class SWOnceToken(Base):
         },
     )
 
-    onceTokenId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    onceTokenId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
     token: Mapped[Optional[str]] = mapped_column(String(128))
-    personId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    personId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     validity: Mapped[Optional[str]] = mapped_column(String(200))
 
     Person_: Mapped["Person"] = relationship("Person", back_populates="SW_onceToken")
@@ -5807,11 +5486,11 @@ class Screen(Base):
         Index("Screen_fk_containerTypeId", "containerTypeId"),
     )
 
-    screenId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    screenId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[Optional[str]] = mapped_column(String(45))
-    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     global_: Mapped[Optional[int]] = mapped_column("global", TINYINT(1))
-    containerTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     ContainerType_: Mapped["ContainerType"] = relationship(
         "ContainerType", back_populates="Screen"
@@ -5842,10 +5521,10 @@ class BFFault(Base):
         Index("bf_fault_FK4", "assigneeId"),
     )
 
-    faultId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    sessionId: Mapped[int] = mapped_column(INTEGER)
+    faultId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    sessionId: Mapped[int] = mapped_column(INTEGER(10))
     owner: Mapped[Optional[str]] = mapped_column(String(50))
-    subcomponentId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    subcomponentId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     starttime: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     endtime: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     beamtimelost: Mapped[Optional[int]] = mapped_column(TINYINT(1))
@@ -5858,10 +5537,10 @@ class BFFault(Base):
     resolved: Mapped[Optional[int]] = mapped_column(TINYINT(1))
     resolution: Mapped[Optional[str]] = mapped_column(Text)
     attachment: Mapped[Optional[str]] = mapped_column(String(200))
-    eLogId: Mapped[Optional[int]] = mapped_column(Integer)
+    eLogId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     assignee: Mapped[Optional[str]] = mapped_column(String(50))
-    personId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    assigneeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    personId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    assigneeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     Person_: Mapped["Person"] = relationship(
         "Person", foreign_keys=[assigneeId], back_populates="BF_fault"
@@ -5899,13 +5578,13 @@ class BLSampleGroupHasBLSample(Base):
         Index("BLSampleGroup_has_BLSample_ibfk3", "blSampleTypeId"),
     )
 
-    blSampleGroupId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blSampleId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    groupOrder: Mapped[Optional[int]] = mapped_column(MEDIUMINT)
+    blSampleGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    blSampleId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    groupOrder: Mapped[Optional[int]] = mapped_column(MEDIUMINT(9))
     type: Mapped[Optional[str]] = mapped_column(
         Enum("background", "container", "sample", "calibrant", "capillary")
     )
-    blSampleTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSampleTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     BLSampleGroup_: Mapped["BLSampleGroup"] = relationship(
         "BLSampleGroup", back_populates="BLSampleGroup_has_BLSample"
@@ -5934,9 +5613,9 @@ class BLSampleHasDataCollectionPlan(Base):
         Index("BLSample_has_DataCollectionPlan_ibfk2", "dataCollectionPlanId"),
     )
 
-    blSampleId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    dataCollectionPlanId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    planOrder: Mapped[Optional[int]] = mapped_column(SMALLINT)
+    blSampleId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    dataCollectionPlanId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    planOrder: Mapped[Optional[int]] = mapped_column(SMALLINT(5))
 
     BLSample_: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="BLSample_has_DataCollectionPlan"
@@ -5959,13 +5638,13 @@ class BLSessionHasSCPosition(Base):
         Index("blsession_has_scposition_FK1", "blsessionid"),
     )
 
-    blsessionhasscpositionid: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blsessionid: Mapped[int] = mapped_column(INTEGER)
+    blsessionhasscpositionid: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    blsessionid: Mapped[int] = mapped_column(INTEGER(11))
     scContainer: Mapped[Optional[int]] = mapped_column(
-        SMALLINT, comment="Position of container within sample changer"
+        SMALLINT(5), comment="Position of container within sample changer"
     )
     containerPosition: Mapped[Optional[int]] = mapped_column(
-        SMALLINT, comment="Position of sample within container"
+        SMALLINT(5), comment="Position of sample within container"
     )
 
     BLSession_: Mapped["BLSession"] = relationship(
@@ -5982,14 +5661,15 @@ class BeamlineAction(Base):
         Index("BeamlineAction_ibfk1", "sessionId"),
     )
 
-    beamlineActionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    beamlineActionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     startTimestamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+        TIMESTAMP,
+        server_default=text("current_timestamp() ON UPDATE current_timestamp()"),
     )
     endTimestamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP, server_default=text("'0000-00-00 00:00:00'")
     )
-    sessionId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    sessionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     message: Mapped[Optional[str]] = mapped_column(String(255))
     parameter: Mapped[Optional[str]] = mapped_column(String(50))
     value: Mapped[Optional[str]] = mapped_column(String(30))
@@ -6012,8 +5692,8 @@ class ComponentLattice(Base):
         Index("ComponentLattice_ibfk1", "componentId"),
     )
 
-    componentLatticeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    componentId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    componentLatticeId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    componentId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     spaceGroup: Mapped[Optional[str]] = mapped_column(String(20))
     cell_a: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     cell_b: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
@@ -6034,8 +5714,8 @@ class ComponentLattice(Base):
 t_Component_has_SubType = Table(
     "Component_has_SubType",
     Base.metadata,
-    Column("componentId", INTEGER, primary_key=True, nullable=False),
-    Column("componentSubTypeId", INTEGER, primary_key=True, nullable=False),
+    Column("componentId", INTEGER(10), primary_key=True, nullable=False),
+    Column("componentSubTypeId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["componentId"],
         ["Protein.proteinId"],
@@ -6074,14 +5754,14 @@ class Crystal(Base):
         Index("Crystal_FKIndex2", "diffractionPlanId"),
     )
 
-    crystalId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    proteinId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    crystalId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    proteinId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
-    diffractionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    diffractionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     crystalUUID: Mapped[Optional[str]] = mapped_column(String(45))
     name: Mapped[Optional[str]] = mapped_column(String(255))
     spaceGroup: Mapped[Optional[str]] = mapped_column(String(20))
@@ -6131,9 +5811,6 @@ class Crystal(Base):
 class DataCollectionGroup(Base):
     __tablename__ = "DataCollectionGroup"
     __table_args__ = (
-        CheckConstraint(
-            "json_valid(`scanParameters`)", name="DataCollectionGroup_chk_1"
-        ),
         ForeignKeyConstraint(
             ["blSampleId"],
             ["BLSample.blSampleId"],
@@ -6160,12 +5837,14 @@ class DataCollectionGroup(Base):
     )
 
     dataCollectionGroupId: Mapped[int] = mapped_column(
-        Integer, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
-    sessionId: Mapped[int] = mapped_column(INTEGER, comment="references Session table")
+    sessionId: Mapped[int] = mapped_column(
+        INTEGER(10), comment="references Session table"
+    )
     comments: Mapped[Optional[str]] = mapped_column(String(1024), comment="comments")
     blSampleId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="references BLSample table"
+        INTEGER(10), comment="references BLSample table"
     )
     experimentType: Mapped[Optional[str]] = mapped_column(
         Enum(
@@ -6222,17 +5901,17 @@ class DataCollectionGroup(Base):
         String(45), comment="Actual sample barcode"
     )
     actualSampleSlotInContainer: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Actual sample slot number in container"
+        INTEGER(10), comment="Actual sample slot number in container"
     )
     actualContainerBarcode: Mapped[Optional[str]] = mapped_column(
         String(45), comment="Actual container barcode"
     )
     actualContainerSlotInSC: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Actual container slot number in sample changer"
+        INTEGER(10), comment="Actual container slot number in sample changer"
     )
     xtalSnapshotFullPath: Mapped[Optional[str]] = mapped_column(String(255))
     scanParameters: Mapped[Optional[str]] = mapped_column(LONGTEXT)
-    experimentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    experimentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     DataCollection_: Mapped[List["DataCollection"]] = relationship(
         "DataCollection", back_populates="DataCollectionGroup"
@@ -6251,6 +5930,9 @@ class DataCollectionGroup(Base):
     )
     Project_: Mapped[List["Project"]] = relationship(
         "Project", secondary="Project_has_DCGroup", back_populates="DataCollectionGroup"
+    )
+    Atlas: Mapped[List["Atlas"]] = relationship(
+        "Atlas", back_populates="DataCollectionGroup_"
     )
     GridInfo: Mapped[List["GridInfo"]] = relationship(
         "GridInfo", back_populates="DataCollectionGroup_"
@@ -6280,10 +5962,10 @@ class DataCollectionPlanHasDetector(Base):
     )
 
     dataCollectionPlanHasDetectorId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True
+        INTEGER(11), primary_key=True
     )
-    dataCollectionPlanId: Mapped[int] = mapped_column(INTEGER)
-    detectorId: Mapped[int] = mapped_column(Integer)
+    dataCollectionPlanId: Mapped[int] = mapped_column(INTEGER(11))
+    detectorId: Mapped[int] = mapped_column(INTEGER(11))
     exposureTime: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True)
     )
@@ -6319,13 +6001,13 @@ class DewarRegistry(Base):
         Index("facilityCode", "facilityCode", unique=True),
     )
 
-    dewarRegistryId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    dewarRegistryId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     facilityCode: Mapped[str] = mapped_column(String(20))
     bltimestamp: Mapped[datetime.datetime] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
-    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    labContactId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    labContactId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     purchaseDate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     manufacturerSerialNumber: Mapped[Optional[str]] = mapped_column(
         String(15),
@@ -6365,9 +6047,9 @@ class EnergyScan(Base):
         Index("EnergyScan_FKIndex2", "sessionId"),
     )
 
-    energyScanId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    sessionId: Mapped[int] = mapped_column(INTEGER)
-    blSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    energyScanId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    sessionId: Mapped[int] = mapped_column(INTEGER(10))
+    blSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     fluorescenceDetector: Mapped[Optional[str]] = mapped_column(String(255))
     scanFileFullPath: Mapped[Optional[str]] = mapped_column(String(255))
     jpegChoochFileFullPath: Mapped[Optional[str]] = mapped_column(String(255))
@@ -6402,7 +6084,7 @@ class EnergyScan(Base):
         Double(asdecimal=True), comment="flux measured after the energyScan"
     )
     workingDirectory: Mapped[Optional[str]] = mapped_column(String(45))
-    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     BLSample_: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="EnergyScan"
@@ -6447,15 +6129,15 @@ class Event(Base):
         },
     )
 
-    eventId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    eventChainId: Mapped[int] = mapped_column(INTEGER)
-    eventTypeId: Mapped[int] = mapped_column(INTEGER)
+    eventId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    eventChainId: Mapped[int] = mapped_column(INTEGER(11))
+    eventTypeId: Mapped[int] = mapped_column(INTEGER(11))
     offset: Mapped[float] = mapped_column(
         Float,
         comment="Start of the event relative to data collection start time in seconds.",
     )
-    componentId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    name: Mapped[Optional[str]] = mapped_column(String(255, "utf8mb4_general_ci"))
+    componentId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    name: Mapped[Optional[str]] = mapped_column(String(255))
     duration: Mapped[Optional[float]] = mapped_column(
         Float, comment="Duration of the event if applicable."
     )
@@ -6486,9 +6168,9 @@ class ExperimentKindDetails(Base):
         Index("ExperimentKindDetails_FKIndex1", "diffractionPlanId"),
     )
 
-    experimentKindId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    diffractionPlanId: Mapped[int] = mapped_column(INTEGER)
-    exposureIndex: Mapped[Optional[int]] = mapped_column(INTEGER)
+    experimentKindId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    diffractionPlanId: Mapped[int] = mapped_column(INTEGER(10))
+    exposureIndex: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     dataCollectionType: Mapped[Optional[str]] = mapped_column(String(45))
     dataCollectionKind: Mapped[Optional[str]] = mapped_column(String(45))
     wedgeValue: Mapped[Optional[float]] = mapped_column(Float)
@@ -6498,59 +6180,11 @@ class ExperimentKindDetails(Base):
     )
 
 
-class ParticleClassificationGroup(Base):
-    __tablename__ = "ParticleClassificationGroup"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["particlePickerId"],
-            ["ParticlePicker.particlePickerId"],
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-            name="ParticleClassificationGroup_fk_particlePickerId",
-        ),
-        ForeignKeyConstraint(
-            ["programId"],
-            ["AutoProcProgram.autoProcProgramId"],
-            onupdate="CASCADE",
-            name="ParticleClassificationGroup_fk_programId",
-        ),
-        Index("ParticleClassificationGroup_fk_particlePickerId", "particlePickerId"),
-        Index("ParticleClassificationGroup_fk_programId", "programId"),
-    )
-
-    particleClassificationGroupId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True
-    )
-    particlePickerId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    programId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    type: Mapped[Optional[str]] = mapped_column(
-        Enum("2D", "3D"), comment="Indicates the type of particle classification"
-    )
-    batchNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Corresponding to batch number"
-    )
-    numberOfParticlesPerBatch: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="total number of particles per batch (a large integer)"
-    )
-    numberOfClassesPerBatch: Mapped[Optional[int]] = mapped_column(INTEGER)
-    symmetry: Mapped[Optional[str]] = mapped_column(String(20))
-
-    ParticlePicker_: Mapped["ParticlePicker"] = relationship(
-        "ParticlePicker", back_populates="ParticleClassificationGroup"
-    )
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
-        "AutoProcProgram", back_populates="ParticleClassificationGroup"
-    )
-    ParticleClassification: Mapped[List["ParticleClassification"]] = relationship(
-        "ParticleClassification", back_populates="ParticleClassificationGroup_"
-    )
-
-
 t_Project_has_Protein = Table(
     "Project_has_Protein",
     Base.metadata,
-    Column("projectId", INTEGER, primary_key=True, nullable=False),
-    Column("proteinId", INTEGER, primary_key=True, nullable=False),
+    Column("projectId", INTEGER(11), primary_key=True, nullable=False),
+    Column("proteinId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["projectId"],
         ["Project.projectId"],
@@ -6570,8 +6204,8 @@ t_Project_has_Protein = Table(
 t_Project_has_Session = Table(
     "Project_has_Session",
     Base.metadata,
-    Column("projectId", INTEGER, primary_key=True, nullable=False),
-    Column("sessionId", INTEGER, primary_key=True, nullable=False),
+    Column("projectId", INTEGER(11), primary_key=True, nullable=False),
+    Column("sessionId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["projectId"],
         ["Project.projectId"],
@@ -6601,9 +6235,9 @@ class ProteinHasPDB(Base):
         Index("Protein_Has_PDB_fk2", "pdbid"),
     )
 
-    proteinhaspdbid: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    proteinid: Mapped[int] = mapped_column(INTEGER)
-    pdbid: Mapped[int] = mapped_column(INTEGER)
+    proteinhaspdbid: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    proteinid: Mapped[int] = mapped_column(INTEGER(11))
+    pdbid: Mapped[int] = mapped_column(INTEGER(11))
 
     PDB_: Mapped["PDB"] = relationship("PDB", back_populates="Protein_has_PDB")
     Protein_: Mapped["Protein"] = relationship(
@@ -6625,15 +6259,16 @@ class RobotAction(Base):
         {"comment": "Robot actions as reported by GDA"},
     )
 
-    robotActionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    blsessionId: Mapped[int] = mapped_column(INTEGER)
+    robotActionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    blsessionId: Mapped[int] = mapped_column(INTEGER(11))
     startTimestamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+        TIMESTAMP,
+        server_default=text("current_timestamp() ON UPDATE current_timestamp()"),
     )
     endTimestamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP, server_default=text("'0000-00-00 00:00:00'")
     )
-    blsampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blsampleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     actionType: Mapped[Optional[str]] = mapped_column(
         Enum("LOAD", "UNLOAD", "DISPOSE", "STORE", "WASH", "ANNEAL", "MOSAIC")
     )
@@ -6641,8 +6276,8 @@ class RobotAction(Base):
         Enum("SUCCESS", "ERROR", "CRITICAL", "WARNING", "EPICSFAIL", "COMMANDNOTSENT")
     )
     message: Mapped[Optional[str]] = mapped_column(String(255))
-    containerLocation: Mapped[Optional[int]] = mapped_column(SmallInteger)
-    dewarLocation: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    containerLocation: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
+    dewarLocation: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
     sampleBarcode: Mapped[Optional[str]] = mapped_column(String(45))
     xtalSnapshotBefore: Mapped[Optional[str]] = mapped_column(String(255))
     xtalSnapshotAfter: Mapped[Optional[str]] = mapped_column(String(255))
@@ -6678,10 +6313,10 @@ class SampleComposition(Base):
         },
     )
 
-    sampleCompositionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    componentId: Mapped[int] = mapped_column(INTEGER)
-    blSampleId: Mapped[int] = mapped_column(INTEGER)
-    concentrationTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    sampleCompositionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    componentId: Mapped[int] = mapped_column(INTEGER(11))
+    blSampleId: Mapped[int] = mapped_column(INTEGER(11))
+    concentrationTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     abundance: Mapped[Optional[float]] = mapped_column(
         Float,
         comment="Abundance or concentration in the unit defined by concentrationTypeId.",
@@ -6719,16 +6354,16 @@ class ScanParametersModel(Base):
         Index("PDF_Model_ibfk2", "dataCollectionPlanId"),
     )
 
-    scanParametersModelId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    scanParametersServiceId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    dataCollectionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    sequenceNumber: Mapped[Optional[int]] = mapped_column(TINYINT)
+    scanParametersModelId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    scanParametersServiceId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    dataCollectionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    sequenceNumber: Mapped[Optional[int]] = mapped_column(TINYINT(3))
     start: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     stop: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     step: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     array: Mapped[Optional[str]] = mapped_column(Text)
     duration: Mapped[Optional[int]] = mapped_column(
-        MEDIUMINT, comment="Duration for parameter change in seconds"
+        MEDIUMINT(8), comment="Duration for parameter change in seconds"
     )
 
     DiffractionPlan_: Mapped["DiffractionPlan"] = relationship(
@@ -6748,9 +6383,9 @@ class ScreenComponentGroup(Base):
         Index("ScreenComponentGroup_fk1", "screenId"),
     )
 
-    screenComponentGroupId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    screenId: Mapped[int] = mapped_column(INTEGER)
-    position: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    screenComponentGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    screenId: Mapped[int] = mapped_column(INTEGER(11))
+    position: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
 
     BLSample_: Mapped[List["BLSample"]] = relationship(
         "BLSample", back_populates="ScreenComponentGroup"
@@ -6776,8 +6411,8 @@ class SessionType(Base):
         Index("SessionType_FKIndex1", "sessionId"),
     )
 
-    sessionTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    sessionId: Mapped[int] = mapped_column(INTEGER)
+    sessionTypeId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    sessionId: Mapped[int] = mapped_column(INTEGER(10))
     typeName: Mapped[str] = mapped_column(String(31))
 
     BLSession_: Mapped["BLSession"] = relationship(
@@ -6806,10 +6441,10 @@ class SessionHasPerson(Base):
     )
 
     sessionId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, server_default=text("'0'")
+        INTEGER(10), primary_key=True, server_default=text("0")
     )
     personId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, server_default=text("'0'")
+        INTEGER(10), primary_key=True, server_default=text("0")
     )
     role: Mapped[Optional[str]] = mapped_column(
         Enum(
@@ -6826,9 +6461,7 @@ class SessionHasPerson(Base):
             "Associate",
         )
     )
-    remote: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
-    )
+    remote: Mapped[Optional[int]] = mapped_column(TINYINT(1), server_default=text("0"))
 
     Person_: Mapped["Person"] = relationship(
         "Person", back_populates="Session_has_Person"
@@ -6841,7 +6474,6 @@ class SessionHasPerson(Base):
 class Shipping(Base):
     __tablename__ = "Shipping"
     __table_args__ = (
-        CheckConstraint("json_valid(`extra`)", name="Shipping_chk_1"),
         ForeignKeyConstraint(
             ["deliveryAgent_flightCodePersonId"],
             ["Person.personId"],
@@ -6878,8 +6510,8 @@ class Shipping(Base):
         Index("laboratoryId", "laboratoryId"),
     )
 
-    shippingId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    proposalId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
+    shippingId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    proposalId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     shippingName: Mapped[Optional[str]] = mapped_column(String(45))
     deliveryAgent_agentName: Mapped[Optional[str]] = mapped_column(String(45))
     deliveryAgent_shippingDate: Mapped[Optional[datetime.date]] = mapped_column(Date)
@@ -6888,21 +6520,21 @@ class Shipping(Base):
     deliveryAgent_flightCode: Mapped[Optional[str]] = mapped_column(String(45))
     shippingStatus: Mapped[Optional[str]] = mapped_column(String(45))
     bltimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
-    laboratoryId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    laboratoryId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     isStorageShipping: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
+        TINYINT(1), server_default=text("0")
     )
     creationDate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     comments: Mapped[Optional[str]] = mapped_column(String(1000))
-    sendingLabContactId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    returnLabContactId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    sendingLabContactId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    returnLabContactId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     returnCourier: Mapped[Optional[str]] = mapped_column(String(45))
     dateOfShippingToUser: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     shippingType: Mapped[Optional[str]] = mapped_column(String(45))
     SAFETYLEVEL: Mapped[Optional[str]] = mapped_column(String(8))
-    deliveryAgent_flightCodeTimestamp: Mapped[
-        Optional[datetime.datetime]
-    ] = mapped_column(TIMESTAMP, comment="Date flight code created, if automatic")
+    deliveryAgent_flightCodeTimestamp: Mapped[Optional[datetime.datetime]] = (
+        mapped_column(TIMESTAMP, comment="Date flight code created, if automatic")
+    )
     deliveryAgent_label: Mapped[Optional[str]] = mapped_column(
         Text, comment="Base64 encoded pdf of airway label"
     )
@@ -6915,9 +6547,9 @@ class Shipping(Base):
     physicalLocation: Mapped[Optional[str]] = mapped_column(
         String(50), comment="Where shipment can be picked up from: i.e. Stores"
     )
-    deliveryAgent_pickupConfirmationTimestamp: Mapped[
-        Optional[datetime.datetime]
-    ] = mapped_column(TIMESTAMP, comment="Date picked confirmed")
+    deliveryAgent_pickupConfirmationTimestamp: Mapped[Optional[datetime.datetime]] = (
+        mapped_column(TIMESTAMP, comment="Date picked confirmed")
+    )
     deliveryAgent_pickupConfirmation: Mapped[Optional[str]] = mapped_column(
         String(10), comment="Confirmation number of requested pickup"
     )
@@ -6931,11 +6563,17 @@ class Shipping(Base):
         String(10), comment="A code that identifies which shipment service was used"
     )
     deliveryAgent_flightCodePersonId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="The person who created the AWB (for auditing)"
+        INTEGER(10), comment="The person who created the AWB (for auditing)"
     )
     extra: Mapped[Optional[str]] = mapped_column(
         LONGTEXT,
         comment="JSON column for facility-specific or hard-to-define attributes",
+    )
+    source: Mapped[Optional[str]] = mapped_column(
+        String(50), server_default=text("current_user()")
+    )
+    externalShippingIdToSynchrotron: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="ID for shipping to synchrotron in external application"
     )
 
     Project_: Mapped[List["Project"]] = relationship(
@@ -6983,9 +6621,11 @@ class XFEFluorescenceSpectrum(Base):
         Index("XFE_ibfk_3", "blSubSampleId"),
     )
 
-    xfeFluorescenceSpectrumId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    sessionId: Mapped[int] = mapped_column(INTEGER)
-    blSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    xfeFluorescenceSpectrumId: Mapped[int] = mapped_column(
+        INTEGER(10), primary_key=True
+    )
+    sessionId: Mapped[int] = mapped_column(INTEGER(10))
+    blSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     jpegScanFileFullPath: Mapped[Optional[str]] = mapped_column(String(255))
     startTime: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     endTime: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
@@ -7001,7 +6641,7 @@ class XFEFluorescenceSpectrum(Base):
     beamSizeHorizontal: Mapped[Optional[float]] = mapped_column(Float)
     crystalClass: Mapped[Optional[str]] = mapped_column(String(20))
     comments: Mapped[Optional[str]] = mapped_column(String(1024))
-    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     flux: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True), comment="flux measured before the xrfSpectra"
     )
@@ -7026,6 +6666,33 @@ class XFEFluorescenceSpectrum(Base):
     )
 
 
+class Atlas(Base):
+    __tablename__ = "Atlas"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["dataCollectionGroupId"],
+            ["DataCollectionGroup.dataCollectionGroupId"],
+            onupdate="CASCADE",
+            name="Atlas_fk_dataCollectionGroupId",
+        ),
+        Index("Atlas_fk_dataCollectionGroupId", "dataCollectionGroupId"),
+        {"comment": "Atlas of a Cryo-EM grid"},
+    )
+
+    atlasId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    dataCollectionGroupId: Mapped[int] = mapped_column(INTEGER(11))
+    atlasImage: Mapped[str] = mapped_column(String(255), comment="path to atlas image")
+    pixelSize: Mapped[float] = mapped_column(Float, comment="pixel size of atlas image")
+    cassetteSlot: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+
+    DataCollectionGroup_: Mapped["DataCollectionGroup"] = relationship(
+        "DataCollectionGroup", back_populates="Atlas"
+    )
+    GridSquare: Mapped[List["GridSquare"]] = relationship(
+        "GridSquare", back_populates="Atlas_"
+    )
+
+
 class BLSampleTypeHasComponent(Base):
     __tablename__ = "BLSampleType_has_Component"
     __table_args__ = (
@@ -7046,8 +6713,8 @@ class BLSampleTypeHasComponent(Base):
         Index("blSampleType_has_Component_fk2", "componentId"),
     )
 
-    blSampleTypeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    componentId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    blSampleTypeId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    componentId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     abundance: Mapped[Optional[float]] = mapped_column(Float)
 
     Crystal_: Mapped["Crystal"] = relationship(
@@ -7079,9 +6746,9 @@ class BLSampleHasEnergyScan(Base):
         Index("BLSample_has_EnergyScan_FKIndex2", "energyScanId"),
     )
 
-    blSampleId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
-    energyScanId: Mapped[int] = mapped_column(INTEGER, server_default=text("'0'"))
-    blSampleHasEnergyScanId: Mapped[int] = mapped_column(Integer, primary_key=True)
+    blSampleId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
+    energyScanId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
+    blSampleHasEnergyScanId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
 
     BLSample_: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="BLSample_has_EnergyScan"
@@ -7113,14 +6780,14 @@ class CourierTermsAccepted(Base):
         {"comment": "Records acceptances of the courier T and C"},
     )
 
-    courierTermsAcceptedId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    proposalId: Mapped[int] = mapped_column(INTEGER)
-    personId: Mapped[int] = mapped_column(INTEGER)
+    courierTermsAcceptedId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    proposalId: Mapped[int] = mapped_column(INTEGER(10))
+    personId: Mapped[int] = mapped_column(INTEGER(10))
     shippingName: Mapped[Optional[str]] = mapped_column(String(100))
     timestamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
-    shippingId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    shippingId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     Person_: Mapped["Person"] = relationship(
         "Person", back_populates="CourierTermsAccepted"
@@ -7156,10 +6823,10 @@ class CrystalComposition(Base):
         },
     )
 
-    crystalCompositionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    componentId: Mapped[int] = mapped_column(INTEGER)
-    crystalId: Mapped[int] = mapped_column(INTEGER)
-    concentrationTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    crystalCompositionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    componentId: Mapped[int] = mapped_column(INTEGER(11))
+    crystalId: Mapped[int] = mapped_column(INTEGER(11))
+    concentrationTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     abundance: Mapped[Optional[float]] = mapped_column(
         Float,
         comment="Abundance or concentration in the unit defined by concentrationTypeId.",
@@ -7192,8 +6859,8 @@ class CrystalHasUUID(Base):
         Index("Crystal_has_UUID_FKIndex2", "UUID"),
     )
 
-    crystal_has_UUID_Id: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    crystalId: Mapped[int] = mapped_column(INTEGER)
+    crystal_has_UUID_Id: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    crystalId: Mapped[int] = mapped_column(INTEGER(10))
     UUID: Mapped[Optional[str]] = mapped_column(String(45))
     imageURL: Mapped[Optional[str]] = mapped_column(String(255))
 
@@ -7205,7 +6872,6 @@ class CrystalHasUUID(Base):
 class Dewar(Base):
     __tablename__ = "Dewar"
     __table_args__ = (
-        CheckConstraint("json_valid(`extra`)", name="Dewar_chk_1"),
         ForeignKeyConstraint(
             ["firstExperimentId"],
             ["BLSession.sessionId"],
@@ -7227,8 +6893,8 @@ class Dewar(Base):
         Index("barCode", "barCode", unique=True),
     )
 
-    dewarId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    shippingId: Mapped[int] = mapped_column(INTEGER)
+    dewarId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    shippingId: Mapped[int] = mapped_column(INTEGER(10))
     type: Mapped[str] = mapped_column(
         Enum("Dewar", "Toolbox", "Parcel"), server_default=text("'Dewar'")
     )
@@ -7238,12 +6904,12 @@ class Dewar(Base):
     dewarStatus: Mapped[Optional[str]] = mapped_column(String(45))
     bltimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     isStorageDewar: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("'0'")
+        TINYINT(1), server_default=text("0")
     )
     barCode: Mapped[Optional[str]] = mapped_column(String(45))
-    firstExperimentId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    customsValue: Mapped[Optional[int]] = mapped_column(INTEGER)
-    transportValue: Mapped[Optional[int]] = mapped_column(INTEGER)
+    firstExperimentId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    customsValue: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    transportValue: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     trackingNumberToSynchrotron: Mapped[Optional[str]] = mapped_column(String(30))
     trackingNumberFromSynchrotron: Mapped[Optional[str]] = mapped_column(String(30))
     facilityCode: Mapped[Optional[str]] = mapped_column(String(20))
@@ -7254,6 +6920,12 @@ class Dewar(Base):
     extra: Mapped[Optional[str]] = mapped_column(
         LONGTEXT,
         comment="JSON column for facility-specific or hard-to-define attributes, e.g. LN2 top-ups and contents checks",
+    )
+    source: Mapped[Optional[str]] = mapped_column(
+        String(50), server_default=text("current_user()")
+    )
+    externalShippingIdFromSynchrotron: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="ID for shipping from synchrotron in external application"
     )
 
     BLSession_: Mapped["BLSession"] = relationship("BLSession", back_populates="Dewar")
@@ -7300,17 +6972,19 @@ class DewarRegistryHasProposal(Base):
         Index("dewarRegistryId", "dewarRegistryId", "proposalId", unique=True),
     )
 
-    dewarRegistryHasProposalId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    dewarRegistryId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    dewarRegistryHasProposalId: Mapped[int] = mapped_column(
+        INTEGER(11), primary_key=True
+    )
+    dewarRegistryId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     personId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Person registering the dewar"
+        INTEGER(10), comment="Person registering the dewar"
     )
     recordTimestamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
     labContactId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Owner of the dewar"
+        INTEGER(11), comment="Owner of the dewar"
     )
 
     DewarRegistry_: Mapped["DewarRegistry"] = relationship(
@@ -7339,10 +7013,10 @@ class DewarReport(Base):
         Index("DewarReportIdx1", "facilityCode"),
     )
 
-    dewarReportId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    dewarReportId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     facilityCode: Mapped[str] = mapped_column(String(20))
     bltimestamp: Mapped[datetime.datetime] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
+        DateTime, server_default=text("current_timestamp()")
     )
     report: Mapped[Optional[str]] = mapped_column(Text)
     attachment: Mapped[Optional[str]] = mapped_column(String(255))
@@ -7373,11 +7047,11 @@ class GridInfo(Base):
     )
 
     gridInfoId: Mapped[int] = mapped_column(
-        INTEGER, primary_key=True, comment="Primary key (auto-incremented)"
+        INTEGER(11), primary_key=True, comment="Primary key (auto-incremented)"
     )
     recordTimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
-        server_default=text("CURRENT_TIMESTAMP"),
+        server_default=text("current_timestamp()"),
         comment="Creation or last update date/time",
     )
     xOffset: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
@@ -7387,29 +7061,29 @@ class GridInfo(Base):
     steps_x: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     steps_y: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     meshAngle: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
-    workflowMeshId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    workflowMeshId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     orientation: Mapped[Optional[str]] = mapped_column(
         Enum("vertical", "horizontal"), server_default=text("'horizontal'")
     )
-    dataCollectionGroupId: Mapped[Optional[int]] = mapped_column(Integer)
+    dataCollectionGroupId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     pixelsPerMicronX: Mapped[Optional[float]] = mapped_column(Float)
     pixelsPerMicronY: Mapped[Optional[float]] = mapped_column(Float)
     snapshot_offsetXPixel: Mapped[Optional[float]] = mapped_column(Float)
     snapshot_offsetYPixel: Mapped[Optional[float]] = mapped_column(Float)
     snaked: Mapped[Optional[int]] = mapped_column(
         TINYINT(1),
-        server_default=text("'0'"),
+        server_default=text("0"),
         comment="True: The images associated with the DCG were collected in a snaked pattern",
     )
-    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     patchesX: Mapped[Optional[int]] = mapped_column(
-        Integer,
-        server_default=text("'1'"),
+        INTEGER(10),
+        server_default=text("1"),
         comment="Number of patches the grid is made up of in the X direction",
     )
     patchesY: Mapped[Optional[int]] = mapped_column(
-        Integer,
-        server_default=text("'1'"),
+        INTEGER(10),
+        server_default=text("1"),
         comment="Number of patches the grid is made up of in the Y direction",
     )
     micronsPerPixelX: Mapped[Optional[float]] = mapped_column(Float)
@@ -7426,83 +7100,11 @@ class GridInfo(Base):
     )
 
 
-class ParticleClassification(Base):
-    __tablename__ = "ParticleClassification"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["particleClassificationGroupId"],
-            ["ParticleClassificationGroup.particleClassificationGroupId"],
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-            name="ParticleClassification_fk_particleClassificationGroupId",
-        ),
-        Index(
-            "ParticleClassification_fk_particleClassificationGroupId",
-            "particleClassificationGroupId",
-        ),
-        {"comment": "Results of 2D or 2D classification"},
-    )
-
-    particleClassificationId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    classNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Identified of the class. A unique ID given by Relion"
-    )
-    classImageFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="The PNG of the class"
-    )
-    particlesPerClass: Mapped[Optional[int]] = mapped_column(
-        INTEGER,
-        comment="Number of particles within the selected class, can then be used together with the total number above to calculate the percentage",
-    )
-    rotationAccuracy: Mapped[Optional[float]] = mapped_column(Float, comment="???")
-    translationAccuracy: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Unit: Angstroms"
-    )
-    estimatedResolution: Mapped[Optional[float]] = mapped_column(
-        Float, comment="???, Unit: Angstroms"
-    )
-    overallFourierCompleteness: Mapped[Optional[float]] = mapped_column(Float)
-    particleClassificationGroupId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    classDistribution: Mapped[Optional[float]] = mapped_column(
-        Float,
-        comment="Provides a figure of merit for the class, higher number is better",
-    )
-    selected: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1),
-        server_default=text("'0'"),
-        comment="Indicates whether the class is selected for further processing or not",
-    )
-    bFactorFitIntercept: Mapped[Optional[float]] = mapped_column(
-        Float,
-        comment="Intercept of quadratic fit to refinement resolution against the logarithm of the number of particles",
-    )
-    bFactorFitLinear: Mapped[Optional[float]] = mapped_column(
-        Float,
-        comment="Linear coefficient of quadratic fit to refinement resolution against the logarithm of the number of particles, equal to half of the B factor",
-    )
-    bFactorFitQuadratic: Mapped[Optional[float]] = mapped_column(
-        Float,
-        comment="Quadratic coefficient of quadratic fit to refinement resolution against the logarithm of the number of particles",
-    )
-
-    CryoemInitialModel_: Mapped[List["CryoemInitialModel"]] = relationship(
-        "CryoemInitialModel",
-        secondary="ParticleClassification_has_CryoemInitialModel",
-        back_populates="ParticleClassification",
-    )
-    ParticleClassificationGroup_: Mapped["ParticleClassificationGroup"] = relationship(
-        "ParticleClassificationGroup", back_populates="ParticleClassification"
-    )
-    BFactorFit: Mapped[List["BFactorFit"]] = relationship(
-        "BFactorFit", back_populates="ParticleClassification_"
-    )
-
-
 t_Project_has_DCGroup = Table(
     "Project_has_DCGroup",
     Base.metadata,
-    Column("projectId", INTEGER, primary_key=True, nullable=False),
-    Column("dataCollectionGroupId", Integer, primary_key=True, nullable=False),
+    Column("projectId", INTEGER(11), primary_key=True, nullable=False),
+    Column("dataCollectionGroupId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["dataCollectionGroupId"],
         ["DataCollectionGroup.dataCollectionGroupId"],
@@ -7524,8 +7126,8 @@ t_Project_has_DCGroup = Table(
 t_Project_has_EnergyScan = Table(
     "Project_has_EnergyScan",
     Base.metadata,
-    Column("projectId", INTEGER, primary_key=True, nullable=False),
-    Column("energyScanId", INTEGER, primary_key=True, nullable=False),
+    Column("projectId", INTEGER(11), primary_key=True, nullable=False),
+    Column("energyScanId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["energyScanId"],
         ["EnergyScan.energyScanId"],
@@ -7547,8 +7149,8 @@ t_Project_has_EnergyScan = Table(
 t_Project_has_Shipping = Table(
     "Project_has_Shipping",
     Base.metadata,
-    Column("projectId", INTEGER, primary_key=True, nullable=False),
-    Column("shippingId", INTEGER, primary_key=True, nullable=False),
+    Column("projectId", INTEGER(11), primary_key=True, nullable=False),
+    Column("shippingId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["projectId"],
         ["Project.projectId"],
@@ -7568,8 +7170,8 @@ t_Project_has_Shipping = Table(
 t_Project_has_XFEFSpectrum = Table(
     "Project_has_XFEFSpectrum",
     Base.metadata,
-    Column("projectId", INTEGER, primary_key=True, nullable=False),
-    Column("xfeFluorescenceSpectrumId", INTEGER, primary_key=True, nullable=False),
+    Column("projectId", INTEGER(11), primary_key=True, nullable=False),
+    Column("xfeFluorescenceSpectrumId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["projectId"],
         ["Project.projectId"],
@@ -7601,9 +7203,9 @@ class ScreenComponent(Base):
         Index("ScreenComponent_fk2", "componentId"),
     )
 
-    screenComponentId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    screenComponentGroupId: Mapped[int] = mapped_column(INTEGER)
-    componentId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    screenComponentId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    screenComponentGroupId: Mapped[int] = mapped_column(INTEGER(11))
+    componentId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     concentration: Mapped[Optional[float]] = mapped_column(Float)
     pH: Mapped[Optional[float]] = mapped_column(Float)
 
@@ -7618,8 +7220,8 @@ class ScreenComponent(Base):
 t_ShippingHasSession = Table(
     "ShippingHasSession",
     Base.metadata,
-    Column("shippingId", INTEGER, primary_key=True, nullable=False),
-    Column("sessionId", INTEGER, primary_key=True, nullable=False),
+    Column("shippingId", INTEGER(10), primary_key=True, nullable=False),
+    Column("sessionId", INTEGER(10), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["sessionId"],
         ["BLSession.sessionId"],
@@ -7652,52 +7254,18 @@ class XrayCentring(Base):
         {"comment": "Xray Centring analysis associated with one or more grid scans."},
     )
 
-    xrayCentringId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    xrayCentringId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     dataCollectionGroupId: Mapped[int] = mapped_column(
-        Integer, comment="references DataCollectionGroup table"
+        INTEGER(11), comment="references DataCollectionGroup table"
     )
-    status: Mapped[Optional[str]] = mapped_column(ENUM("success", "failed", "pending"))
-    xrayCentringType: Mapped[Optional[str]] = mapped_column(ENUM("2d", "3d"))
+    status: Mapped[Optional[str]] = mapped_column(Enum("success", "failed", "pending"))
+    xrayCentringType: Mapped[Optional[str]] = mapped_column(Enum("2d", "3d"))
 
     DataCollectionGroup_: Mapped["DataCollectionGroup"] = relationship(
         "DataCollectionGroup", back_populates="XrayCentring"
     )
     XrayCentringResult: Mapped[List["XrayCentringResult"]] = relationship(
         "XrayCentringResult", back_populates="XrayCentring_"
-    )
-
-
-class BFactorFit(Base):
-    __tablename__ = "BFactorFit"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["particleClassificationId"],
-            ["ParticleClassification.particleClassificationId"],
-            name="BFactorFit_fk_particleClassificationId",
-        ),
-        Index("BFactorFit_fk_particleClassificationId", "particleClassificationId"),
-        {
-            "comment": "CryoEM reconstruction resolution as a function of the number of "
-            "particles for the creation of a Rosenthal-Henderson plot and the "
-            "calculation of B-factors"
-        },
-    )
-
-    bFactorFitId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    particleClassificationId: Mapped[int] = mapped_column(INTEGER)
-    resolution: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Resolution of a refined map using a given number of particles"
-    )
-    numberOfParticles: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Number of particles used in refinement"
-    )
-    particleBatchSize: Mapped[Optional[int]] = mapped_column(
-        INTEGER,
-        comment="Number of particles in the batch that the B-factor analysis was performed on",
-    )
-
-    ParticleClassification_: Mapped["ParticleClassification"] = relationship(
-        "ParticleClassification", back_populates="BFactorFit"
     )
 
 
@@ -7773,25 +7341,25 @@ class Container(Base):
         Index("Container_ibfk9", "priorityPipelineId"),
     )
 
-    containerId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    dewarId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    dewarId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     code: Mapped[Optional[str]] = mapped_column(String(45))
     containerType: Mapped[Optional[str]] = mapped_column(String(20))
-    capacity: Mapped[Optional[int]] = mapped_column(INTEGER)
+    capacity: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     sampleChangerLocation: Mapped[Optional[str]] = mapped_column(String(20))
     containerStatus: Mapped[Optional[str]] = mapped_column(String(45))
     bltimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     beamlineLocation: Mapped[Optional[str]] = mapped_column(String(20))
-    screenId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    scheduleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    screenId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    scheduleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     barcode: Mapped[Optional[str]] = mapped_column(String(45))
-    imagerId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    sessionId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    ownerId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    requestedImagerId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    imagerId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    sessionId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    ownerId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    requestedImagerId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     requestedReturn: Mapped[Optional[int]] = mapped_column(
         TINYINT(1),
-        server_default=text("'0'"),
+        server_default=text("0"),
         comment="True for requesting return, False means container will be disposed",
     )
     comments: Mapped[Optional[str]] = mapped_column(String(255))
@@ -7799,19 +7367,23 @@ class Container(Base):
     storageTemperature: Mapped[Optional[float]] = mapped_column(
         Float, comment="NULL=ambient"
     )
-    containerRegistryId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerRegistryId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     scLocationUpdated: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     priorityPipelineId: Mapped[Optional[int]] = mapped_column(
-        INTEGER,
-        server_default=text("'6'"),
+        INTEGER(11),
+        server_default=text("6"),
         comment="Processing pipeline to prioritise, defaults to 6 which is xia2/DIALS",
     )
-    experimentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    containerTypeId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    experimentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    containerTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     currentDewarId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="The dewar with which the container is currently associated"
+        INTEGER(10),
+        comment="The dewar with which the container is currently associated",
     )
-    parentContainerId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    parentContainerId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    source: Mapped[Optional[str]] = mapped_column(
+        String(50), server_default=text("current_user()")
+    )
 
     BLSample_: Mapped[List["BLSample"]] = relationship(
         "BLSample", back_populates="Container"
@@ -7879,38 +7451,73 @@ class DewarTransportHistory(Base):
         Index("DewarTransportHistory_FKIndex1", "dewarId"),
     )
 
-    DewarTransportHistoryId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    DewarTransportHistoryId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     dewarStatus: Mapped[str] = mapped_column(String(45))
     storageLocation: Mapped[str] = mapped_column(String(45))
     arrivalDate: Mapped[datetime.datetime] = mapped_column(DateTime)
-    dewarId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    dewarId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     Dewar_: Mapped["Dewar"] = relationship(
         "Dewar", back_populates="DewarTransportHistory"
     )
 
 
-t_ParticleClassification_has_CryoemInitialModel = Table(
-    "ParticleClassification_has_CryoemInitialModel",
-    Base.metadata,
-    Column("particleClassificationId", INTEGER, primary_key=True, nullable=False),
-    Column("cryoemInitialModelId", INTEGER, primary_key=True, nullable=False),
-    ForeignKeyConstraint(
-        ["cryoemInitialModelId"],
-        ["CryoemInitialModel.cryoemInitialModelId"],
-        ondelete="CASCADE",
-        onupdate="CASCADE",
-        name="ParticleClassification_has_InitialModel_fk2",
-    ),
-    ForeignKeyConstraint(
-        ["particleClassificationId"],
-        ["ParticleClassification.particleClassificationId"],
-        ondelete="CASCADE",
-        onupdate="CASCADE",
-        name="ParticleClassification_has_CryoemInitialModel_fk1",
-    ),
-    Index("ParticleClassification_has_InitialModel_fk2", "cryoemInitialModelId"),
-)
+class GridSquare(Base):
+    __tablename__ = "GridSquare"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["atlasId"],
+            ["Atlas.atlasId"],
+            onupdate="CASCADE",
+            name="GridSquare_fk_atlasId",
+        ),
+        Index("GridSquare_fk_atlasId", "atlasId"),
+        {
+            "comment": "Details of a Cryo-EM grid square including image captured at grid "
+            "square magnification"
+        },
+    )
+
+    gridSquareId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    atlasId: Mapped[int] = mapped_column(INTEGER(11))
+    gridSquareLabel: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="grid square reference from acquisition software"
+    )
+    gridSquareImage: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="path to grid square image"
+    )
+    pixelLocationX: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="pixel location of grid square centre on atlas image (x)"
+    )
+    pixelLocationY: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="pixel location of grid square centre on atlas image (y)"
+    )
+    height: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="grid square height on atlas image in pixels"
+    )
+    width: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="grid square width on atlas image in pixels"
+    )
+    angle: Mapped[Optional[float]] = mapped_column(
+        Float, comment="angle of grid square relative to atlas image"
+    )
+    stageLocationX: Mapped[Optional[float]] = mapped_column(
+        Float, comment="x stage position (microns)"
+    )
+    stageLocationY: Mapped[Optional[float]] = mapped_column(
+        Float, comment="y stage position (microns)"
+    )
+    qualityIndicator: Mapped[Optional[float]] = mapped_column(
+        Float, comment="metric for determining quality of grid square"
+    )
+    pixelSize: Mapped[Optional[float]] = mapped_column(
+        Float, comment="pixel size of grid square image"
+    )
+
+    Atlas_: Mapped["Atlas"] = relationship("Atlas", back_populates="GridSquare")
+    FoilHole: Mapped[List["FoilHole"]] = relationship(
+        "FoilHole", back_populates="GridSquare_"
+    )
 
 
 class XRFFluorescenceMapping(Base):
@@ -7940,31 +7547,31 @@ class XRFFluorescenceMapping(Base):
         },
     )
 
-    xrfFluorescenceMappingId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    xrfFluorescenceMappingROIId: Mapped[int] = mapped_column(INTEGER)
-    gridInfoId: Mapped[int] = mapped_column(INTEGER)
+    xrfFluorescenceMappingId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    xrfFluorescenceMappingROIId: Mapped[int] = mapped_column(INTEGER(11))
+    gridInfoId: Mapped[int] = mapped_column(INTEGER(11))
     dataFormat: Mapped[str] = mapped_column(
         String(15),
         comment="Description of format and any compression, i.e. json+gzip for gzipped json",
     )
     data: Mapped[bytes] = mapped_column(LONGBLOB, comment="The actual data")
     opacity: Mapped[float] = mapped_column(
-        Float, server_default=text("'1'"), comment="Display opacity"
+        Float, server_default=text("1"), comment="Display opacity"
     )
     points: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="The number of points available, for realtime feedback"
+        INTEGER(11), comment="The number of points available, for realtime feedback"
     )
     colourMap: Mapped[Optional[str]] = mapped_column(
         String(20), comment="Colour map for displaying the data"
     )
     min: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Min value in the data for histogramming"
+        INTEGER(3), comment="Min value in the data for histogramming"
     )
     max: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Max value in the data for histogramming"
+        INTEGER(3), comment="Max value in the data for histogramming"
     )
     autoProcProgramId: Mapped[Optional[int]] = mapped_column(
-        INTEGER, comment="Related autoproc programid"
+        INTEGER(10), comment="Related autoproc programid"
     )
 
     AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
@@ -8007,9 +7614,9 @@ class XrayCentringResult(Base):
         {"comment": "Xray Centring result."},
     )
 
-    xrayCentringResultId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    xrayCentringResultId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     xrayCentringId: Mapped[int] = mapped_column(
-        INTEGER, comment="references XrayCentring table"
+        INTEGER(11), comment="references XrayCentring table"
     )
     centreOfMassX: Mapped[Optional[float]] = mapped_column(
         Float,
@@ -8024,19 +7631,19 @@ class XrayCentringResult(Base):
         comment="z-coordinate corresponding to the centre of mass of the crystal (in voxels)",
     )
     maxVoxelX: Mapped[Optional[int]] = mapped_column(
-        Integer,
+        INTEGER(11),
         comment="x-coordinate of the voxel with the maximum value within this crystal volume",
     )
     maxVoxelY: Mapped[Optional[int]] = mapped_column(
-        Integer,
+        INTEGER(11),
         comment="y-coordinate of the voxel with the maximum value within this crystal volume",
     )
     maxVoxelZ: Mapped[Optional[int]] = mapped_column(
-        Integer,
+        INTEGER(11),
         comment="z-coordinate of the voxel with the maximum value within this crystal volume",
     )
     numberOfVoxels: Mapped[Optional[int]] = mapped_column(
-        Integer, comment="Number of voxels within the specified bounding box"
+        INTEGER(11), comment="Number of voxels within the specified bounding box"
     )
     totalCount: Mapped[Optional[float]] = mapped_column(
         Float,
@@ -8067,9 +7674,11 @@ class XrayCentringResult(Base):
         comment="Maximum z-coordinate of the bounding box containing the crystal (in voxels)",
     )
     status: Mapped[Optional[str]] = mapped_column(
-        ENUM("success", "failure", "pending"), comment="to be removed"
+        Enum("success", "failure", "pending"), comment="to be removed"
     )
-    gridInfoId: Mapped[Optional[int]] = mapped_column(INTEGER, comment="to be removed")
+    gridInfoId: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="to be removed"
+    )
 
     XrayCentring_: Mapped["XrayCentring"] = relationship(
         "XrayCentring", back_populates="XrayCentringResult"
@@ -8091,12 +7700,12 @@ class BFAutomationFault(Base):
         Index("BF_automationFault_ibfk2", "containerId"),
     )
 
-    automationFaultId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    automationFaultId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     faultTimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
-    automationErrorId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    containerId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    automationErrorId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    containerId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     severity: Mapped[Optional[str]] = mapped_column(Enum("1", "2", "3"))
     stacktrace: Mapped[Optional[str]] = mapped_column(Text)
     resolved: Mapped[Optional[int]] = mapped_column(TINYINT(1))
@@ -8126,16 +7735,16 @@ class ContainerHistory(Base):
         Index("ContainerHistory_ibfk1", "containerId"),
     )
 
-    containerHistoryId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    containerHistoryId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     blTimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
-    containerId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     location: Mapped[Optional[str]] = mapped_column(String(45))
     status: Mapped[Optional[str]] = mapped_column(String(45))
     beamlineName: Mapped[Optional[str]] = mapped_column(String(20))
     currentDewarId: Mapped[Optional[int]] = mapped_column(
-        INTEGER,
+        INTEGER(10),
         comment="The dewar with which the container was associated at the creation of this row",
     )
 
@@ -8180,15 +7789,15 @@ class ContainerInspection(Base):
         ),
     )
 
-    containerInspectionId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    containerId: Mapped[int] = mapped_column(INTEGER)
-    inspectionTypeId: Mapped[int] = mapped_column(INTEGER)
-    imagerId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerInspectionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    containerId: Mapped[int] = mapped_column(INTEGER(11))
+    inspectionTypeId: Mapped[int] = mapped_column(INTEGER(11))
+    imagerId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     temperature: Mapped[Optional[float]] = mapped_column(Float)
     blTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
-    scheduleComponentid: Mapped[Optional[int]] = mapped_column(INTEGER)
+    scheduleComponentid: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     state: Mapped[Optional[str]] = mapped_column(String(20))
-    priority: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    priority: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
     manual: Mapped[Optional[int]] = mapped_column(TINYINT(1))
     scheduledTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     completedTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
@@ -8228,14 +7837,15 @@ class ContainerQueue(Base):
         ),
         Index("ContainerQueue_ibfk1", "containerId"),
         Index("ContainerQueue_ibfk2", "personId"),
+        Index("ContainerQueue_idx1", "containerId", "completedTimeStamp"),
     )
 
-    containerQueueId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
+    containerQueueId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    containerId: Mapped[int] = mapped_column(INTEGER(10))
     createdTimeStamp: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")
+        TIMESTAMP, server_default=text("current_timestamp()")
     )
-    containerId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    personId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    personId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     completedTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(TIMESTAMP)
 
     Container_: Mapped["Container"] = relationship(
@@ -8245,6 +7855,61 @@ class ContainerQueue(Base):
     ContainerQueueSample: Mapped[List["ContainerQueueSample"]] = relationship(
         "ContainerQueueSample", back_populates="ContainerQueue_"
     )
+
+
+class FoilHole(Base):
+    __tablename__ = "FoilHole"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["gridSquareId"],
+            ["GridSquare.gridSquareId"],
+            onupdate="CASCADE",
+            name="FoilHole_fk_gridSquareId",
+        ),
+        Index("FoilHole_fk_gridSquareId", "gridSquareId"),
+        {
+            "comment": "Details of a Cryo-EM foil hole within a grid square including "
+            "image captured at foil hole magnification if applicable"
+        },
+    )
+
+    foilHoleId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    gridSquareId: Mapped[int] = mapped_column(INTEGER(11))
+    foilHoleLabel: Mapped[str] = mapped_column(
+        String(30), comment="foil hole reference name from acquisition software"
+    )
+    foilHoleImage: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        comment="path to foil hole image, nullable as there is not always a foil hole image",
+    )
+    pixelLocationX: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11),
+        comment="pixel location of foil hole centre on grid square image (x)",
+    )
+    pixelLocationY: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11),
+        comment="pixel location of foil hole centre on grid square image (y)",
+    )
+    diameter: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="foil hole diameter on grid square image in pixels"
+    )
+    stageLocationX: Mapped[Optional[float]] = mapped_column(
+        Float, comment="x stage position (microns)"
+    )
+    stageLocationY: Mapped[Optional[float]] = mapped_column(
+        Float, comment="y stage position (microns)"
+    )
+    qualityIndicator: Mapped[Optional[float]] = mapped_column(
+        Float, comment="metric for determining quality of foil hole"
+    )
+    pixelSize: Mapped[Optional[float]] = mapped_column(
+        Float, comment="pixel size of foil hole image"
+    )
+
+    GridSquare_: Mapped["GridSquare"] = relationship(
+        "GridSquare", back_populates="FoilHole"
+    )
+    Movie: Mapped[List["Movie"]] = relationship("Movie", back_populates="FoilHole_")
 
 
 class XFEFluorescenceComposite(Base):
@@ -8274,21 +7939,23 @@ class XFEFluorescenceComposite(Base):
         },
     )
 
-    xfeFluorescenceCompositeId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    r: Mapped[int] = mapped_column(INTEGER, comment="Red layer")
-    g: Mapped[int] = mapped_column(INTEGER, comment="Green layer")
-    b: Mapped[int] = mapped_column(INTEGER, comment="Blue layer")
+    xfeFluorescenceCompositeId: Mapped[int] = mapped_column(
+        INTEGER(10), primary_key=True
+    )
+    r: Mapped[int] = mapped_column(INTEGER(10), comment="Red layer")
+    g: Mapped[int] = mapped_column(INTEGER(10), comment="Green layer")
+    b: Mapped[int] = mapped_column(INTEGER(10), comment="Blue layer")
     rOpacity: Mapped[float] = mapped_column(
-        Float, server_default=text("'1'"), comment="Red layer opacity"
+        Float, server_default=text("1"), comment="Red layer opacity"
     )
     bOpacity: Mapped[float] = mapped_column(
-        Float, server_default=text("'1'"), comment="Red layer opacity"
+        Float, server_default=text("1"), comment="Red layer opacity"
     )
     gOpacity: Mapped[float] = mapped_column(
-        Float, server_default=text("'1'"), comment="Red layer opacity"
+        Float, server_default=text("1"), comment="Red layer opacity"
     )
     opacity: Mapped[float] = mapped_column(
-        Float, server_default=text("'1'"), comment="Total map opacity"
+        Float, server_default=text("1"), comment="Total map opacity"
     )
 
     XRFFluorescenceMapping_: Mapped["XRFFluorescenceMapping"] = relationship(
@@ -8341,9 +8008,9 @@ class ContainerQueueSample(Base):
         Index("ContainerQueueSample_ibfk2", "blSubSampleId"),
     )
 
-    containerQueueSampleId: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    containerQueueId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    containerQueueSampleId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    containerQueueId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     status: Mapped[Optional[str]] = mapped_column(
         String(20),
         comment="The status of the queued item, i.e. skipped, reinspect. Completed / failed should be inferred from related DataCollection",
@@ -8354,8 +8021,8 @@ class ContainerQueueSample(Base):
     endTime: Mapped[Optional[datetime.datetime]] = mapped_column(
         DateTime, comment="End time of processing the queue item"
     )
-    dataCollectionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER)
-    blSampleId: Mapped[Optional[int]] = mapped_column(INTEGER)
+    dataCollectionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    blSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
     BLSample_: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="ContainerQueueSample"
@@ -8369,3 +8036,522 @@ class ContainerQueueSample(Base):
     DiffractionPlan_: Mapped["DiffractionPlan"] = relationship(
         "DiffractionPlan", back_populates="ContainerQueueSample"
     )
+
+
+class Movie(Base):
+    __tablename__ = "Movie"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["dataCollectionId"],
+            ["DataCollection.dataCollectionId"],
+            name="Movie_ibfk1",
+        ),
+        ForeignKeyConstraint(
+            ["foilHoleId"],
+            ["FoilHole.foilHoleId"],
+            onupdate="CASCADE",
+            name="Movie_fk_foilHoleId",
+        ),
+        Index("Movie_fk_foilHoleId", "foilHoleId"),
+        Index("Movie_ibfk1", "dataCollectionId"),
+    )
+
+    movieId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    createdTimeStamp: Mapped[datetime.datetime] = mapped_column(
+        TIMESTAMP,
+        server_default=text("current_timestamp() ON UPDATE current_timestamp()"),
+    )
+    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    movieNumber: Mapped[Optional[int]] = mapped_column(MEDIUMINT(8))
+    movieFullPath: Mapped[Optional[str]] = mapped_column(String(255))
+    positionX: Mapped[Optional[float]] = mapped_column(Float)
+    positionY: Mapped[Optional[float]] = mapped_column(Float)
+    nominalDefocus: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Nominal defocus, Units: A"
+    )
+    angle: Mapped[Optional[float]] = mapped_column(
+        Float, comment="unit: degrees relative to perpendicular to beam"
+    )
+    fluence: Mapped[Optional[float]] = mapped_column(
+        Float,
+        comment="accumulated electron fluence from start to end of acquisition of this movie (commonly, but incorrectly, referred to as ‘dose’)",
+    )
+    numberOfFrames: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11),
+        comment="number of frames per movie. This should be equivalent to the number of\xa0MotionCorrectionDrift\xa0entries, but the latter is a property of data analysis, whereas the number of frames is an intrinsic property of acquisition.",
+    )
+    foilHoleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    templateLabel: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+
+    DataCollection_: Mapped["DataCollection"] = relationship(
+        "DataCollection", back_populates="Movie"
+    )
+    FoilHole_: Mapped["FoilHole"] = relationship("FoilHole", back_populates="Movie")
+    MotionCorrection: Mapped[List["MotionCorrection"]] = relationship(
+        "MotionCorrection", back_populates="Movie_"
+    )
+    TiltImageAlignment: Mapped[List["TiltImageAlignment"]] = relationship(
+        "TiltImageAlignment", back_populates="Movie_"
+    )
+
+
+class MotionCorrection(Base):
+    __tablename__ = "MotionCorrection"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["autoProcProgramId"],
+            ["AutoProcProgram.autoProcProgramId"],
+            name="MotionCorrection_ibfk2",
+        ),
+        ForeignKeyConstraint(
+            ["dataCollectionId"],
+            ["DataCollection.dataCollectionId"],
+            name="_MotionCorrection_ibfk1",
+        ),
+        ForeignKeyConstraint(
+            ["movieId"], ["Movie.movieId"], name="MotionCorrection_ibfk3"
+        ),
+        Index("MotionCorrection_ibfk2", "autoProcProgramId"),
+        Index("MotionCorrection_ibfk3", "movieId"),
+        Index("_MotionCorrection_ibfk1", "dataCollectionId"),
+    )
+
+    motionCorrectionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    dataCollectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    imageNumber: Mapped[Optional[int]] = mapped_column(
+        SMALLINT(5), comment="Movie number, sequential in time 1-n"
+    )
+    firstFrame: Mapped[Optional[int]] = mapped_column(
+        SMALLINT(5), comment="First frame of movie used"
+    )
+    lastFrame: Mapped[Optional[int]] = mapped_column(
+        SMALLINT(5), comment="Last frame of movie used"
+    )
+    dosePerFrame: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Dose per frame, Units: e-/A^2"
+    )
+    doseWeight: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Dose weight, Units: dimensionless"
+    )
+    totalMotion: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Total motion, Units: A"
+    )
+    averageMotionPerFrame: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Average motion per frame, Units: A"
+    )
+    driftPlotFullPath: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Full path to the drift plot"
+    )
+    micrographFullPath: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Full path to the micrograph"
+    )
+    micrographSnapshotFullPath: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Full path to a snapshot (jpg) of the micrograph"
+    )
+    patchesUsedX: Mapped[Optional[int]] = mapped_column(
+        MEDIUMINT(8), comment="Number of patches used in x (for motioncor2)"
+    )
+    patchesUsedY: Mapped[Optional[int]] = mapped_column(
+        MEDIUMINT(8), comment="Number of patches used in y (for motioncor2)"
+    )
+    fftFullPath: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Full path to the jpg image of the raw micrograph FFT"
+    )
+    fftCorrectedFullPath: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        comment="Full path to the jpg image of the drift corrected micrograph FFT",
+    )
+    comments: Mapped[Optional[str]] = mapped_column(String(255))
+    movieId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+
+    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+        "AutoProcProgram", back_populates="MotionCorrection"
+    )
+    DataCollection_: Mapped["DataCollection"] = relationship(
+        "DataCollection", back_populates="MotionCorrection"
+    )
+    Movie_: Mapped["Movie"] = relationship("Movie", back_populates="MotionCorrection")
+    CTF: Mapped[List["CTF"]] = relationship("CTF", back_populates="MotionCorrection_")
+    ParticlePicker: Mapped[List["ParticlePicker"]] = relationship(
+        "ParticlePicker", back_populates="MotionCorrection_"
+    )
+    RelativeIceThickness: Mapped[List["RelativeIceThickness"]] = relationship(
+        "RelativeIceThickness", back_populates="MotionCorrection_"
+    )
+
+
+class TiltImageAlignment(Base):
+    __tablename__ = "TiltImageAlignment"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["movieId"],
+            ["Movie.movieId"],
+            ondelete="CASCADE",
+            onupdate="CASCADE",
+            name="TiltImageAlignment_fk_movieId",
+        ),
+        ForeignKeyConstraint(
+            ["tomogramId"],
+            ["Tomogram.tomogramId"],
+            ondelete="CASCADE",
+            onupdate="CASCADE",
+            name="TiltImageAlignment_fk_tomogramId",
+        ),
+        Index("TiltImageAlignment_fk_tomogramId", "tomogramId"),
+        {"comment": "For storing per-movie analysis results (reconstruction)"},
+    )
+
+    movieId: Mapped[int] = mapped_column(
+        INTEGER(11), primary_key=True, comment="FK to\xa0Movie\xa0table"
+    )
+    tomogramId: Mapped[int] = mapped_column(
+        INTEGER(11),
+        primary_key=True,
+        comment="FK to\xa0Tomogram\xa0table; tuple (movieID, tomogramID) is unique",
+    )
+    defocusU: Mapped[Optional[float]] = mapped_column(Float, comment="unit: Angstroms")
+    defocusV: Mapped[Optional[float]] = mapped_column(Float, comment="unit: Angstroms")
+    psdFile: Mapped[Optional[str]] = mapped_column(String(255))
+    resolution: Mapped[Optional[float]] = mapped_column(
+        Float, comment="unit: Angstroms"
+    )
+    fitQuality: Mapped[Optional[float]] = mapped_column(Float)
+    refinedMagnification: Mapped[Optional[float]] = mapped_column(
+        Float, comment="unitless"
+    )
+    refinedTiltAngle: Mapped[Optional[float]] = mapped_column(
+        Float, comment="units: degrees"
+    )
+    refinedTiltAxis: Mapped[Optional[float]] = mapped_column(
+        Float, comment="units: degrees"
+    )
+    residualError: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Residual error, unit: nm"
+    )
+
+    Movie_: Mapped["Movie"] = relationship("Movie", back_populates="TiltImageAlignment")
+    Tomogram_: Mapped["Tomogram"] = relationship(
+        "Tomogram", back_populates="TiltImageAlignment"
+    )
+
+
+class CTF(Base):
+    __tablename__ = "CTF"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["autoProcProgramId"],
+            ["AutoProcProgram.autoProcProgramId"],
+            name="CTF_ibfk2",
+        ),
+        ForeignKeyConstraint(
+            ["motionCorrectionId"],
+            ["MotionCorrection.motionCorrectionId"],
+            name="CTF_ibfk1",
+        ),
+        Index("CTF_ibfk1", "motionCorrectionId"),
+        Index("CTF_ibfk2", "autoProcProgramId"),
+    )
+
+    ctfId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    motionCorrectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    boxSizeX: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Box size in x, Units: pixels"
+    )
+    boxSizeY: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Box size in y, Units: pixels"
+    )
+    minResolution: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Minimum resolution for CTF, Units: A"
+    )
+    maxResolution: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
+    minDefocus: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
+    maxDefocus: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
+    defocusStepSize: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
+    astigmatism: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
+    astigmatismAngle: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Units: deg?"
+    )
+    estimatedResolution: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Units: A"
+    )
+    estimatedDefocus: Mapped[Optional[float]] = mapped_column(Float, comment="Units: A")
+    amplitudeContrast: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Units: %?"
+    )
+    ccValue: Mapped[Optional[float]] = mapped_column(Float, comment="Correlation value")
+    fftTheoreticalFullPath: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Full path to the jpg image of the simulated FFT"
+    )
+    comments: Mapped[Optional[str]] = mapped_column(String(255))
+
+    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+        "AutoProcProgram", back_populates="CTF"
+    )
+    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
+        "MotionCorrection", back_populates="CTF"
+    )
+
+
+class ParticlePicker(Base):
+    __tablename__ = "ParticlePicker"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["firstMotionCorrectionId"],
+            ["MotionCorrection.motionCorrectionId"],
+            onupdate="CASCADE",
+            name="ParticlePicker_fk_motionCorrectionId",
+        ),
+        ForeignKeyConstraint(
+            ["programId"],
+            ["AutoProcProgram.autoProcProgramId"],
+            onupdate="CASCADE",
+            name="ParticlePicker_fk_programId",
+        ),
+        Index("ParticlePicker_fk_motionCorrectionId", "firstMotionCorrectionId"),
+        Index("ParticlePicker_fk_particlePickerProgramId", "programId"),
+        {"comment": "An instance of a particle picker program that was run"},
+    )
+
+    particlePickerId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    programId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    firstMotionCorrectionId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    particlePickingTemplate: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Cryolo model"
+    )
+    particleDiameter: Mapped[Optional[float]] = mapped_column(Float, comment="Unit: nm")
+    numberOfParticles: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    summaryImageFullPath: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        comment="Generated summary micrograph image with highlighted particles",
+    )
+
+    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
+        "MotionCorrection", back_populates="ParticlePicker"
+    )
+    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+        "AutoProcProgram", back_populates="ParticlePicker"
+    )
+    ParticleClassificationGroup: Mapped[List["ParticleClassificationGroup"]] = (
+        relationship("ParticleClassificationGroup", back_populates="ParticlePicker_")
+    )
+
+
+class RelativeIceThickness(Base):
+    __tablename__ = "RelativeIceThickness"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["autoProcProgramId"],
+            ["AutoProcProgram.autoProcProgramId"],
+            onupdate="CASCADE",
+            name="RelativeIceThickness_fk_programId",
+        ),
+        ForeignKeyConstraint(
+            ["motionCorrectionId"],
+            ["MotionCorrection.motionCorrectionId"],
+            onupdate="CASCADE",
+            name="RelativeIceThickness_fk_motionCorrectionId",
+        ),
+        Index("RelativeIceThickness_fk_motionCorrectionId", "motionCorrectionId"),
+        Index("RelativeIceThickness_fk_programId", "autoProcProgramId"),
+    )
+
+    relativeIceThicknessId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    motionCorrectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    minimum: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Minimum relative ice thickness, Unitless"
+    )
+    q1: Mapped[Optional[float]] = mapped_column(Float, comment="Quartile 1, unitless")
+    median: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Median relative ice thickness, Unitless"
+    )
+    q3: Mapped[Optional[float]] = mapped_column(Float, comment="Quartile 3, unitless")
+    maximum: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Minimum relative ice thickness, Unitless"
+    )
+
+    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+        "AutoProcProgram", back_populates="RelativeIceThickness"
+    )
+    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
+        "MotionCorrection", back_populates="RelativeIceThickness"
+    )
+
+
+class ParticleClassificationGroup(Base):
+    __tablename__ = "ParticleClassificationGroup"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["particlePickerId"],
+            ["ParticlePicker.particlePickerId"],
+            ondelete="CASCADE",
+            onupdate="CASCADE",
+            name="ParticleClassificationGroup_fk_particlePickerId",
+        ),
+        ForeignKeyConstraint(
+            ["programId"],
+            ["AutoProcProgram.autoProcProgramId"],
+            onupdate="CASCADE",
+            name="ParticleClassificationGroup_fk_programId",
+        ),
+        Index("ParticleClassificationGroup_fk_particlePickerId", "particlePickerId"),
+        Index("ParticleClassificationGroup_fk_programId", "programId"),
+    )
+
+    particleClassificationGroupId: Mapped[int] = mapped_column(
+        INTEGER(10), primary_key=True
+    )
+    particlePickerId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    programId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    type: Mapped[Optional[str]] = mapped_column(
+        Enum("2D", "3D"), comment="Indicates the type of particle classification"
+    )
+    batchNumber: Mapped[Optional[int]] = mapped_column(
+        INTEGER(10), comment="Corresponding to batch number"
+    )
+    numberOfParticlesPerBatch: Mapped[Optional[int]] = mapped_column(
+        INTEGER(10), comment="total number of particles per batch (a large integer)"
+    )
+    numberOfClassesPerBatch: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    symmetry: Mapped[Optional[str]] = mapped_column(String(20))
+
+    ParticlePicker_: Mapped["ParticlePicker"] = relationship(
+        "ParticlePicker", back_populates="ParticleClassificationGroup"
+    )
+    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+        "AutoProcProgram", back_populates="ParticleClassificationGroup"
+    )
+    ParticleClassification: Mapped[List["ParticleClassification"]] = relationship(
+        "ParticleClassification", back_populates="ParticleClassificationGroup_"
+    )
+
+
+class ParticleClassification(Base):
+    __tablename__ = "ParticleClassification"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["particleClassificationGroupId"],
+            ["ParticleClassificationGroup.particleClassificationGroupId"],
+            ondelete="CASCADE",
+            onupdate="CASCADE",
+            name="ParticleClassification_fk_particleClassificationGroupId",
+        ),
+        Index(
+            "ParticleClassification_fk_particleClassificationGroupId",
+            "particleClassificationGroupId",
+        ),
+        {"comment": "Results of 2D or 2D classification"},
+    )
+
+    particleClassificationId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
+    classNumber: Mapped[Optional[int]] = mapped_column(
+        INTEGER(10), comment="Identified of the class. A unique ID given by Relion"
+    )
+    classImageFullPath: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="The PNG of the class"
+    )
+    particlesPerClass: Mapped[Optional[int]] = mapped_column(
+        INTEGER(10),
+        comment="Number of particles within the selected class, can then be used together with the total number above to calculate the percentage",
+    )
+    rotationAccuracy: Mapped[Optional[float]] = mapped_column(Float, comment="???")
+    translationAccuracy: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Unit: Angstroms"
+    )
+    estimatedResolution: Mapped[Optional[float]] = mapped_column(
+        Float, comment="???, Unit: Angstroms"
+    )
+    overallFourierCompleteness: Mapped[Optional[float]] = mapped_column(Float)
+    particleClassificationGroupId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    classDistribution: Mapped[Optional[float]] = mapped_column(
+        Float,
+        comment="Provides a figure of merit for the class, higher number is better",
+    )
+    selected: Mapped[Optional[int]] = mapped_column(
+        TINYINT(1),
+        server_default=text("0"),
+        comment="Indicates whether the class is selected for further processing or not",
+    )
+    bFactorFitIntercept: Mapped[Optional[float]] = mapped_column(
+        Float,
+        comment="Intercept of quadratic fit to refinement resolution against the logarithm of the number of particles",
+    )
+    bFactorFitLinear: Mapped[Optional[float]] = mapped_column(
+        Float,
+        comment="Linear coefficient of quadratic fit to refinement resolution against the logarithm of the number of particles, equal to half of the B factor",
+    )
+    bFactorFitQuadratic: Mapped[Optional[float]] = mapped_column(
+        Float,
+        comment="Quadratic coefficient of quadratic fit to refinement resolution against the logarithm of the number of particles",
+    )
+
+    CryoemInitialModel_: Mapped[List["CryoemInitialModel"]] = relationship(
+        "CryoemInitialModel",
+        secondary="ParticleClassification_has_CryoemInitialModel",
+        back_populates="ParticleClassification",
+    )
+    ParticleClassificationGroup_: Mapped["ParticleClassificationGroup"] = relationship(
+        "ParticleClassificationGroup", back_populates="ParticleClassification"
+    )
+    BFactorFit: Mapped[List["BFactorFit"]] = relationship(
+        "BFactorFit", back_populates="ParticleClassification_"
+    )
+
+
+class BFactorFit(Base):
+    __tablename__ = "BFactorFit"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["particleClassificationId"],
+            ["ParticleClassification.particleClassificationId"],
+            name="BFactorFit_fk_particleClassificationId",
+        ),
+        Index("BFactorFit_fk_particleClassificationId", "particleClassificationId"),
+        {
+            "comment": "CryoEM reconstruction resolution as a function of the number of "
+            "particles for the creation of a Rosenthal-Henderson plot and the "
+            "calculation of B-factors"
+        },
+    )
+
+    bFactorFitId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    particleClassificationId: Mapped[int] = mapped_column(INTEGER(11))
+    resolution: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Resolution of a refined map using a given number of particles"
+    )
+    numberOfParticles: Mapped[Optional[int]] = mapped_column(
+        INTEGER(10), comment="Number of particles used in refinement"
+    )
+    particleBatchSize: Mapped[Optional[int]] = mapped_column(
+        INTEGER(10),
+        comment="Number of particles in the batch that the B-factor analysis was performed on",
+    )
+
+    ParticleClassification_: Mapped["ParticleClassification"] = relationship(
+        "ParticleClassification", back_populates="BFactorFit"
+    )
+
+
+t_ParticleClassification_has_CryoemInitialModel = Table(
+    "ParticleClassification_has_CryoemInitialModel",
+    Base.metadata,
+    Column("particleClassificationId", INTEGER(10), primary_key=True, nullable=False),
+    Column("cryoemInitialModelId", INTEGER(10), primary_key=True, nullable=False),
+    ForeignKeyConstraint(
+        ["cryoemInitialModelId"],
+        ["CryoemInitialModel.cryoemInitialModelId"],
+        ondelete="CASCADE",
+        onupdate="CASCADE",
+        name="ParticleClassification_has_InitialModel_fk2",
+    ),
+    ForeignKeyConstraint(
+        ["particleClassificationId"],
+        ["ParticleClassification.particleClassificationId"],
+        ondelete="CASCADE",
+        onupdate="CASCADE",
+        name="ParticleClassification_has_CryoemInitialModel_fk1",
+    ),
+    Index("ParticleClassification_has_InitialModel_fk2", "cryoemInitialModelId"),
+)
