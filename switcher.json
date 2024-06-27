@@ -4,6 +4,10 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/master/"
   },
   {
+    "version": "v0.2.2",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.2.2/"
+  },
+  {
     "version": "v0.2.0",
     "url": "https://DiamondLightSource.github.io/lims-utils/v0.2.0/"
   },
@@ -22,6 +26,10 @@
   {
     "version": "v0.0.1",
     "url": "https://DiamondLightSource.github.io/lims-utils/v0.0.1/"
+  },
+  {
+    "version": "dependabot_pip_pydantic-gte-2.5.1-and-lt-2.8.0",
+    "url": "https://DiamondLightSource.github.io/lims-utils/dependabot_pip_pydantic-gte-2.5.1-and-lt-2.8.0/"
   },
   {
     "version": "feature_no-ticket_paginate-and-proposal-reference",
