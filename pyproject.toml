@@ -16,7 +16,7 @@ dependencies = [
     "SQLAlchemy~=2.0.16",
     "pydantic>=2.5.1,<2.8.0",
     "fastapi>=0.104.1,<0.112.0",
-    "pydantic-settings>=2.1,<2.3"
+    "pydantic-settings>=2.1,<2.5"
 ]
 dynamic = ["version"]
 license.file = "LICENSE"
