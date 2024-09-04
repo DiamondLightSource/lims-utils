@@ -1,6 +1,3 @@
-# type: ignore
-# ruff: noqa: E501
-
 import datetime
 import decimal
 from typing import List, Optional
@@ -3002,6 +2999,9 @@ class Person(Base):
     Proposal: Mapped[List["Proposal"]] = relationship(
         "Proposal", back_populates="Person_"
     )
+    BLSampleGroup: Mapped[List["BLSampleGroup"]] = relationship(
+        "BLSampleGroup", back_populates="Person_"
+    )
     ContainerRegistry_has_Proposal: Mapped[List["ContainerRegistryHasProposal"]] = (
         relationship("ContainerRegistryHasProposal", back_populates="Person_")
     )
@@ -3518,6 +3518,9 @@ class Tomogram(Base):
     )
     DataCollection_: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="Tomogram"
+    )
+    ProcessedTomogram: Mapped[List["ProcessedTomogram"]] = relationship(
+        "ProcessedTomogram", back_populates="Tomogram_"
     )
     TiltImageAlignment: Mapped[List["TiltImageAlignment"]] = relationship(
         "TiltImageAlignment", back_populates="Tomogram_"
@@ -4342,6 +4345,40 @@ class PreparePhasingData(Base):
     )
 
 
+class ProcessedTomogram(Base):
+    __tablename__ = "ProcessedTomogram"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tomogramId"],
+            ["Tomogram.tomogramId"],
+            ondelete="CASCADE",
+            onupdate="CASCADE",
+            name="ProcessedTomogram_ibfk_1",
+        ),
+        Index("tomogramId", "tomogramId"),
+        {
+            "comment": "Indicates the sample's location on a multi-sample pin, where 1 is "
+            "closest to the pin base or a sample's position in a cryo-EM "
+            "cassette"
+        },
+    )
+
+    processedTomogramId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    tomogramId: Mapped[int] = mapped_column(
+        INTEGER(11), comment="references Tomogram table"
+    )
+    filePath: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="location on disk for the tomogram file"
+    )
+    processingType: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="nature of the processed tomogram"
+    )
+
+    Tomogram_: Mapped["Tomogram"] = relationship(
+        "Tomogram", back_populates="ProcessedTomogram"
+    )
+
+
 class Project(Base):
     __tablename__ = "Project"
     __table_args__ = (
@@ -4573,12 +4610,19 @@ class BLSampleGroup(Base):
     __tablename__ = "BLSampleGroup"
     __table_args__ = (
         ForeignKeyConstraint(
+            ["ownerId"],
+            ["Person.personId"],
+            onupdate="CASCADE",
+            name="BLSampleGroup_fk_ownerId",
+        ),
+        ForeignKeyConstraint(
             ["proposalId"],
             ["Proposal.proposalId"],
             ondelete="SET NULL",
             onupdate="CASCADE",
             name="BLSampleGroup_fk_proposalId",
         ),
+        Index("BLSampleGroup_fk_ownerId", "ownerId"),
         Index("BLSampleGroup_fk_proposalId", "proposalId"),
     )
 
@@ -4587,7 +4631,11 @@ class BLSampleGroup(Base):
         String(100), comment="Human-readable name"
     )
     proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
+    ownerId: Mapped[Optional[int]] = mapped_column(
+        INTEGER(10), comment="Sample group owner"
+    )
 
+    Person_: Mapped["Person"] = relationship("Person", back_populates="BLSampleGroup")
     Proposal_: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="BLSampleGroup"
     )
@@ -4858,6 +4906,7 @@ class DiffractionPlan(Base):
             "XChem High Symmetry",
             "XChem Low Symmetry",
             "Commissioning",
+            "Metal ID",
         )
     )
     observedResolution: Mapped[Optional[float]] = mapped_column(Float)
@@ -5882,6 +5931,7 @@ class DataCollectionGroup(Base):
             "Still",
             "SSX-Chip",
             "SSX-Jet",
+            "Metal ID",
         ),
         comment="Standard: Routine structure determination experiment. Time Resolved: Investigate the change of a system over time. Custom: Special or non-standard data collection.",
     )
