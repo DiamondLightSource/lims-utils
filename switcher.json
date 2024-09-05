@@ -32,6 +32,10 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/dependabot_pip_pydantic-gte-2.5.1-and-lt-2.8.0/"
   },
   {
+    "version": "dependabot_pip_pydantic-gte-2.8.2-and-lt-2.9.0",
+    "url": "https://DiamondLightSource.github.io/lims-utils/dependabot_pip_pydantic-gte-2.8.2-and-lt-2.9.0/"
+  },
+  {
     "version": "dependabot_pip_pydantic-settings-gte-2.1-and-lt-2.5",
     "url": "https://DiamondLightSource.github.io/lims-utils/dependabot_pip_pydantic-settings-gte-2.1-and-lt-2.5/"
   },
