@@ -4,30 +4,6 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/master/"
   },
   {
-    "version": "v0.2.2",
-    "url": "https://DiamondLightSource.github.io/lims-utils/v0.2.2/"
-  },
-  {
-    "version": "v0.2.0",
-    "url": "https://DiamondLightSource.github.io/lims-utils/v0.2.0/"
-  },
-  {
-    "version": "v0.1.2",
-    "url": "https://DiamondLightSource.github.io/lims-utils/v0.1.2/"
-  },
-  {
-    "version": "v0.1.1",
-    "url": "https://DiamondLightSource.github.io/lims-utils/v0.1.1/"
-  },
-  {
-    "version": "v0.1.0",
-    "url": "https://DiamondLightSource.github.io/lims-utils/v0.1.0/"
-  },
-  {
-    "version": "v0.0.1",
-    "url": "https://DiamondLightSource.github.io/lims-utils/v0.0.1/"
-  },
-  {
     "version": "dependabot_pip_pydantic-gte-2.5.1-and-lt-2.8.0",
     "url": "https://DiamondLightSource.github.io/lims-utils/dependabot_pip_pydantic-gte-2.5.1-and-lt-2.8.0/"
   },
@@ -56,11 +32,31 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/improvement_lims-1177_ispyb-models/"
   },
   {
-    "version": "improvement_lims-1445_schema-updates",
-    "url": "https://DiamondLightSource.github.io/lims-utils/improvement_lims-1445_schema-updates/"
-  },
-  {
     "version": "master1",
     "url": "https://DiamondLightSource.github.io/lims-utils/master1/"
+  },
+  {
+    "version": "v0.0.1",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.0.1/"
+  },
+  {
+    "version": "v0.1.0",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.1.0/"
+  },
+  {
+    "version": "v0.1.1",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.1.1/"
+  },
+  {
+    "version": "v0.1.2",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.1.2/"
+  },
+  {
+    "version": "v0.2.0",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.2.0/"
+  },
+  {
+    "version": "v0.2.2",
+    "url": "https://DiamondLightSource.github.io/lims-utils/v0.2.2/"
   }
 ]
