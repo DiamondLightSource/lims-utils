@@ -36,6 +36,10 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/v0.0.1/"
   },
   {
+    "version": "dependabot_pip_fastapi-gte-0.104.1-and-lt-0.116.0",
+    "url": "https://DiamondLightSource.github.io/lims-utils/dependabot_pip_fastapi-gte-0.104.1-and-lt-0.116.0/"
+  },
+  {
     "version": "dependabot_pip_pydantic-gte-2.5.1-and-lt-2.8.0",
     "url": "https://DiamondLightSource.github.io/lims-utils/dependabot_pip_pydantic-gte-2.5.1-and-lt-2.8.0/"
   },
