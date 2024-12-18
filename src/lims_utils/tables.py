@@ -163,6 +163,7 @@ class AutoProcProgram(Base):
         DateTime, comment="Creation or last update date/time"
     )
     processingJobId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    processingPipelineId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     ProcessingJob: Mapped["ProcessingJob"] = relationship(
         "ProcessingJob", back_populates="AutoProcProgram_"
@@ -243,7 +244,9 @@ class BLSample(Base):
     __tablename__ = "BLSample"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["blSubSampleId"], ["BLSubSample.blSubSampleId"], name="BLSample_ibfk4"
+            ["blSubSampleId"],
+            ["BLSubSample.blSubSampleId"],
+            name="BLSample_ibfk4",
         ),
         ForeignKeyConstraint(
             ["containerId"],
@@ -277,6 +280,13 @@ class BLSample(Base):
         Index("BLSample_FKIndex_Status", "blSampleStatus"),
         Index("BLSample_Index1", "name"),
         Index("BLSample_fk5", "screenComponentGroupId"),
+        Index(
+            "BLSample_uidx_containerId_location_subLocation",
+            "containerId",
+            "location",
+            "subLocation",
+            unique=True,
+        ),
         Index("crystalId", "crystalId", "containerId"),
     )
 
@@ -341,7 +351,8 @@ class BLSample(Base):
         Float, comment="Force used when blotting sample, Units: N?"
     )
     blottingDrainTime: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11), comment="Time sample left to drain after blotting, Units: sec"
+        INTEGER(11),
+        comment="Time sample left to drain after blotting, Units: sec",
     )
     support: Mapped[Optional[str]] = mapped_column(
         String(50), comment="Sample support material"
@@ -732,7 +743,9 @@ class ComponentSubType(Base):
     )
 
     Protein: Mapped[List["Protein"]] = relationship(
-        "Protein", secondary="Component_has_SubType", back_populates="ComponentSubType_"
+        "Protein",
+        secondary="Component_has_SubType",
+        back_populates="ComponentSubType_",
     )
 
 
@@ -872,7 +885,9 @@ class DataCollection(Base):
             name="DataCollection_dataCollectionPlanId",
         ),
         ForeignKeyConstraint(
-            ["detectorId"], ["Detector.detectorId"], name="DataCollection_ibfk_2"
+            ["detectorId"],
+            ["Detector.detectorId"],
+            name="DataCollection_ibfk_2",
         ),
         ForeignKeyConstraint(
             ["endPositionId"],
@@ -1074,7 +1089,9 @@ class DataCollection(Base):
         "Detector", back_populates="DataCollection_"
     )
     MotorPosition: Mapped["MotorPosition"] = relationship(
-        "MotorPosition", foreign_keys=[endPositionId], back_populates="DataCollection_"
+        "MotorPosition",
+        foreign_keys=[endPositionId],
+        back_populates="DataCollection_",
     )
     MotorPosition_: Mapped["MotorPosition"] = relationship(
         "MotorPosition",
@@ -1352,7 +1369,9 @@ class Imager(Base):
     capacity: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
 
     Container: Mapped[List["Container"]] = relationship(
-        "Container", foreign_keys="[Container.imagerId]", back_populates="Imager_"
+        "Container",
+        foreign_keys="[Container.imagerId]",
+        back_populates="Imager_",
     )
     Container_: Mapped[List["Container"]] = relationship(
         "Container",
@@ -1428,7 +1447,8 @@ class LDAPSearchParameters(Base):
         String(255), comment="Comma-separated list of search attributes"
     )
     accountTypeGroupName: Mapped[Optional[str]] = mapped_column(
-        String(100), comment="all accounts of this type must be members of this group"
+        String(100),
+        comment="all accounts of this type must be members of this group",
     )
     filter: Mapped[Optional[str]] = mapped_column(
         String(200), comment="A filter string for the search"
@@ -1440,7 +1460,8 @@ class LDAPSearchParameters(Base):
     UserGroup_has_LDAPSearchParameters: Mapped[
         List["UserGroupHasLDAPSearchParameters"]
     ] = relationship(
-        "UserGroupHasLDAPSearchParameters", back_populates="LDAPSearchParameters_"
+        "UserGroupHasLDAPSearchParameters",
+        back_populates="LDAPSearchParameters_",
     )
 
 
@@ -1537,7 +1558,9 @@ class Permission(Base):
     description: Mapped[Optional[str]] = mapped_column(String(100))
 
     UserGroup: Mapped[List["UserGroup"]] = relationship(
-        "UserGroup", secondary="UserGroup_has_Permission", back_populates="Permission_"
+        "UserGroup",
+        secondary="UserGroup_has_Permission",
+        back_populates="Permission_",
     )
 
 
@@ -1982,7 +2005,8 @@ class ScreeningStrategy(Base):
     program: Mapped[Optional[str]] = mapped_column(String(45))
     rankingResolution: Mapped[Optional[float]] = mapped_column(Float)
     transmission: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Transmission for the strategy as given by the strategy program."
+        Float,
+        comment="Transmission for the strategy as given by the strategy program.",
     )
 
     ScreeningOutput_: Mapped["ScreeningOutput"] = relationship(
@@ -2113,7 +2137,8 @@ class Sleeve(Base):
         TIMESTAMP, server_default=text("current_timestamp()")
     )
     location: Mapped[Optional[int]] = mapped_column(
-        TINYINT(3), comment="NULL == freezer, 1...255 for local storage locations"
+        TINYINT(3),
+        comment="NULL == freezer, 1...255 for local storage locations",
     )
     lastMovedFromFreezer: Mapped[Optional[datetime.datetime]] = mapped_column(
         TIMESTAMP, server_default=text("current_timestamp()")
@@ -2128,7 +2153,9 @@ class UserGroup(Base):
     name: Mapped[str] = mapped_column(String(31))
 
     Permission_: Mapped[List["Permission"]] = relationship(
-        "Permission", secondary="UserGroup_has_Permission", back_populates="UserGroup"
+        "Permission",
+        secondary="UserGroup_has_Permission",
+        back_populates="UserGroup",
     )
     Person: Mapped[List["Person"]] = relationship(
         "Person", secondary="UserGroup_has_Person", back_populates="UserGroup_"
@@ -2215,7 +2242,9 @@ class AutoProcIntegration(Base):
         DateTime, comment="Creation or last update date/time"
     )
     anomalous: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("0"), comment="boolean type:0 noanoum - 1 anoum"
+        TINYINT(1),
+        server_default=text("0"),
+        comment="boolean type:0 noanoum - 1 anoum",
     )
 
     AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
@@ -2267,6 +2296,11 @@ class AutoProcProgramAttachment(Base):
     importanceRank: Mapped[Optional[int]] = mapped_column(
         TINYINT(3),
         comment="For the particular autoProcProgramId and fileType, indicate the importance of the attachment. Higher numbers are more important",
+    )
+    deleted: Mapped[Optional[int]] = mapped_column(
+        TINYINT(1),
+        server_default=text("0"),
+        comment="1/TRUE if the file has been deleted",
     )
 
     AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
@@ -2439,7 +2473,8 @@ class BLSampleImageAutoScoreClass(Base):
 
     BLSampleImageAutoScoreSchema_: Mapped["BLSampleImageAutoScoreSchema"] = (
         relationship(
-            "BLSampleImageAutoScoreSchema", back_populates="BLSampleImageAutoScoreClass"
+            "BLSampleImageAutoScoreSchema",
+            back_populates="BLSampleImageAutoScoreClass",
         )
     )
     BLSampleImage_has_AutoScoreClass: Mapped[List["BLSampleImageHasAutoScoreClass"]] = (
@@ -2531,7 +2566,9 @@ class BLSampleHasPositioner(Base):
     __tablename__ = "BLSample_has_Positioner"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["blSampleId"], ["BLSample.blSampleId"], name="BLSampleHasPositioner_ibfk1"
+            ["blSampleId"],
+            ["BLSample.blSampleId"],
+            name="BLSampleHasPositioner_ibfk1",
         ),
         ForeignKeyConstraint(
             ["positionerId"],
@@ -3063,7 +3100,8 @@ class PhasingProgramAttachment(Base):
         INTEGER(11), comment="Related program item"
     )
     fileType: Mapped[Optional[str]] = mapped_column(
-        Enum("Map", "Logfile", "PDB", "CSV", "INS", "RES", "TXT"), comment="file type"
+        Enum("Map", "Logfile", "PDB", "CSV", "INS", "RES", "TXT"),
+        comment="file type",
     )
     fileName: Mapped[Optional[str]] = mapped_column(String(45), comment="file name")
     filePath: Mapped[Optional[str]] = mapped_column(String(255), comment="file path")
@@ -3386,7 +3424,9 @@ class SpaceGroup(Base):
         INTEGER(10), primary_key=True, comment="Primary key"
     )
     MX_used: Mapped[int] = mapped_column(
-        TINYINT(1), server_default=text("0"), comment="1 if used in the crystal form"
+        TINYINT(1),
+        server_default=text("0"),
+        comment="1 if used in the crystal form",
     )
     spaceGroupNumber: Mapped[Optional[int]] = mapped_column(
         INTEGER(10), comment="ccp4 number pr IUCR"
@@ -3553,11 +3593,14 @@ class UserGroupHasLDAPSearchParameters(Base):
     userGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     ldapSearchParametersId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(
-        String(200), primary_key=True, comment="Name of the object we search for"
+        String(200),
+        primary_key=True,
+        comment="Name of the object we search for",
     )
 
     LDAPSearchParameters_: Mapped["LDAPSearchParameters"] = relationship(
-        "LDAPSearchParameters", back_populates="UserGroup_has_LDAPSearchParameters"
+        "LDAPSearchParameters",
+        back_populates="UserGroup_has_LDAPSearchParameters",
     )
     UserGroup_: Mapped["UserGroup"] = relationship(
         "UserGroup", back_populates="UserGroup_has_LDAPSearchParameters"
@@ -3612,7 +3655,8 @@ class XRFFluorescenceMappingROI(Base):
     g: Mapped[Optional[int]] = mapped_column(TINYINT(3), comment="G colour component")
     b: Mapped[Optional[int]] = mapped_column(TINYINT(3), comment="B colour component")
     blSampleId: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10), comment="ROIs can be created within the context of a sample"
+        INTEGER(10),
+        comment="ROIs can be created within the context of a sample",
     )
     scalar: Mapped[Optional[str]] = mapped_column(
         String(50),
@@ -3623,7 +3667,8 @@ class XRFFluorescenceMappingROI(Base):
         "BLSample", back_populates="XRFFluorescenceMappingROI"
     )
     XRFFluorescenceMapping: Mapped[List["XRFFluorescenceMapping"]] = relationship(
-        "XRFFluorescenceMapping", back_populates="XRFFluorescenceMappingROI_"
+        "XRFFluorescenceMapping",
+        back_populates="XRFFluorescenceMappingROI_",
     )
 
 
@@ -3686,7 +3731,8 @@ class AutoProcScalingStatistics(Base):
         comment="Scaling statistics type",
     )
     autoProcScalingId: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10), comment="Related autoProcScaling item (used by foreign key)"
+        INTEGER(10),
+        comment="Related autoProcScaling item (used by foreign key)",
     )
     comments: Mapped[Optional[str]] = mapped_column(String(255), comment="Comments...")
     resolutionLimitLow: Mapped[Optional[float]] = mapped_column(
@@ -3732,7 +3778,9 @@ class AutoProcScalingStatistics(Base):
         DateTime, comment="Creation or last update date/time"
     )
     anomalous: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1), server_default=text("0"), comment="boolean type:0 noanoum - 1 anoum"
+        TINYINT(1),
+        server_default=text("0"),
+        comment="boolean type:0 noanoum - 1 anoum",
     )
     ccHalf: Mapped[Optional[float]] = mapped_column(
         Float, comment="information from XDS"
@@ -3816,7 +3864,8 @@ class AutoProcStatus(Base):
         comment="autoprocessing step",
     )
     status: Mapped[str] = mapped_column(
-        Enum("Launched", "Successful", "Failed"), comment="autoprocessing status"
+        Enum("Launched", "Successful", "Failed"),
+        comment="autoprocessing status",
     )
     bltimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
@@ -3853,7 +3902,9 @@ class BFSubcomponent(Base):
     __tablename__ = "BF_subcomponent"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["componentId"], ["BF_component.componentId"], name="bf_subcomponent_FK1"
+            ["componentId"],
+            ["BF_component.componentId"],
+            name="bf_subcomponent_FK1",
         ),
         Index("bf_subcomponent_FK1", "componentId"),
     )
@@ -3891,7 +3942,10 @@ class BLSampleImageHasAutoScoreClass(Base):
             onupdate="CASCADE",
             name="BLSampleImage_has_AutoScoreClass_fk1",
         ),
-        Index("BLSampleImage_has_AutoScoreClass_fk2", "blSampleImageAutoScoreClassId"),
+        Index(
+            "BLSampleImage_has_AutoScoreClass_fk2",
+            "blSampleImageAutoScoreClassId",
+        ),
         {
             "comment": "Many-to-many relationship between drop images and thing being "
             "scored, as well as the actual probability (score) that the drop "
@@ -3906,7 +3960,8 @@ class BLSampleImageHasAutoScoreClass(Base):
     probability: Mapped[Optional[float]] = mapped_column(Float)
 
     BLSampleImageAutoScoreClass_: Mapped["BLSampleImageAutoScoreClass"] = relationship(
-        "BLSampleImageAutoScoreClass", back_populates="BLSampleImage_has_AutoScoreClass"
+        "BLSampleImageAutoScoreClass",
+        back_populates="BLSampleImage_has_AutoScoreClass",
     )
     BLSampleImage_: Mapped["BLSampleImage"] = relationship(
         "BLSampleImage", back_populates="BLSampleImage_has_AutoScoreClass"
@@ -4425,7 +4480,9 @@ class Project(Base):
         back_populates="Project_",
     )
     EnergyScan: Mapped[List["EnergyScan"]] = relationship(
-        "EnergyScan", secondary="Project_has_EnergyScan", back_populates="Project_"
+        "EnergyScan",
+        secondary="Project_has_EnergyScan",
+        back_populates="Project_",
     )
 
 
@@ -4441,7 +4498,10 @@ class Proposal(Base):
         ),
         Index("Proposal_FKIndex1", "personId"),
         Index(
-            "Proposal_FKIndexCodeNumber", "proposalCode", "proposalNumber", unique=True
+            "Proposal_FKIndexCodeNumber",
+            "proposalCode",
+            "proposalNumber",
+            unique=True,
         ),
     )
 
@@ -4824,7 +4884,12 @@ class ContainerRegistryHasProposal(Base):
         ),
         Index("ContainerRegistry_has_Proposal_ibfk2", "proposalId"),
         Index("ContainerRegistry_has_Proposal_ibfk3", "personId"),
-        Index("containerRegistryId", "containerRegistryId", "proposalId", unique=True),
+        Index(
+            "containerRegistryId",
+            "containerRegistryId",
+            "proposalId",
+            unique=True,
+        ),
     )
 
     containerRegistryHasProposalId: Mapped[int] = mapped_column(
@@ -4958,10 +5023,12 @@ class DiffractionPlan(Base):
     kappaStrategyOption: Mapped[Optional[str]] = mapped_column(String(45))
     numberOfPositions: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     minDimAccrossSpindleAxis: Mapped[Optional[decimal.Decimal]] = mapped_column(
-        Double(asdecimal=True), comment="minimum dimension accross the spindle axis"
+        Double(asdecimal=True),
+        comment="minimum dimension accross the spindle axis",
     )
     maxDimAccrossSpindleAxis: Mapped[Optional[decimal.Decimal]] = mapped_column(
-        Double(asdecimal=True), comment="maximum dimension accross the spindle axis"
+        Double(asdecimal=True),
+        comment="maximum dimension accross the spindle axis",
     )
     radiationSensitivityBeta: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True)
@@ -5247,7 +5314,8 @@ class PhasingStatistics(Base):
         Double(asdecimal=True), comment="low resolution cutoff of this binfloat"
     )
     highRes: Mapped[Optional[decimal.Decimal]] = mapped_column(
-        Double(asdecimal=True), comment="high resolution cutoff of this binfloat"
+        Double(asdecimal=True),
+        comment="high resolution cutoff of this binfloat",
     )
     metric: Mapped[Optional[str]] = mapped_column(
         Enum(
@@ -5357,7 +5425,9 @@ class ProposalHasPerson(Base):
     __tablename__ = "ProposalHasPerson"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["personId"], ["Person.personId"], name="fk_ProposalHasPerson_Personal"
+            ["personId"],
+            ["Person.personId"],
+            name="fk_ProposalHasPerson_Personal",
         ),
         ForeignKeyConstraint(
             ["proposalId"],
@@ -5470,7 +5540,9 @@ class Protein(Base):
     )
     Proposal_: Mapped["Proposal"] = relationship("Proposal", back_populates="Protein")
     ComponentSubType_: Mapped[List["ComponentSubType"]] = relationship(
-        "ComponentSubType", secondary="Component_has_SubType", back_populates="Protein"
+        "ComponentSubType",
+        secondary="Component_has_SubType",
+        back_populates="Protein",
     )
     ComponentLattice: Mapped[List["ComponentLattice"]] = relationship(
         "ComponentLattice", back_populates="Protein_"
@@ -5565,7 +5637,9 @@ class BFFault(Base):
             ["sessionId"], ["BLSession.sessionId"], name="bf_fault_FK1"
         ),
         ForeignKeyConstraint(
-            ["subcomponentId"], ["BF_subcomponent.subcomponentId"], name="bf_fault_FK2"
+            ["subcomponentId"],
+            ["BF_subcomponent.subcomponentId"],
+            name="bf_fault_FK2",
         ),
         Index("bf_fault_FK1", "sessionId"),
         Index("bf_fault_FK2", "subcomponentId"),
@@ -5739,7 +5813,9 @@ class ComponentLattice(Base):
     __tablename__ = "ComponentLattice"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["componentId"], ["Protein.proteinId"], name="ComponentLattice_ibfk1"
+            ["componentId"],
+            ["Protein.proteinId"],
+            name="ComponentLattice_ibfk1",
         ),
         Index("ComponentLattice_ibfk1", "componentId"),
     )
@@ -5982,7 +6058,9 @@ class DataCollectionGroup(Base):
         "BLSession", back_populates="DataCollectionGroup"
     )
     Project_: Mapped[List["Project"]] = relationship(
-        "Project", secondary="Project_has_DCGroup", back_populates="DataCollectionGroup"
+        "Project",
+        secondary="Project_has_DCGroup",
+        back_populates="DataCollectionGroup",
     )
     Atlas: Mapped[List["Atlas"]] = relationship(
         "Atlas", back_populates="DataCollectionGroup_"
@@ -6010,7 +6088,10 @@ class DataCollectionPlanHasDetector(Base):
         ),
         Index("DataCollectionPlan_has_Detector_ibfk2", "detectorId"),
         Index(
-            "dataCollectionPlanId", "dataCollectionPlanId", "detectorId", unique=True
+            "dataCollectionPlanId",
+            "dataCollectionPlanId",
+            "detectorId",
+            unique=True,
         ),
     )
 
@@ -6149,7 +6230,9 @@ class EnergyScan(Base):
         "BLSession", back_populates="EnergyScan"
     )
     Project_: Mapped[List["Project"]] = relationship(
-        "Project", secondary="Project_has_EnergyScan", back_populates="EnergyScan"
+        "Project",
+        secondary="Project_has_EnergyScan",
+        back_populates="EnergyScan",
     )
     BLSample_has_EnergyScan: Mapped[List["BLSampleHasEnergyScan"]] = relationship(
         "BLSampleHasEnergyScan", back_populates="EnergyScan_"
@@ -6326,7 +6409,14 @@ class RobotAction(Base):
         Enum("LOAD", "UNLOAD", "DISPOSE", "STORE", "WASH", "ANNEAL", "MOSAIC")
     )
     status: Mapped[Optional[str]] = mapped_column(
-        Enum("SUCCESS", "ERROR", "CRITICAL", "WARNING", "EPICSFAIL", "COMMANDNOTSENT")
+        Enum(
+            "SUCCESS",
+            "ERROR",
+            "CRITICAL",
+            "WARNING",
+            "EPICSFAIL",
+            "COMMANDNOTSENT",
+        )
     )
     message: Mapped[Optional[str]] = mapped_column(String(255))
     containerLocation: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
@@ -6347,10 +6437,14 @@ class SampleComposition(Base):
     __tablename__ = "SampleComposition"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["blSampleId"], ["BLSample.blSampleId"], name="SampleComposition_ibfk_2"
+            ["blSampleId"],
+            ["BLSample.blSampleId"],
+            name="SampleComposition_ibfk_2",
         ),
         ForeignKeyConstraint(
-            ["componentId"], ["Component.componentId"], name="SampleComposition_ibfk_1"
+            ["componentId"],
+            ["Component.componentId"],
+            name="SampleComposition_ibfk_1",
         ),
         ForeignKeyConstraint(
             ["concentrationTypeId"],
@@ -6613,7 +6707,8 @@ class Shipping(Base):
         Time, comment="Confirmed courier call-in time"
     )
     deliveryAgent_productcode: Mapped[Optional[str]] = mapped_column(
-        String(10), comment="A code that identifies which shipment service was used"
+        String(10),
+        comment="A code that identifies which shipment service was used",
     )
     deliveryAgent_flightCodePersonId: Mapped[Optional[int]] = mapped_column(
         INTEGER(10), comment="The person who created the AWB (for auditing)"
@@ -6626,7 +6721,8 @@ class Shipping(Base):
         String(50), server_default=text("current_user()")
     )
     externalShippingIdToSynchrotron: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11), comment="ID for shipping to synchrotron in external application"
+        INTEGER(11),
+        comment="ID for shipping to synchrotron in external application",
     )
 
     Project_: Mapped[List["Project"]] = relationship(
@@ -6638,10 +6734,14 @@ class Shipping(Base):
     Person_: Mapped["Person"] = relationship("Person", back_populates="Shipping")
     Proposal_: Mapped["Proposal"] = relationship("Proposal", back_populates="Shipping")
     LabContact_: Mapped["LabContact"] = relationship(
-        "LabContact", foreign_keys=[returnLabContactId], back_populates="Shipping"
+        "LabContact",
+        foreign_keys=[returnLabContactId],
+        back_populates="Shipping",
     )
     LabContact1: Mapped["LabContact"] = relationship(
-        "LabContact", foreign_keys=[sendingLabContactId], back_populates="Shipping_"
+        "LabContact",
+        foreign_keys=[sendingLabContactId],
+        back_populates="Shipping_",
     )
     CourierTermsAccepted: Mapped[List["CourierTermsAccepted"]] = relationship(
         "CourierTermsAccepted", back_populates="Shipping_"
@@ -6815,10 +6915,14 @@ class CourierTermsAccepted(Base):
     __tablename__ = "CourierTermsAccepted"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["personId"], ["Person.personId"], name="CourierTermsAccepted_ibfk_2"
+            ["personId"],
+            ["Person.personId"],
+            name="CourierTermsAccepted_ibfk_2",
         ),
         ForeignKeyConstraint(
-            ["proposalId"], ["Proposal.proposalId"], name="CourierTermsAccepted_ibfk_1"
+            ["proposalId"],
+            ["Proposal.proposalId"],
+            name="CourierTermsAccepted_ibfk_1",
         ),
         ForeignKeyConstraint(
             ["shippingId"],
@@ -6857,7 +6961,9 @@ class CrystalComposition(Base):
     __tablename__ = "CrystalComposition"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["componentId"], ["Component.componentId"], name="CrystalComposition_ibfk_1"
+            ["componentId"],
+            ["Component.componentId"],
+            name="CrystalComposition_ibfk_1",
         ),
         ForeignKeyConstraint(
             ["concentrationTypeId"],
@@ -6865,7 +6971,9 @@ class CrystalComposition(Base):
             name="CrystalComposition_ibfk_3",
         ),
         ForeignKeyConstraint(
-            ["crystalId"], ["Crystal.crystalId"], name="CrystalComposition_ibfk_2"
+            ["crystalId"],
+            ["Crystal.crystalId"],
+            name="CrystalComposition_ibfk_2",
         ),
         Index("componentId", "componentId"),
         Index("concentrationTypeId", "concentrationTypeId"),
@@ -6978,13 +7086,16 @@ class Dewar(Base):
         String(50), server_default=text("current_user()")
     )
     externalShippingIdFromSynchrotron: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11), comment="ID for shipping from synchrotron in external application"
+        INTEGER(11),
+        comment="ID for shipping from synchrotron in external application",
     )
 
     BLSession_: Mapped["BLSession"] = relationship("BLSession", back_populates="Dewar")
     Shipping_: Mapped["Shipping"] = relationship("Shipping", back_populates="Dewar")
     Container: Mapped[List["Container"]] = relationship(
-        "Container", foreign_keys="[Container.currentDewarId]", back_populates="Dewar_"
+        "Container",
+        foreign_keys="[Container.currentDewarId]",
+        back_populates="Dewar_",
     )
     Container_: Mapped[List["Container"]] = relationship(
         "Container", foreign_keys="[Container.dewarId]", back_populates="Dewar1"
@@ -7012,7 +7123,9 @@ class DewarRegistryHasProposal(Base):
             name="DewarRegistry_has_Proposal_ibfk4",
         ),
         ForeignKeyConstraint(
-            ["personId"], ["Person.personId"], name="DewarRegistry_has_Proposal_ibfk3"
+            ["personId"],
+            ["Person.personId"],
+            name="DewarRegistry_has_Proposal_ibfk3",
         ),
         ForeignKeyConstraint(
             ["proposalId"],
@@ -7224,7 +7337,12 @@ t_Project_has_XFEFSpectrum = Table(
     "Project_has_XFEFSpectrum",
     Base.metadata,
     Column("projectId", INTEGER(11), primary_key=True, nullable=False),
-    Column("xfeFluorescenceSpectrumId", INTEGER(11), primary_key=True, nullable=False),
+    Column(
+        "xfeFluorescenceSpectrumId",
+        INTEGER(11),
+        primary_key=True,
+        nullable=False,
+    ),
     ForeignKeyConstraint(
         ["projectId"],
         ["Project.projectId"],
@@ -7336,7 +7454,9 @@ class Container(Base):
             name="Container_ibfk10",
         ),
         ForeignKeyConstraint(
-            ["currentDewarId"], ["Dewar.dewarId"], name="Container_fk_currentDewarId"
+            ["currentDewarId"],
+            ["Dewar.dewarId"],
+            name="Container_fk_currentDewarId",
         ),
         ForeignKeyConstraint(
             ["dewarId"],
@@ -7461,7 +7581,9 @@ class Container(Base):
     )
     Person_: Mapped["Person"] = relationship("Person", back_populates="Container")
     Container: Mapped["Container"] = relationship(
-        "Container", remote_side=[containerId], back_populates="Container_reverse"
+        "Container",
+        remote_side=[containerId],
+        back_populates="Container_reverse",
     )
     Container_reverse: Mapped[List["Container"]] = relationship(
         "Container", remote_side=[parentContainerId], back_populates="Container"
@@ -7540,10 +7662,12 @@ class GridSquare(Base):
         String(255), comment="path to grid square image"
     )
     pixelLocationX: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11), comment="pixel location of grid square centre on atlas image (x)"
+        INTEGER(11),
+        comment="pixel location of grid square centre on atlas image (x)",
     )
     pixelLocationY: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11), comment="pixel location of grid square centre on atlas image (y)"
+        INTEGER(11),
+        comment="pixel location of grid square centre on atlas image (y)",
     )
     height: Mapped[Optional[int]] = mapped_column(
         INTEGER(11), comment="grid square height on atlas image in pixels"
@@ -7582,7 +7706,9 @@ class XRFFluorescenceMapping(Base):
             name="XRFFluorescenceMapping_ibfk3",
         ),
         ForeignKeyConstraint(
-            ["gridInfoId"], ["GridInfo.gridInfoId"], name="XRFFluorescenceMapping_ibfk2"
+            ["gridInfoId"],
+            ["GridInfo.gridInfoId"],
+            name="XRFFluorescenceMapping_ibfk2",
         ),
         ForeignKeyConstraint(
             ["xrfFluorescenceMappingROIId"],
@@ -7612,7 +7738,8 @@ class XRFFluorescenceMapping(Base):
         Float, server_default=text("1"), comment="Display opacity"
     )
     points: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11), comment="The number of points available, for realtime feedback"
+        INTEGER(11),
+        comment="The number of points available, for realtime feedback",
     )
     colourMap: Mapped[Optional[str]] = mapped_column(
         String(20), comment="Colour map for displaying the data"
@@ -7696,7 +7823,8 @@ class XrayCentringResult(Base):
         comment="z-coordinate of the voxel with the maximum value within this crystal volume",
     )
     numberOfVoxels: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11), comment="Number of voxels within the specified bounding box"
+        INTEGER(11),
+        comment="Number of voxels within the specified bounding box",
     )
     totalCount: Mapped[Optional[float]] = mapped_column(
         Float,
@@ -7747,7 +7875,9 @@ class BFAutomationFault(Base):
             name="BF_automationFault_ibfk1",
         ),
         ForeignKeyConstraint(
-            ["containerId"], ["Container.containerId"], name="BF_automationFault_ibfk2"
+            ["containerId"],
+            ["Container.containerId"],
+            name="BF_automationFault_ibfk2",
         ),
         Index("BF_automationFault_ibfk1", "automationErrorId"),
         Index("BF_automationFault_ibfk2", "containerId"),
@@ -7782,7 +7912,9 @@ class ContainerHistory(Base):
             name="ContainerHistory_ibfk1",
         ),
         ForeignKeyConstraint(
-            ["currentDewarId"], ["Dewar.dewarId"], name="ContainerHistory_fk_dewarId"
+            ["currentDewarId"],
+            ["Dewar.dewarId"],
+            name="ContainerHistory_fk_dewarId",
         ),
         Index("ContainerHistory_fk_dewarId", "currentDewarId"),
         Index("ContainerHistory_ibfk1", "containerId"),
@@ -8209,7 +8341,8 @@ class MotionCorrection(Base):
         MEDIUMINT(8), comment="Number of patches used in y (for motioncor2)"
     )
     fftFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Full path to the jpg image of the raw micrograph FFT"
+        String(255),
+        comment="Full path to the jpg image of the raw micrograph FFT",
     )
     fftCorrectedFullPath: Mapped[Optional[str]] = mapped_column(
         String(255),
@@ -8449,7 +8582,10 @@ class ParticleClassificationGroup(Base):
             onupdate="CASCADE",
             name="ParticleClassificationGroup_fk_programId",
         ),
-        Index("ParticleClassificationGroup_fk_particlePickerId", "particlePickerId"),
+        Index(
+            "ParticleClassificationGroup_fk_particlePickerId",
+            "particlePickerId",
+        ),
         Index("ParticleClassificationGroup_fk_programId", "programId"),
     )
 
@@ -8459,13 +8595,15 @@ class ParticleClassificationGroup(Base):
     particlePickerId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     programId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     type: Mapped[Optional[str]] = mapped_column(
-        Enum("2D", "3D"), comment="Indicates the type of particle classification"
+        Enum("2D", "3D"),
+        comment="Indicates the type of particle classification",
     )
     batchNumber: Mapped[Optional[int]] = mapped_column(
         INTEGER(10), comment="Corresponding to batch number"
     )
     numberOfParticlesPerBatch: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10), comment="total number of particles per batch (a large integer)"
+        INTEGER(10),
+        comment="total number of particles per batch (a large integer)",
     )
     numberOfClassesPerBatch: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     symmetry: Mapped[Optional[str]] = mapped_column(String(20))
@@ -8477,7 +8615,8 @@ class ParticleClassificationGroup(Base):
         "AutoProcProgram", back_populates="ParticleClassificationGroup"
     )
     ParticleClassification: Mapped[List["ParticleClassification"]] = relationship(
-        "ParticleClassification", back_populates="ParticleClassificationGroup_"
+        "ParticleClassification",
+        back_populates="ParticleClassificationGroup_",
     )
 
 
@@ -8500,7 +8639,8 @@ class ParticleClassification(Base):
 
     particleClassificationId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     classNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10), comment="Identified of the class. A unique ID given by Relion"
+        INTEGER(10),
+        comment="Identified of the class. A unique ID given by Relion",
     )
     classImageFullPath: Mapped[Optional[str]] = mapped_column(
         String(255), comment="The PNG of the class"
@@ -8546,7 +8686,8 @@ class ParticleClassification(Base):
         back_populates="ParticleClassification",
     )
     ParticleClassificationGroup_: Mapped["ParticleClassificationGroup"] = relationship(
-        "ParticleClassificationGroup", back_populates="ParticleClassification"
+        "ParticleClassificationGroup",
+        back_populates="ParticleClassification",
     )
     BFactorFit: Mapped[List["BFactorFit"]] = relationship(
         "BFactorFit", back_populates="ParticleClassification_"
@@ -8572,7 +8713,8 @@ class BFactorFit(Base):
     bFactorFitId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     particleClassificationId: Mapped[int] = mapped_column(INTEGER(11))
     resolution: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Resolution of a refined map using a given number of particles"
+        Float,
+        comment="Resolution of a refined map using a given number of particles",
     )
     numberOfParticles: Mapped[Optional[int]] = mapped_column(
         INTEGER(10), comment="Number of particles used in refinement"
@@ -8590,7 +8732,12 @@ class BFactorFit(Base):
 t_ParticleClassification_has_CryoemInitialModel = Table(
     "ParticleClassification_has_CryoemInitialModel",
     Base.metadata,
-    Column("particleClassificationId", INTEGER(10), primary_key=True, nullable=False),
+    Column(
+        "particleClassificationId",
+        INTEGER(10),
+        primary_key=True,
+        nullable=False,
+    ),
     Column("cryoemInitialModelId", INTEGER(10), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["cryoemInitialModelId"],
