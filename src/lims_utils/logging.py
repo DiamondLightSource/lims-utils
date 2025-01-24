@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from fastapi import Request
 from fastapi.exception_handlers import http_exception_handler
@@ -9,16 +10,19 @@ uvicorn_logger = logging.getLogger("uvicorn.access")
 
 
 class EndpointFilter(logging.Filter):
+    def __init__(self, paths_to_ignore=["/api/docs", "/docs"]):
+        self.paths_to_ignore = paths_to_ignore
+
     def filter(self, record: logging.LogRecord) -> bool:
         if type(record.args) is not tuple:
             return True
 
-        return not record.args or record.args[2] != "/docs"
+        return not record.args or record.args[2] not in self.paths_to_ignore
 
 
-def register_loggers():
+def register_loggers(paths_to_ignore: List[str] = ["/api/docs", "/docs"]):
     """Register Uvicorn error and access logs, filtering out calls to /docs by default"""
-    uvicorn_logger.addFilter(EndpointFilter())
+    uvicorn_logger.addFilter(EndpointFilter(paths_to_ignore=paths_to_ignore))
 
     logging.basicConfig(format="%(levelname)s: %(message)s")
     app_logger.setLevel("INFO")

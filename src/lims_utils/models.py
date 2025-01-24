@@ -34,6 +34,14 @@ class ProposalReference(BaseModel):
     number: int
     visit_number: int | None = None
 
+    def __str__(self):
+        string_proposal_reference = f"{self.code}{self.number}"
+
+        if self.visit_number is not None:
+            string_proposal_reference += f"-{self.visit_number}"
+
+        return string_proposal_reference
+
     @field_validator("code")
     def code_validator(cls, v):
         # This allows us to set a more descriptive error message compared to regex
@@ -45,12 +53,14 @@ class ProposalReference(BaseModel):
 def parse_proposal(proposal_reference: str, visit_number: int | None = None):
     """Parse proposal string and return ProposalReference object
 
-    Args:
-        proposal_reference: Proposal reference, formatted as ab12345
-        visit_number: Visit number
+        Args:
+            proposal_reference: Proposal reference, formatted as ab12345
+            visit_numb
+        uvicorn_logger.error("Message %s %s %s", "Arg 1", "Arg 2", "/test")
+    er: Visit number
 
-    Returns:
-        ProposalReference object"""
+        Returns:
+            ProposalReference object"""
 
     if len(proposal_reference) < 3:
         raise ValueError("Proposal reference must be at least three characters long")

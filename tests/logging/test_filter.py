@@ -13,6 +13,15 @@ async def test_docs_filter(caplog):
 
 
 @pytest.mark.asyncio
+async def test_docs_filter_custom(caplog):
+    """Should not log message that includes URL in ignore list"""
+    register_loggers(["/test"])
+    uvicorn_logger.error("Message %s %s %s", "Arg 1", "Arg 2", "/test")
+
+    assert not caplog.text
+
+
+@pytest.mark.asyncio
 async def test_docs_no_filter(caplog):
     """Should log message that doesn't include docs as part of the path"""
     register_loggers()
