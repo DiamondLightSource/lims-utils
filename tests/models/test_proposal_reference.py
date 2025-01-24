@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from lims_utils.models import parse_proposal
+from lims_utils.models import ProposalReference, parse_proposal
 
 
 def test_proposal_reference():
@@ -37,3 +37,13 @@ def test_proposal_reference_too_short():
     """Should raise error if proposal reference is too short"""
     with pytest.raises(ValueError):
         parse_proposal("c", 1)
+
+
+def test_string():
+    """Should provide conversion to string"""
+    str(ProposalReference(code="cm", number=1)) == "cm1"
+
+
+def test_string_with_visit():
+    """Should provide conversion to string (with visit number)"""
+    str(ProposalReference(code="cm", number=1, visit_number=5)) == "cm1-5"
