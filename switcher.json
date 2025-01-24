@@ -76,6 +76,10 @@
     "url": "https://DiamondLightSource.github.io/lims-utils/improvement_lims-1177_ispyb-models/"
   },
   {
+    "version": "improvement_logging-and-str-prop-ref",
+    "url": "https://DiamondLightSource.github.io/lims-utils/improvement_logging-and-str-prop-ref/"
+  },
+  {
     "version": "master1",
     "url": "https://DiamondLightSource.github.io/lims-utils/master1/"
   }
