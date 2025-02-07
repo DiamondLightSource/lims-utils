@@ -120,7 +120,7 @@ class AutoProc(Base):
     )
 
     AutoProcScaling: Mapped[List["AutoProcScaling"]] = relationship(
-        "AutoProcScaling", back_populates="AutoProc_"
+        "AutoProcScaling", back_populates="AutoProc"
     )
 
 
@@ -166,50 +166,50 @@ class AutoProcProgram(Base):
     processingPipelineId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
     ProcessingJob: Mapped["ProcessingJob"] = relationship(
-        "ProcessingJob", back_populates="AutoProcProgram_"
+        "ProcessingJob", back_populates="AutoProcProgram"
     )
     Screening: Mapped[List["Screening"]] = relationship(
-        "Screening", back_populates="AutoProcProgram_"
+        "Screening", back_populates="AutoProcProgram"
     )
     AutoProcIntegration: Mapped[List["AutoProcIntegration"]] = relationship(
-        "AutoProcIntegration", back_populates="AutoProcProgram_"
+        "AutoProcIntegration", back_populates="AutoProcProgram"
     )
     AutoProcProgramAttachment: Mapped[List["AutoProcProgramAttachment"]] = relationship(
-        "AutoProcProgramAttachment", back_populates="AutoProcProgram_"
+        "AutoProcProgramAttachment", back_populates="AutoProcProgram"
     )
     AutoProcProgramMessage: Mapped[List["AutoProcProgramMessage"]] = relationship(
-        "AutoProcProgramMessage", back_populates="AutoProcProgram_"
+        "AutoProcProgramMessage", back_populates="AutoProcProgram"
     )
     PDBEntry: Mapped[List["PDBEntry"]] = relationship(
-        "PDBEntry", back_populates="AutoProcProgram_"
-    )
-    Tomogram: Mapped[List["Tomogram"]] = relationship(
-        "Tomogram", back_populates="AutoProcProgram_"
+        "PDBEntry", back_populates="AutoProcProgram"
     )
     zc_ZocaloBuffer: Mapped[List["ZcZocaloBuffer"]] = relationship(
-        "ZcZocaloBuffer", back_populates="AutoProcProgram_"
+        "ZcZocaloBuffer", back_populates="AutoProcProgram"
     )
     MXMRRun: Mapped[List["MXMRRun"]] = relationship(
-        "MXMRRun", back_populates="AutoProcProgram_"
+        "MXMRRun", back_populates="AutoProcProgram"
     )
     PDBEntry_has_AutoProcProgram: Mapped[List["PDBEntryHasAutoProcProgram"]] = (
-        relationship("PDBEntryHasAutoProcProgram", back_populates="AutoProcProgram_")
+        relationship("PDBEntryHasAutoProcProgram", back_populates="AutoProcProgram")
     )
     XRFFluorescenceMapping: Mapped[List["XRFFluorescenceMapping"]] = relationship(
-        "XRFFluorescenceMapping", back_populates="AutoProcProgram_"
+        "XRFFluorescenceMapping", back_populates="AutoProcProgram"
+    )
+    Tomogram: Mapped[List["Tomogram"]] = relationship(
+        "Tomogram", back_populates="AutoProcProgram"
     )
     MotionCorrection: Mapped[List["MotionCorrection"]] = relationship(
-        "MotionCorrection", back_populates="AutoProcProgram_"
+        "MotionCorrection", back_populates="AutoProcProgram"
     )
-    CTF: Mapped[List["CTF"]] = relationship("CTF", back_populates="AutoProcProgram_")
+    CTF: Mapped[List["CTF"]] = relationship("CTF", back_populates="AutoProcProgram")
     ParticlePicker: Mapped[List["ParticlePicker"]] = relationship(
-        "ParticlePicker", back_populates="AutoProcProgram_"
+        "ParticlePicker", back_populates="AutoProcProgram"
     )
     RelativeIceThickness: Mapped[List["RelativeIceThickness"]] = relationship(
-        "RelativeIceThickness", back_populates="AutoProcProgram_"
+        "RelativeIceThickness", back_populates="AutoProcProgram"
     )
     ParticleClassificationGroup: Mapped[List["ParticleClassificationGroup"]] = (
-        relationship("ParticleClassificationGroup", back_populates="AutoProcProgram_")
+        relationship("ParticleClassificationGroup", back_populates="AutoProcProgram")
     )
 
 
@@ -244,9 +244,7 @@ class BLSample(Base):
     __tablename__ = "BLSample"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["blSubSampleId"],
-            ["BLSubSample.blSubSampleId"],
-            name="BLSample_ibfk4",
+            ["blSubSampleId"], ["BLSubSample.blSubSampleId"], name="BLSample_ibfk4"
         ),
         ForeignKeyConstraint(
             ["containerId"],
@@ -351,8 +349,7 @@ class BLSample(Base):
         Float, comment="Force used when blotting sample, Units: N?"
     )
     blottingDrainTime: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11),
-        comment="Time sample left to drain after blotting, Units: sec",
+        INTEGER(11), comment="Time sample left to drain after blotting, Units: sec"
     )
     support: Mapped[Optional[str]] = mapped_column(
         String(50), comment="Sample support material"
@@ -369,61 +366,61 @@ class BLSample(Base):
     )
 
     BLSubSample: Mapped["BLSubSample"] = relationship(
-        "BLSubSample", foreign_keys=[blSubSampleId], back_populates="BLSample_"
+        "BLSubSample", foreign_keys=[blSubSampleId], back_populates="BLSample"
     )
     Container: Mapped["Container"] = relationship(
-        "Container", back_populates="BLSample_"
+        "Container", back_populates="BLSample"
     )
-    Crystal: Mapped["Crystal"] = relationship("Crystal", back_populates="BLSample_")
+    Crystal: Mapped["Crystal"] = relationship("Crystal", back_populates="BLSample")
     DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
-        "DiffractionPlan", back_populates="BLSample_"
+        "DiffractionPlan", back_populates="BLSample"
     )
     ScreenComponentGroup: Mapped["ScreenComponentGroup"] = relationship(
-        "ScreenComponentGroup", back_populates="BLSample_"
+        "ScreenComponentGroup", back_populates="BLSample"
     )
     Project: Mapped[List["Project"]] = relationship(
-        "Project", secondary="Project_has_BLSample", back_populates="BLSample_"
+        "Project", secondary="Project_has_BLSample", back_populates="BLSample"
     )
     BLSampleImage: Mapped[List["BLSampleImage"]] = relationship(
-        "BLSampleImage", back_populates="BLSample_"
+        "BLSampleImage", back_populates="BLSample"
     )
-    BLSubSample_: Mapped[List["BLSubSample"]] = relationship(
+    BLSubSample: Mapped[List["BLSubSample"]] = relationship(
         "BLSubSample",
         foreign_keys="[BLSubSample.blSampleId]",
-        back_populates="BLSample1",
+        back_populates="BLSample",
     )
     BLSample_has_Positioner: Mapped[List["BLSampleHasPositioner"]] = relationship(
-        "BLSampleHasPositioner", back_populates="BLSample_"
+        "BLSampleHasPositioner", back_populates="BLSample"
     )
     XRFFluorescenceMappingROI: Mapped[List["XRFFluorescenceMappingROI"]] = relationship(
-        "XRFFluorescenceMappingROI", back_populates="BLSample_"
+        "XRFFluorescenceMappingROI", back_populates="BLSample"
     )
     BLSampleGroup_has_BLSample: Mapped[List["BLSampleGroupHasBLSample"]] = relationship(
-        "BLSampleGroupHasBLSample", back_populates="BLSample_"
+        "BLSampleGroupHasBLSample", back_populates="BLSample"
     )
     BLSample_has_DataCollectionPlan: Mapped[List["BLSampleHasDataCollectionPlan"]] = (
-        relationship("BLSampleHasDataCollectionPlan", back_populates="BLSample_")
+        relationship("BLSampleHasDataCollectionPlan", back_populates="BLSample")
     )
     DataCollectionGroup: Mapped[List["DataCollectionGroup"]] = relationship(
-        "DataCollectionGroup", back_populates="BLSample_"
+        "DataCollectionGroup", back_populates="BLSample"
     )
     EnergyScan: Mapped[List["EnergyScan"]] = relationship(
-        "EnergyScan", back_populates="BLSample_"
+        "EnergyScan", back_populates="BLSample"
     )
     RobotAction: Mapped[List["RobotAction"]] = relationship(
-        "RobotAction", back_populates="BLSample_"
+        "RobotAction", back_populates="BLSample"
     )
     SampleComposition: Mapped[List["SampleComposition"]] = relationship(
-        "SampleComposition", back_populates="BLSample_"
+        "SampleComposition", back_populates="BLSample"
     )
     XFEFluorescenceSpectrum: Mapped[List["XFEFluorescenceSpectrum"]] = relationship(
-        "XFEFluorescenceSpectrum", back_populates="BLSample_"
+        "XFEFluorescenceSpectrum", back_populates="BLSample"
     )
     BLSample_has_EnergyScan: Mapped[List["BLSampleHasEnergyScan"]] = relationship(
-        "BLSampleHasEnergyScan", back_populates="BLSample_"
+        "BLSampleHasEnergyScan", back_populates="BLSample"
     )
     ContainerQueueSample: Mapped[List["ContainerQueueSample"]] = relationship(
-        "ContainerQueueSample", back_populates="BLSample_"
+        "ContainerQueueSample", back_populates="BLSample"
     )
 
 
@@ -471,29 +468,29 @@ class BLSampleImage(Base):
     containerInspectionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     modifiedTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
 
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="BLSampleImage"
     )
     BLSampleImageScore: Mapped["BLSampleImageScore"] = relationship(
-        "BLSampleImageScore", back_populates="BLSampleImage_"
+        "BLSampleImageScore", back_populates="BLSampleImage"
     )
     ContainerInspection: Mapped["ContainerInspection"] = relationship(
-        "ContainerInspection", back_populates="BLSampleImage_"
+        "ContainerInspection", back_populates="BLSampleImage"
     )
     BLSubSample: Mapped[List["BLSubSample"]] = relationship(
-        "BLSubSample", back_populates="BLSampleImage_"
+        "BLSubSample", back_populates="BLSampleImage"
     )
     BLSampleImageAnalysis: Mapped[List["BLSampleImageAnalysis"]] = relationship(
-        "BLSampleImageAnalysis", back_populates="BLSampleImage_"
+        "BLSampleImageAnalysis", back_populates="BLSampleImage"
     )
     BLSampleImageMeasurement: Mapped[List["BLSampleImageMeasurement"]] = relationship(
-        "BLSampleImageMeasurement", back_populates="BLSampleImage_"
+        "BLSampleImageMeasurement", back_populates="BLSampleImage"
     )
     BLSampleImage_has_Positioner: Mapped[List["BLSampleImageHasPositioner"]] = (
-        relationship("BLSampleImageHasPositioner", back_populates="BLSampleImage_")
+        relationship("BLSampleImageHasPositioner", back_populates="BLSampleImage")
     )
     BLSampleImage_has_AutoScoreClass: Mapped[List["BLSampleImageHasAutoScoreClass"]] = (
-        relationship("BLSampleImageHasAutoScoreClass", back_populates="BLSampleImage_")
+        relationship("BLSampleImageHasAutoScoreClass", back_populates="BLSampleImage")
     )
 
 
@@ -515,8 +512,7 @@ class BLSampleImageAutoScoreSchema(Base):
 
     BLSampleImageAutoScoreClass: Mapped[List["BLSampleImageAutoScoreClass"]] = (
         relationship(
-            "BLSampleImageAutoScoreClass",
-            back_populates="BLSampleImageAutoScoreSchema_",
+            "BLSampleImageAutoScoreClass", back_populates="BLSampleImageAutoScoreSchema"
         )
     )
 
@@ -529,7 +525,7 @@ class BLSampleImageScore(Base):
     score: Mapped[Optional[float]] = mapped_column(Float)
     colour: Mapped[Optional[str]] = mapped_column(String(15))
 
-    BLSampleImage_: Mapped[List["BLSampleImage"]] = relationship(
+    BLSampleImage: Mapped[List["BLSampleImage"]] = relationship(
         "BLSampleImage", back_populates="BLSampleImageScore"
     )
 
@@ -545,7 +541,7 @@ class BLSampleType(Base):
     )
 
     BLSampleGroup_has_BLSample: Mapped[List["BLSampleGroupHasBLSample"]] = relationship(
-        "BLSampleGroupHasBLSample", back_populates="BLSampleType_"
+        "BLSampleGroupHasBLSample", back_populates="BLSampleType"
     )
 
 
@@ -638,46 +634,46 @@ class BLSubSample(Base):
         comment="The type of subsample, i.e. roi (region), poi (point), loi (line)",
     )
 
-    BLSample_: Mapped[List["BLSample"]] = relationship(
+    BLSample: Mapped[List["BLSample"]] = relationship(
         "BLSample",
         foreign_keys="[BLSample.blSubSampleId]",
         back_populates="BLSubSample",
     )
-    BLSample1: Mapped["BLSample"] = relationship(
-        "BLSample", foreign_keys=[blSampleId], back_populates="BLSubSample_"
+    BLSample: Mapped["BLSample"] = relationship(
+        "BLSample", foreign_keys=[blSampleId], back_populates="BLSubSample"
     )
-    BLSampleImage_: Mapped["BLSampleImage"] = relationship(
+    BLSampleImage: Mapped["BLSampleImage"] = relationship(
         "BLSampleImage", back_populates="BLSubSample"
     )
     DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
-        "DiffractionPlan", back_populates="BLSubSample_"
+        "DiffractionPlan", back_populates="BLSubSample"
     )
     MotorPosition: Mapped["MotorPosition"] = relationship(
-        "MotorPosition", back_populates="BLSubSample_"
+        "MotorPosition", back_populates="BLSubSample"
     )
     Position: Mapped["Position"] = relationship(
-        "Position", foreign_keys=[position2Id], back_populates="BLSubSample_"
+        "Position", foreign_keys=[position2Id], back_populates="BLSubSample"
     )
-    Position_: Mapped["Position"] = relationship(
-        "Position", foreign_keys=[positionId], back_populates="BLSubSample1"
+    Position: Mapped["Position"] = relationship(
+        "Position", foreign_keys=[positionId], back_populates="BLSubSample"
     )
     DataCollection: Mapped[List["DataCollection"]] = relationship(
-        "DataCollection", back_populates="BLSubSample_"
+        "DataCollection", back_populates="BLSubSample"
     )
     BLSampleImageMeasurement: Mapped[List["BLSampleImageMeasurement"]] = relationship(
-        "BLSampleImageMeasurement", back_populates="BLSubSample_"
+        "BLSampleImageMeasurement", back_populates="BLSubSample"
     )
     BLSubSample_has_Positioner: Mapped[List["BLSubSampleHasPositioner"]] = relationship(
-        "BLSubSampleHasPositioner", back_populates="BLSubSample_"
+        "BLSubSampleHasPositioner", back_populates="BLSubSample"
     )
     EnergyScan: Mapped[List["EnergyScan"]] = relationship(
-        "EnergyScan", back_populates="BLSubSample_"
+        "EnergyScan", back_populates="BLSubSample"
     )
     XFEFluorescenceSpectrum: Mapped[List["XFEFluorescenceSpectrum"]] = relationship(
-        "XFEFluorescenceSpectrum", back_populates="BLSubSample_"
+        "XFEFluorescenceSpectrum", back_populates="BLSubSample"
     )
     ContainerQueueSample: Mapped[List["ContainerQueueSample"]] = relationship(
-        "ContainerQueueSample", back_populates="BLSubSample_"
+        "ContainerQueueSample", back_populates="BLSubSample"
     )
 
 
@@ -691,7 +687,7 @@ class BeamCalendar(Base):
     endDate: Mapped[datetime.datetime] = mapped_column(DateTime)
 
     BLSession: Mapped[List["BLSession"]] = relationship(
-        "BLSession", back_populates="BeamCalendar_"
+        "BLSession", back_populates="BeamCalendar"
     )
 
 
@@ -711,10 +707,10 @@ class BeamlineStats(Base):
     scanFileH: Mapped[Optional[str]] = mapped_column(String(255))
 
     BeamApertures: Mapped[List["BeamApertures"]] = relationship(
-        "BeamApertures", back_populates="BeamlineStats_"
+        "BeamApertures", back_populates="BeamlineStats"
     )
     BeamCentres: Mapped[List["BeamCentres"]] = relationship(
-        "BeamCentres", back_populates="BeamlineStats_"
+        "BeamCentres", back_populates="BeamlineStats"
     )
 
 
@@ -743,9 +739,7 @@ class ComponentSubType(Base):
     )
 
     Protein: Mapped[List["Protein"]] = relationship(
-        "Protein",
-        secondary="Component_has_SubType",
-        back_populates="ComponentSubType_",
+        "Protein", secondary="Component_has_SubType", back_populates="ComponentSubType"
     )
 
 
@@ -757,10 +751,10 @@ class ComponentType(Base):
     name: Mapped[str] = mapped_column(String(31))
 
     Component: Mapped[List["Component"]] = relationship(
-        "Component", back_populates="ComponentType_"
+        "Component", back_populates="ComponentType"
     )
     Protein: Mapped[List["Protein"]] = relationship(
-        "Protein", back_populates="ComponentType_"
+        "Protein", back_populates="ComponentType"
     )
 
 
@@ -776,13 +770,13 @@ class ConcentrationType(Base):
     )
 
     Protein: Mapped[List["Protein"]] = relationship(
-        "Protein", back_populates="ConcentrationType_"
+        "Protein", back_populates="ConcentrationType"
     )
     SampleComposition: Mapped[List["SampleComposition"]] = relationship(
-        "SampleComposition", back_populates="ConcentrationType_"
+        "SampleComposition", back_populates="ConcentrationType"
     )
     CrystalComposition: Mapped[List["CrystalComposition"]] = relationship(
-        "CrystalComposition", back_populates="ConcentrationType_"
+        "CrystalComposition", back_populates="ConcentrationType"
     )
 
 
@@ -798,15 +792,13 @@ class ContainerRegistry(Base):
     )
 
     ContainerReport: Mapped[List["ContainerReport"]] = relationship(
-        "ContainerReport", back_populates="ContainerRegistry_"
+        "ContainerReport", back_populates="ContainerRegistry"
     )
     ContainerRegistry_has_Proposal: Mapped[List["ContainerRegistryHasProposal"]] = (
-        relationship(
-            "ContainerRegistryHasProposal", back_populates="ContainerRegistry_"
-        )
+        relationship("ContainerRegistryHasProposal", back_populates="ContainerRegistry")
     )
     Container: Mapped[List["Container"]] = relationship(
-        "Container", back_populates="ContainerRegistry_"
+        "Container", back_populates="ContainerRegistry"
     )
 
 
@@ -831,10 +823,10 @@ class ContainerType(Base):
     wellDrop: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
 
     Screen: Mapped[List["Screen"]] = relationship(
-        "Screen", back_populates="ContainerType_"
+        "Screen", back_populates="ContainerType"
     )
     Container: Mapped[List["Container"]] = relationship(
-        "Container", back_populates="ContainerType_"
+        "Container", back_populates="ContainerType"
     )
 
 
@@ -851,7 +843,7 @@ class CryoemInitialModel(Base):
     ParticleClassification: Mapped[List["ParticleClassification"]] = relationship(
         "ParticleClassification",
         secondary="ParticleClassification_has_CryoemInitialModel",
-        back_populates="CryoemInitialModel_",
+        back_populates="CryoemInitialModel",
     )
 
 
@@ -885,9 +877,7 @@ class DataCollection(Base):
             name="DataCollection_dataCollectionPlanId",
         ),
         ForeignKeyConstraint(
-            ["detectorId"],
-            ["Detector.detectorId"],
-            name="DataCollection_ibfk_2",
+            ["detectorId"], ["Detector.detectorId"], name="DataCollection_ibfk_2"
         ),
         ForeignKeyConstraint(
             ["endPositionId"],
@@ -1076,69 +1066,65 @@ class DataCollection(Base):
     )
     dataCollectionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    BLSubSample_: Mapped["BLSubSample"] = relationship(
+    BLSubSample: Mapped["BLSubSample"] = relationship(
         "BLSubSample", back_populates="DataCollection"
     )
     DataCollectionGroup: Mapped["DataCollectionGroup"] = relationship(
-        "DataCollectionGroup", back_populates="DataCollection_"
+        "DataCollectionGroup", back_populates="DataCollection"
     )
     DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
-        "DiffractionPlan", back_populates="DataCollection_"
+        "DiffractionPlan", back_populates="DataCollection"
     )
     Detector: Mapped["Detector"] = relationship(
-        "Detector", back_populates="DataCollection_"
+        "Detector", back_populates="DataCollection"
     )
     MotorPosition: Mapped["MotorPosition"] = relationship(
-        "MotorPosition",
-        foreign_keys=[endPositionId],
-        back_populates="DataCollection_",
+        "MotorPosition", foreign_keys=[endPositionId], back_populates="DataCollection"
     )
-    MotorPosition_: Mapped["MotorPosition"] = relationship(
-        "MotorPosition",
-        foreign_keys=[startPositionId],
-        back_populates="DataCollection1",
+    MotorPosition: Mapped["MotorPosition"] = relationship(
+        "MotorPosition", foreign_keys=[startPositionId], back_populates="DataCollection"
     )
     ScreeningStrategySubWedge: Mapped["ScreeningStrategySubWedge"] = relationship(
-        "ScreeningStrategySubWedge", back_populates="DataCollection_"
+        "ScreeningStrategySubWedge", back_populates="DataCollection"
     )
     ProcessingJob: Mapped[List["ProcessingJob"]] = relationship(
-        "ProcessingJob", back_populates="DataCollection_"
+        "ProcessingJob", back_populates="DataCollection"
     )
     Screening: Mapped[List["Screening"]] = relationship(
-        "Screening", back_populates="DataCollection_"
+        "Screening", back_populates="DataCollection"
     )
     AutoProcIntegration: Mapped[List["AutoProcIntegration"]] = relationship(
-        "AutoProcIntegration", back_populates="DataCollection_"
+        "AutoProcIntegration", back_populates="DataCollection"
     )
     DataCollectionFileAttachment: Mapped[List["DataCollectionFileAttachment"]] = (
-        relationship("DataCollectionFileAttachment", back_populates="DataCollection_")
+        relationship("DataCollectionFileAttachment", back_populates="DataCollection")
     )
     EventChain: Mapped[List["EventChain"]] = relationship(
-        "EventChain", back_populates="DataCollection_"
+        "EventChain", back_populates="DataCollection"
     )
     GridImageMap: Mapped[List["GridImageMap"]] = relationship(
-        "GridImageMap", back_populates="DataCollection_"
+        "GridImageMap", back_populates="DataCollection"
     )
     Image: Mapped[List["Image"]] = relationship(
-        "Image", back_populates="DataCollection_"
+        "Image", back_populates="DataCollection"
     )
     ProcessingJobImageSweep: Mapped[List["ProcessingJobImageSweep"]] = relationship(
-        "ProcessingJobImageSweep", back_populates="DataCollection_"
-    )
-    Tomogram: Mapped[List["Tomogram"]] = relationship(
-        "Tomogram", back_populates="DataCollection_"
+        "ProcessingJobImageSweep", back_populates="DataCollection"
     )
     DataCollectionComment: Mapped[List["DataCollectionComment"]] = relationship(
-        "DataCollectionComment", back_populates="DataCollection_"
+        "DataCollectionComment", back_populates="DataCollection"
     )
     GridInfo: Mapped[List["GridInfo"]] = relationship(
-        "GridInfo", back_populates="DataCollection_"
+        "GridInfo", back_populates="DataCollection"
+    )
+    Tomogram: Mapped[List["Tomogram"]] = relationship(
+        "Tomogram", back_populates="DataCollection"
     )
     Movie: Mapped[List["Movie"]] = relationship(
-        "Movie", back_populates="DataCollection_"
+        "Movie", back_populates="DataCollection"
     )
     MotionCorrection: Mapped[List["MotionCorrection"]] = relationship(
-        "MotionCorrection", back_populates="DataCollection_"
+        "MotionCorrection", back_populates="DataCollection"
     )
 
 
@@ -1209,17 +1195,17 @@ class Detector(Base):
         MEDIUMINT(9), comment="Detector number of pixels in y in ROI mode"
     )
 
-    DataCollection_: Mapped[List["DataCollection"]] = relationship(
+    DataCollection: Mapped[List["DataCollection"]] = relationship(
         "DataCollection", back_populates="Detector"
     )
     BeamLineSetup: Mapped[List["BeamLineSetup"]] = relationship(
-        "BeamLineSetup", back_populates="Detector_"
+        "BeamLineSetup", back_populates="Detector"
     )
     DiffractionPlan: Mapped[List["DiffractionPlan"]] = relationship(
-        "DiffractionPlan", back_populates="Detector_"
+        "DiffractionPlan", back_populates="Detector"
     )
     DataCollectionPlan_has_Detector: Mapped[List["DataCollectionPlanHasDetector"]] = (
-        relationship("DataCollectionPlanHasDetector", back_populates="Detector_")
+        relationship("DataCollectionPlanHasDetector", back_populates="Detector")
     )
 
 
@@ -1269,7 +1255,7 @@ class EventType(Base):
     eventTypeId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
 
-    Event: Mapped[List["Event"]] = relationship("Event", back_populates="EventType_")
+    Event: Mapped[List["Event"]] = relationship("Event", back_populates="EventType")
 
 
 class ExperimentType(Base):
@@ -1284,13 +1270,13 @@ class ExperimentType(Base):
     )
 
     DiffractionPlan: Mapped[List["DiffractionPlan"]] = relationship(
-        "DiffractionPlan", back_populates="ExperimentType_"
+        "DiffractionPlan", back_populates="ExperimentType"
     )
     DataCollectionGroup: Mapped[List["DataCollectionGroup"]] = relationship(
-        "DataCollectionGroup", back_populates="ExperimentType_"
+        "DataCollectionGroup", back_populates="ExperimentType"
     )
     Container: Mapped[List["Container"]] = relationship(
-        "Container", back_populates="ExperimentType_"
+        "Container", back_populates="ExperimentType"
     )
 
 
@@ -1302,7 +1288,7 @@ class GeometryClassname(Base):
     geometryClassname: Mapped[Optional[str]] = mapped_column(String(45))
 
     SpaceGroup: Mapped[List["SpaceGroup"]] = relationship(
-        "SpaceGroup", back_populates="GeometryClassname_"
+        "SpaceGroup", back_populates="GeometryClassname"
     )
 
 
@@ -1369,17 +1355,15 @@ class Imager(Base):
     capacity: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
 
     Container: Mapped[List["Container"]] = relationship(
-        "Container",
-        foreign_keys="[Container.imagerId]",
-        back_populates="Imager_",
+        "Container", foreign_keys="[Container.imagerId]", back_populates="Imager"
     )
-    Container_: Mapped[List["Container"]] = relationship(
+    Container: Mapped[List["Container"]] = relationship(
         "Container",
         foreign_keys="[Container.requestedImagerId]",
-        back_populates="Imager1",
+        back_populates="Imager",
     )
     ContainerInspection: Mapped[List["ContainerInspection"]] = relationship(
-        "ContainerInspection", back_populates="Imager_"
+        "ContainerInspection", back_populates="Imager"
     )
 
 
@@ -1390,10 +1374,10 @@ class InspectionType(Base):
     name: Mapped[Optional[str]] = mapped_column(String(45))
 
     ScheduleComponent: Mapped[List["ScheduleComponent"]] = relationship(
-        "ScheduleComponent", back_populates="InspectionType_"
+        "ScheduleComponent", back_populates="InspectionType"
     )
     ContainerInspection: Mapped[List["ContainerInspection"]] = relationship(
-        "ContainerInspection", back_populates="InspectionType_"
+        "ContainerInspection", back_populates="InspectionType"
     )
 
 
@@ -1447,21 +1431,19 @@ class LDAPSearchParameters(Base):
         String(255), comment="Comma-separated list of search attributes"
     )
     accountTypeGroupName: Mapped[Optional[str]] = mapped_column(
-        String(100),
-        comment="all accounts of this type must be members of this group",
+        String(100), comment="all accounts of this type must be members of this group"
     )
     filter: Mapped[Optional[str]] = mapped_column(
         String(200), comment="A filter string for the search"
     )
 
     LDAPSearchBase: Mapped[List["LDAPSearchBase"]] = relationship(
-        "LDAPSearchBase", back_populates="LDAPSearchParameters_"
+        "LDAPSearchBase", back_populates="LDAPSearchParameters"
     )
     UserGroup_has_LDAPSearchParameters: Mapped[
         List["UserGroupHasLDAPSearchParameters"]
     ] = relationship(
-        "UserGroupHasLDAPSearchParameters",
-        back_populates="LDAPSearchParameters_",
+        "UserGroupHasLDAPSearchParameters", back_populates="LDAPSearchParameters"
     )
 
 
@@ -1488,9 +1470,7 @@ class Laboratory(Base):
         comment="An EORI number consists of an ISO Country code from an EU Member State  (2 characters) + a maximum of 15 characters",
     )
 
-    Person: Mapped[List["Person"]] = relationship(
-        "Person", back_populates="Laboratory_"
-    )
+    Person: Mapped[List["Person"]] = relationship("Person", back_populates="Laboratory")
 
 
 class MotorPosition(Base):
@@ -1516,22 +1496,20 @@ class MotorPosition(Base):
     gridIndexY: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     gridIndexZ: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
-    BLSubSample_: Mapped[List["BLSubSample"]] = relationship(
+    BLSubSample: Mapped[List["BLSubSample"]] = relationship(
         "BLSubSample", back_populates="MotorPosition"
     )
-    DataCollection_: Mapped[List["DataCollection"]] = relationship(
+    DataCollection: Mapped[List["DataCollection"]] = relationship(
         "DataCollection",
         foreign_keys="[DataCollection.endPositionId]",
         back_populates="MotorPosition",
     )
-    DataCollection1: Mapped[List["DataCollection"]] = relationship(
+    DataCollection: Mapped[List["DataCollection"]] = relationship(
         "DataCollection",
         foreign_keys="[DataCollection.startPositionId]",
-        back_populates="MotorPosition_",
+        back_populates="MotorPosition",
     )
-    Image: Mapped[List["Image"]] = relationship(
-        "Image", back_populates="MotorPosition_"
-    )
+    Image: Mapped[List["Image"]] = relationship("Image", back_populates="MotorPosition")
 
 
 class PDB(Base):
@@ -1546,7 +1524,7 @@ class PDB(Base):
     )
 
     Protein_has_PDB: Mapped[List["ProteinHasPDB"]] = relationship(
-        "ProteinHasPDB", back_populates="PDB_"
+        "ProteinHasPDB", back_populates="PDB"
     )
 
 
@@ -1558,9 +1536,7 @@ class Permission(Base):
     description: Mapped[Optional[str]] = mapped_column(String(100))
 
     UserGroup: Mapped[List["UserGroup"]] = relationship(
-        "UserGroup",
-        secondary="UserGroup_has_Permission",
-        back_populates="Permission_",
+        "UserGroup", secondary="UserGroup_has_Permission", back_populates="Permission"
     )
 
 
@@ -1575,19 +1551,19 @@ class PhasingAnalysis(Base):
     )
 
     ModelBuilding: Mapped[List["ModelBuilding"]] = relationship(
-        "ModelBuilding", back_populates="PhasingAnalysis_"
+        "ModelBuilding", back_populates="PhasingAnalysis"
     )
     Phasing: Mapped[List["Phasing"]] = relationship(
-        "Phasing", back_populates="PhasingAnalysis_"
+        "Phasing", back_populates="PhasingAnalysis"
     )
     Phasing_has_Scaling: Mapped[List["PhasingHasScaling"]] = relationship(
-        "PhasingHasScaling", back_populates="PhasingAnalysis_"
+        "PhasingHasScaling", back_populates="PhasingAnalysis"
     )
     PreparePhasingData: Mapped[List["PreparePhasingData"]] = relationship(
-        "PreparePhasingData", back_populates="PhasingAnalysis_"
+        "PreparePhasingData", back_populates="PhasingAnalysis"
     )
     SubstructureDetermination: Mapped[List["SubstructureDetermination"]] = relationship(
-        "SubstructureDetermination", back_populates="PhasingAnalysis_"
+        "SubstructureDetermination", back_populates="PhasingAnalysis"
     )
 
 
@@ -1623,22 +1599,22 @@ class PhasingProgramRun(Base):
     )
 
     PhasingProgramAttachment: Mapped[List["PhasingProgramAttachment"]] = relationship(
-        "PhasingProgramAttachment", back_populates="PhasingProgramRun_"
+        "PhasingProgramAttachment", back_populates="PhasingProgramRun"
     )
     ModelBuilding: Mapped[List["ModelBuilding"]] = relationship(
-        "ModelBuilding", back_populates="PhasingProgramRun_"
+        "ModelBuilding", back_populates="PhasingProgramRun"
     )
     Phasing: Mapped[List["Phasing"]] = relationship(
-        "Phasing", back_populates="PhasingProgramRun_"
+        "Phasing", back_populates="PhasingProgramRun"
     )
     PhasingStep: Mapped[List["PhasingStep"]] = relationship(
-        "PhasingStep", back_populates="PhasingProgramRun_"
+        "PhasingStep", back_populates="PhasingProgramRun"
     )
     PreparePhasingData: Mapped[List["PreparePhasingData"]] = relationship(
-        "PreparePhasingData", back_populates="PhasingProgramRun_"
+        "PreparePhasingData", back_populates="PhasingProgramRun"
     )
     SubstructureDetermination: Mapped[List["SubstructureDetermination"]] = relationship(
-        "SubstructureDetermination", back_populates="PhasingProgramRun_"
+        "SubstructureDetermination", back_populates="PhasingProgramRun"
     )
 
 
@@ -1678,15 +1654,15 @@ class Position(Base):
         Double(asdecimal=True), Computed("(`posZ`)", persisted=False)
     )
 
-    BLSubSample_: Mapped[List["BLSubSample"]] = relationship(
+    BLSubSample: Mapped[List["BLSubSample"]] = relationship(
         "BLSubSample",
         foreign_keys="[BLSubSample.position2Id]",
         back_populates="Position",
     )
-    BLSubSample1: Mapped[List["BLSubSample"]] = relationship(
+    BLSubSample: Mapped[List["BLSubSample"]] = relationship(
         "BLSubSample",
         foreign_keys="[BLSubSample.positionId]",
-        back_populates="Position_",
+        back_populates="Position",
     )
     Position: Mapped["Position"] = relationship(
         "Position", remote_side=[positionId], back_populates="Position_reverse"
@@ -1709,13 +1685,13 @@ class Positioner(Base):
     value: Mapped[float] = mapped_column(Float)
 
     BLSampleImage_has_Positioner: Mapped[List["BLSampleImageHasPositioner"]] = (
-        relationship("BLSampleImageHasPositioner", back_populates="Positioner_")
+        relationship("BLSampleImageHasPositioner", back_populates="Positioner")
     )
     BLSample_has_Positioner: Mapped[List["BLSampleHasPositioner"]] = relationship(
-        "BLSampleHasPositioner", back_populates="Positioner_"
+        "BLSampleHasPositioner", back_populates="Positioner"
     )
     BLSubSample_has_Positioner: Mapped[List["BLSubSampleHasPositioner"]] = relationship(
-        "BLSubSampleHasPositioner", back_populates="Positioner_"
+        "BLSubSampleHasPositioner", back_populates="Positioner"
     )
 
 
@@ -1753,17 +1729,17 @@ class ProcessingJob(Base):
         comment="Whether this processing job was triggered automatically or not",
     )
 
-    AutoProcProgram_: Mapped[List["AutoProcProgram"]] = relationship(
+    AutoProcProgram: Mapped[List["AutoProcProgram"]] = relationship(
         "AutoProcProgram", back_populates="ProcessingJob"
     )
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="ProcessingJob"
     )
     ProcessingJobImageSweep: Mapped[List["ProcessingJobImageSweep"]] = relationship(
-        "ProcessingJobImageSweep", back_populates="ProcessingJob_"
+        "ProcessingJobImageSweep", back_populates="ProcessingJob"
     )
     ProcessingJobParameter: Mapped[List["ProcessingJobParameter"]] = relationship(
-        "ProcessingJobParameter", back_populates="ProcessingJob_"
+        "ProcessingJobParameter", back_populates="ProcessingJob"
     )
 
 
@@ -1779,7 +1755,7 @@ class ProcessingPipelineCategory(Base):
     name: Mapped[str] = mapped_column(String(20))
 
     ProcessingPipeline: Mapped[List["ProcessingPipeline"]] = relationship(
-        "ProcessingPipeline", back_populates="ProcessingPipelineCategory_"
+        "ProcessingPipeline", back_populates="ProcessingPipelineCategory"
     )
 
 
@@ -1796,7 +1772,7 @@ class PurificationColumn(Base):
     )
 
     DiffractionPlan: Mapped[List["DiffractionPlan"]] = relationship(
-        "DiffractionPlan", back_populates="PurificationColumn_"
+        "DiffractionPlan", back_populates="PurificationColumn"
     )
 
 
@@ -1808,7 +1784,7 @@ class ScanParametersService(Base):
     description: Mapped[Optional[str]] = mapped_column(String(45))
 
     ScanParametersModel: Mapped[List["ScanParametersModel"]] = relationship(
-        "ScanParametersModel", back_populates="ScanParametersService_"
+        "ScanParametersModel", back_populates="ScanParametersService"
     )
 
 
@@ -1819,10 +1795,10 @@ class Schedule(Base):
     name: Mapped[Optional[str]] = mapped_column(String(45))
 
     ScheduleComponent: Mapped[List["ScheduleComponent"]] = relationship(
-        "ScheduleComponent", back_populates="Schedule_"
+        "ScheduleComponent", back_populates="Schedule"
     )
     Container: Mapped[List["Container"]] = relationship(
-        "Container", back_populates="Schedule_"
+        "Container", back_populates="Schedule"
     )
 
 
@@ -1882,23 +1858,23 @@ class Screening(Base):
     xmlSampleInformation: Mapped[Optional[bytes]] = mapped_column(LONGBLOB)
     autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="Screening"
     )
     DataCollectionGroup: Mapped["DataCollectionGroup"] = relationship(
-        "DataCollectionGroup", back_populates="Screening_"
+        "DataCollectionGroup", back_populates="Screening"
     )
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="Screening"
     )
     ScreeningOutput: Mapped[List["ScreeningOutput"]] = relationship(
-        "ScreeningOutput", back_populates="Screening_"
+        "ScreeningOutput", back_populates="Screening"
     )
     ScreeningInput: Mapped[List["ScreeningInput"]] = relationship(
-        "ScreeningInput", back_populates="Screening_"
+        "ScreeningInput", back_populates="Screening"
     )
     ScreeningRank: Mapped[List["ScreeningRank"]] = relationship(
-        "ScreeningRank", back_populates="Screening_"
+        "ScreeningRank", back_populates="Screening"
     )
 
 
@@ -1953,14 +1929,14 @@ class ScreeningOutput(Base):
     totalNumberOfImages: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     rFriedel: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
 
-    Screening_: Mapped["Screening"] = relationship(
+    Screening: Mapped["Screening"] = relationship(
         "Screening", back_populates="ScreeningOutput"
     )
     ScreeningStrategy: Mapped[List["ScreeningStrategy"]] = relationship(
-        "ScreeningStrategy", back_populates="ScreeningOutput_"
+        "ScreeningStrategy", back_populates="ScreeningOutput"
     )
     ScreeningOutputLattice: Mapped[List["ScreeningOutputLattice"]] = relationship(
-        "ScreeningOutputLattice", back_populates="ScreeningOutput_"
+        "ScreeningOutputLattice", back_populates="ScreeningOutput"
     )
 
 
@@ -1973,7 +1949,7 @@ class ScreeningRankSet(Base):
     rankingSummaryFileName: Mapped[Optional[str]] = mapped_column(String(255))
 
     ScreeningRank: Mapped[List["ScreeningRank"]] = relationship(
-        "ScreeningRank", back_populates="ScreeningRankSet_"
+        "ScreeningRank", back_populates="ScreeningRankSet"
     )
 
 
@@ -2005,15 +1981,14 @@ class ScreeningStrategy(Base):
     program: Mapped[Optional[str]] = mapped_column(String(45))
     rankingResolution: Mapped[Optional[float]] = mapped_column(Float)
     transmission: Mapped[Optional[float]] = mapped_column(
-        Float,
-        comment="Transmission for the strategy as given by the strategy program.",
+        Float, comment="Transmission for the strategy as given by the strategy program."
     )
 
-    ScreeningOutput_: Mapped["ScreeningOutput"] = relationship(
+    ScreeningOutput: Mapped["ScreeningOutput"] = relationship(
         "ScreeningOutput", back_populates="ScreeningStrategy"
     )
     ScreeningStrategyWedge: Mapped[List["ScreeningStrategyWedge"]] = relationship(
-        "ScreeningStrategyWedge", back_populates="ScreeningStrategy_"
+        "ScreeningStrategyWedge", back_populates="ScreeningStrategy"
     )
 
 
@@ -2064,11 +2039,11 @@ class ScreeningStrategySubWedge(Base):
     )
     comments: Mapped[Optional[str]] = mapped_column(String(255))
 
-    DataCollection_: Mapped[List["DataCollection"]] = relationship(
+    DataCollection: Mapped[List["DataCollection"]] = relationship(
         "DataCollection", back_populates="ScreeningStrategySubWedge"
     )
     ScreeningStrategyWedge: Mapped["ScreeningStrategyWedge"] = relationship(
-        "ScreeningStrategyWedge", back_populates="ScreeningStrategySubWedge_"
+        "ScreeningStrategyWedge", back_populates="ScreeningStrategySubWedge"
     )
 
 
@@ -2111,12 +2086,10 @@ class ScreeningStrategyWedge(Base):
         Double(asdecimal=True)
     )
 
-    ScreeningStrategySubWedge_: Mapped[List["ScreeningStrategySubWedge"]] = (
-        relationship(
-            "ScreeningStrategySubWedge", back_populates="ScreeningStrategyWedge"
-        )
+    ScreeningStrategySubWedge: Mapped[List["ScreeningStrategySubWedge"]] = relationship(
+        "ScreeningStrategySubWedge", back_populates="ScreeningStrategyWedge"
     )
-    ScreeningStrategy_: Mapped["ScreeningStrategy"] = relationship(
+    ScreeningStrategy: Mapped["ScreeningStrategy"] = relationship(
         "ScreeningStrategy", back_populates="ScreeningStrategyWedge"
     )
 
@@ -2137,8 +2110,7 @@ class Sleeve(Base):
         TIMESTAMP, server_default=text("current_timestamp()")
     )
     location: Mapped[Optional[int]] = mapped_column(
-        TINYINT(3),
-        comment="NULL == freezer, 1...255 for local storage locations",
+        TINYINT(3), comment="NULL == freezer, 1...255 for local storage locations"
     )
     lastMovedFromFreezer: Mapped[Optional[datetime.datetime]] = mapped_column(
         TIMESTAMP, server_default=text("current_timestamp()")
@@ -2152,17 +2124,15 @@ class UserGroup(Base):
     userGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(String(31))
 
-    Permission_: Mapped[List["Permission"]] = relationship(
-        "Permission",
-        secondary="UserGroup_has_Permission",
-        back_populates="UserGroup",
+    Permission: Mapped[List["Permission"]] = relationship(
+        "Permission", secondary="UserGroup_has_Permission", back_populates="UserGroup"
     )
     Person: Mapped[List["Person"]] = relationship(
-        "Person", secondary="UserGroup_has_Person", back_populates="UserGroup_"
+        "Person", secondary="UserGroup_has_Person", back_populates="UserGroup"
     )
     UserGroup_has_LDAPSearchParameters: Mapped[
         List["UserGroupHasLDAPSearchParameters"]
-    ] = relationship("UserGroupHasLDAPSearchParameters", back_populates="UserGroup_")
+    ] = relationship("UserGroupHasLDAPSearchParameters", back_populates="UserGroup")
 
 
 class VRun(Base):
@@ -2242,22 +2212,20 @@ class AutoProcIntegration(Base):
         DateTime, comment="Creation or last update date/time"
     )
     anomalous: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1),
-        server_default=text("0"),
-        comment="boolean type:0 noanoum - 1 anoum",
+        TINYINT(1), server_default=text("0"), comment="boolean type:0 noanoum - 1 anoum"
     )
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="AutoProcIntegration"
     )
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="AutoProcIntegration"
     )
     AutoProcScaling_has_Int: Mapped[List["AutoProcScalingHasInt"]] = relationship(
-        "AutoProcScalingHasInt", back_populates="AutoProcIntegration_"
+        "AutoProcScalingHasInt", back_populates="AutoProcIntegration"
     )
     AutoProcStatus: Mapped[List["AutoProcStatus"]] = relationship(
-        "AutoProcStatus", back_populates="AutoProcIntegration_"
+        "AutoProcStatus", back_populates="AutoProcIntegration"
     )
 
 
@@ -2303,7 +2271,7 @@ class AutoProcProgramAttachment(Base):
         comment="1/TRUE if the file has been deleted",
     )
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="AutoProcProgramAttachment"
     )
 
@@ -2328,7 +2296,7 @@ class AutoProcProgramMessage(Base):
     message: Mapped[Optional[str]] = mapped_column(String(200))
     description: Mapped[Optional[str]] = mapped_column(Text)
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="AutoProcProgramMessage"
     )
 
@@ -2357,23 +2325,23 @@ class AutoProcScaling(Base):
         DateTime, comment="Creation or last update date/time"
     )
 
-    AutoProc_: Mapped["AutoProc"] = relationship(
+    AutoProc: Mapped["AutoProc"] = relationship(
         "AutoProc", back_populates="AutoProcScaling"
     )
     AutoProcScalingStatistics: Mapped[List["AutoProcScalingStatistics"]] = relationship(
-        "AutoProcScalingStatistics", back_populates="AutoProcScaling_"
+        "AutoProcScalingStatistics", back_populates="AutoProcScaling"
     )
     AutoProcScaling_has_Int: Mapped[List["AutoProcScalingHasInt"]] = relationship(
-        "AutoProcScalingHasInt", back_populates="AutoProcScaling_"
+        "AutoProcScalingHasInt", back_populates="AutoProcScaling"
     )
     MXMRRun: Mapped[List["MXMRRun"]] = relationship(
-        "MXMRRun", back_populates="AutoProcScaling_"
+        "MXMRRun", back_populates="AutoProcScaling"
     )
     PhasingStep: Mapped[List["PhasingStep"]] = relationship(
-        "PhasingStep", back_populates="AutoProcScaling_"
+        "PhasingStep", back_populates="AutoProcScaling"
     )
     Phasing_has_Scaling: Mapped[List["PhasingHasScaling"]] = relationship(
-        "PhasingHasScaling", back_populates="AutoProcScaling_"
+        "PhasingHasScaling", back_populates="AutoProcScaling"
     )
 
 
@@ -2445,7 +2413,7 @@ class BLSampleImageAnalysis(Base):
     )
     matchEndTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(TIMESTAMP)
 
-    BLSampleImage_: Mapped["BLSampleImage"] = relationship(
+    BLSampleImage: Mapped["BLSampleImage"] = relationship(
         "BLSampleImage", back_populates="BLSampleImageAnalysis"
     )
 
@@ -2471,16 +2439,13 @@ class BLSampleImageAutoScoreClass(Base):
     )
     blSampleImageAutoScoreSchemaId: Mapped[Optional[int]] = mapped_column(TINYINT(3))
 
-    BLSampleImageAutoScoreSchema_: Mapped["BLSampleImageAutoScoreSchema"] = (
-        relationship(
-            "BLSampleImageAutoScoreSchema",
-            back_populates="BLSampleImageAutoScoreClass",
-        )
+    BLSampleImageAutoScoreSchema: Mapped["BLSampleImageAutoScoreSchema"] = relationship(
+        "BLSampleImageAutoScoreSchema", back_populates="BLSampleImageAutoScoreClass"
     )
     BLSampleImage_has_AutoScoreClass: Mapped[List["BLSampleImageHasAutoScoreClass"]] = (
         relationship(
             "BLSampleImageHasAutoScoreClass",
-            back_populates="BLSampleImageAutoScoreClass_",
+            back_populates="BLSampleImageAutoScoreClass",
         )
     )
 
@@ -2516,10 +2481,10 @@ class BLSampleImageMeasurement(Base):
     endPosY: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     blTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
 
-    BLSampleImage_: Mapped["BLSampleImage"] = relationship(
+    BLSampleImage: Mapped["BLSampleImage"] = relationship(
         "BLSampleImage", back_populates="BLSampleImageMeasurement"
     )
-    BLSubSample_: Mapped["BLSubSample"] = relationship(
+    BLSubSample: Mapped["BLSubSample"] = relationship(
         "BLSubSample", back_populates="BLSampleImageMeasurement"
     )
 
@@ -2554,10 +2519,10 @@ class BLSampleImageHasPositioner(Base):
         Float, comment="The position of this positioner for this blsampleimage"
     )
 
-    BLSampleImage_: Mapped["BLSampleImage"] = relationship(
+    BLSampleImage: Mapped["BLSampleImage"] = relationship(
         "BLSampleImage", back_populates="BLSampleImage_has_Positioner"
     )
-    Positioner_: Mapped["Positioner"] = relationship(
+    Positioner: Mapped["Positioner"] = relationship(
         "Positioner", back_populates="BLSampleImage_has_Positioner"
     )
 
@@ -2566,9 +2531,7 @@ class BLSampleHasPositioner(Base):
     __tablename__ = "BLSample_has_Positioner"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["blSampleId"],
-            ["BLSample.blSampleId"],
-            name="BLSampleHasPositioner_ibfk1",
+            ["blSampleId"], ["BLSample.blSampleId"], name="BLSampleHasPositioner_ibfk1"
         ),
         ForeignKeyConstraint(
             ["positionerId"],
@@ -2583,10 +2546,10 @@ class BLSampleHasPositioner(Base):
     blSampleId: Mapped[int] = mapped_column(INTEGER(10))
     positionerId: Mapped[int] = mapped_column(INTEGER(10))
 
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="BLSample_has_Positioner"
     )
-    Positioner_: Mapped["Positioner"] = relationship(
+    Positioner: Mapped["Positioner"] = relationship(
         "Positioner", back_populates="BLSample_has_Positioner"
     )
 
@@ -2612,10 +2575,10 @@ class BLSubSampleHasPositioner(Base):
     blSubSampleId: Mapped[int] = mapped_column(INTEGER(10))
     positionerId: Mapped[int] = mapped_column(INTEGER(10))
 
-    BLSubSample_: Mapped["BLSubSample"] = relationship(
+    BLSubSample: Mapped["BLSubSample"] = relationship(
         "BLSubSample", back_populates="BLSubSample_has_Positioner"
     )
-    Positioner_: Mapped["Positioner"] = relationship(
+    Positioner: Mapped["Positioner"] = relationship(
         "Positioner", back_populates="BLSubSample_has_Positioner"
     )
 
@@ -2639,7 +2602,7 @@ class BeamApertures(Base):
     y: Mapped[Optional[float]] = mapped_column(Float)
     apertureSize: Mapped[Optional[int]] = mapped_column(SMALLINT(5))
 
-    BeamlineStats_: Mapped["BeamlineStats"] = relationship(
+    BeamlineStats: Mapped["BeamlineStats"] = relationship(
         "BeamlineStats", back_populates="BeamApertures"
     )
 
@@ -2662,7 +2625,7 @@ class BeamCentres(Base):
     y: Mapped[Optional[float]] = mapped_column(Float)
     zoom: Mapped[Optional[int]] = mapped_column(TINYINT(3))
 
-    BeamlineStats_: Mapped["BeamlineStats"] = relationship(
+    BeamlineStats: Mapped["BeamlineStats"] = relationship(
         "BeamlineStats", back_populates="BeamCentres"
     )
 
@@ -2766,11 +2729,11 @@ class BeamLineSetup(Base):
         Float, comment="Needed for cryo-ET"
     )
 
-    Detector_: Mapped["Detector"] = relationship(
+    Detector: Mapped["Detector"] = relationship(
         "Detector", back_populates="BeamLineSetup"
     )
     BLSession: Mapped[List["BLSession"]] = relationship(
-        "BLSession", back_populates="BeamLineSetup_"
+        "BLSession", back_populates="BeamLineSetup"
     )
 
 
@@ -2799,7 +2762,7 @@ class DataCollectionFileAttachment(Base):
         Enum("snapshot", "log", "xy", "recip", "pia", "warning", "params")
     )
 
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="DataCollectionFileAttachment"
     )
 
@@ -2822,10 +2785,10 @@ class EventChain(Base):
     dataCollectionId: Mapped[int] = mapped_column(INTEGER(11))
     name: Mapped[Optional[str]] = mapped_column(String(255))
 
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="EventChain"
     )
-    Event: Mapped[List["Event"]] = relationship("Event", back_populates="EventChain_")
+    Event: Mapped[List["Event"]] = relationship("Event", back_populates="EventChain")
 
 
 class GridImageMap(Base):
@@ -2854,7 +2817,7 @@ class GridImageMap(Base):
         Float, comment="Y position of stage, Units: um"
     )
 
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="GridImageMap"
     )
 
@@ -2905,10 +2868,10 @@ class Image(Base):
     machineMessage: Mapped[Optional[str]] = mapped_column(String(1024))
     motorPositionId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="Image"
     )
-    MotorPosition_: Mapped["MotorPosition"] = relationship(
+    MotorPosition: Mapped["MotorPosition"] = relationship(
         "MotorPosition", back_populates="Image"
     )
 
@@ -2941,7 +2904,7 @@ class LDAPSearchBase(Base):
         comment="The number in the sequence of searches where this search base should be attempted",
     )
 
-    LDAPSearchParameters_: Mapped["LDAPSearchParameters"] = relationship(
+    LDAPSearchParameters: Mapped["LDAPSearchParameters"] = relationship(
         "LDAPSearchParameters", back_populates="LDAPSearchBase"
     )
 
@@ -2979,11 +2942,11 @@ class PDBEntry(Base):
     beamlineMatch: Mapped[Optional[int]] = mapped_column(TINYINT(1))
     authorMatch: Mapped[Optional[int]] = mapped_column(TINYINT(1))
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="PDBEntry"
     )
     PDBEntry_has_AutoProcProgram: Mapped[List["PDBEntryHasAutoProcProgram"]] = (
-        relationship("PDBEntryHasAutoProcProgram", back_populates="PDBEntry_")
+        relationship("PDBEntryHasAutoProcProgram", back_populates="PDBEntry")
     )
 
 
@@ -3018,65 +2981,63 @@ class Person(Base):
     cache: Mapped[Optional[str]] = mapped_column(Text)
     externalId: Mapped[Optional[bytes]] = mapped_column(BINARY(16))
 
-    Laboratory_: Mapped["Laboratory"] = relationship(
+    Laboratory: Mapped["Laboratory"] = relationship(
         "Laboratory", back_populates="Person"
     )
-    UserGroup_: Mapped[List["UserGroup"]] = relationship(
+    UserGroup: Mapped[List["UserGroup"]] = relationship(
         "UserGroup", secondary="UserGroup_has_Person", back_populates="Person"
     )
     Project: Mapped[List["Project"]] = relationship(
-        "Project", secondary="Project_has_Person", back_populates="Person_"
+        "Project", secondary="Project_has_Person", back_populates="Person"
     )
     ContainerReport: Mapped[List["ContainerReport"]] = relationship(
-        "ContainerReport", back_populates="Person_"
+        "ContainerReport", back_populates="Person"
     )
     DataCollectionComment: Mapped[List["DataCollectionComment"]] = relationship(
-        "DataCollectionComment", back_populates="Person_"
+        "DataCollectionComment", back_populates="Person"
     )
-    Project_: Mapped[List["Project"]] = relationship(
-        "Project", back_populates="Person1"
-    )
+    Project: Mapped[List["Project"]] = relationship("Project", back_populates="Person")
     Proposal: Mapped[List["Proposal"]] = relationship(
-        "Proposal", back_populates="Person_"
+        "Proposal", back_populates="Person"
     )
     BLSampleGroup: Mapped[List["BLSampleGroup"]] = relationship(
-        "BLSampleGroup", back_populates="Person_"
+        "BLSampleGroup", back_populates="Person"
     )
     ContainerRegistry_has_Proposal: Mapped[List["ContainerRegistryHasProposal"]] = (
-        relationship("ContainerRegistryHasProposal", back_populates="Person_")
+        relationship("ContainerRegistryHasProposal", back_populates="Person")
     )
     LabContact: Mapped[List["LabContact"]] = relationship(
-        "LabContact", back_populates="Person_"
+        "LabContact", back_populates="Person"
     )
     ProposalHasPerson: Mapped[List["ProposalHasPerson"]] = relationship(
-        "ProposalHasPerson", back_populates="Person_"
+        "ProposalHasPerson", back_populates="Person"
     )
     SW_onceToken: Mapped[List["SWOnceToken"]] = relationship(
-        "SWOnceToken", back_populates="Person_"
+        "SWOnceToken", back_populates="Person"
     )
     BF_fault: Mapped[List["BFFault"]] = relationship(
-        "BFFault", foreign_keys="[BFFault.assigneeId]", back_populates="Person_"
+        "BFFault", foreign_keys="[BFFault.assigneeId]", back_populates="Person"
     )
-    BF_fault_: Mapped[List["BFFault"]] = relationship(
-        "BFFault", foreign_keys="[BFFault.personId]", back_populates="Person1"
+    BF_fault: Mapped[List["BFFault"]] = relationship(
+        "BFFault", foreign_keys="[BFFault.personId]", back_populates="Person"
     )
     Session_has_Person: Mapped[List["SessionHasPerson"]] = relationship(
-        "SessionHasPerson", back_populates="Person_"
+        "SessionHasPerson", back_populates="Person"
     )
     Shipping: Mapped[List["Shipping"]] = relationship(
-        "Shipping", back_populates="Person_"
+        "Shipping", back_populates="Person"
     )
     CourierTermsAccepted: Mapped[List["CourierTermsAccepted"]] = relationship(
-        "CourierTermsAccepted", back_populates="Person_"
+        "CourierTermsAccepted", back_populates="Person"
     )
     DewarRegistry_has_Proposal: Mapped[List["DewarRegistryHasProposal"]] = relationship(
-        "DewarRegistryHasProposal", back_populates="Person_"
+        "DewarRegistryHasProposal", back_populates="Person"
     )
     Container: Mapped[List["Container"]] = relationship(
-        "Container", back_populates="Person_"
+        "Container", back_populates="Person"
     )
     ContainerQueue: Mapped[List["ContainerQueue"]] = relationship(
-        "ContainerQueue", back_populates="Person_"
+        "ContainerQueue", back_populates="Person"
     )
 
 
@@ -3100,8 +3061,7 @@ class PhasingProgramAttachment(Base):
         INTEGER(11), comment="Related program item"
     )
     fileType: Mapped[Optional[str]] = mapped_column(
-        Enum("Map", "Logfile", "PDB", "CSV", "INS", "RES", "TXT"),
-        comment="file type",
+        Enum("Map", "Logfile", "PDB", "CSV", "INS", "RES", "TXT"), comment="file type"
     )
     fileName: Mapped[Optional[str]] = mapped_column(String(45), comment="file name")
     filePath: Mapped[Optional[str]] = mapped_column(String(255), comment="file path")
@@ -3109,7 +3069,7 @@ class PhasingProgramAttachment(Base):
         DateTime, comment="Creation or last update date/time"
     )
 
-    PhasingProgramRun_: Mapped["PhasingProgramRun"] = relationship(
+    PhasingProgramRun: Mapped["PhasingProgramRun"] = relationship(
         "PhasingProgramRun", back_populates="PhasingProgramAttachment"
     )
 
@@ -3140,10 +3100,10 @@ class ProcessingJobImageSweep(Base):
     startImage: Mapped[Optional[int]] = mapped_column(MEDIUMINT(8))
     endImage: Mapped[Optional[int]] = mapped_column(MEDIUMINT(8))
 
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="ProcessingJobImageSweep"
     )
-    ProcessingJob_: Mapped["ProcessingJob"] = relationship(
+    ProcessingJob: Mapped["ProcessingJob"] = relationship(
         "ProcessingJob", back_populates="ProcessingJobImageSweep"
     )
 
@@ -3171,7 +3131,7 @@ class ProcessingJobParameter(Base):
     )
     parameterValue: Mapped[Optional[str]] = mapped_column(String(1024))
 
-    ProcessingJob_: Mapped["ProcessingJob"] = relationship(
+    ProcessingJob: Mapped["ProcessingJob"] = relationship(
         "ProcessingJob", back_populates="ProcessingJobParameter"
     )
 
@@ -3205,11 +3165,11 @@ class ProcessingPipeline(Base):
         comment="Pipeline is available for re-processing",
     )
 
-    ProcessingPipelineCategory_: Mapped["ProcessingPipelineCategory"] = relationship(
+    ProcessingPipelineCategory: Mapped["ProcessingPipelineCategory"] = relationship(
         "ProcessingPipelineCategory", back_populates="ProcessingPipeline"
     )
     Container: Mapped[List["Container"]] = relationship(
-        "Container", back_populates="ProcessingPipeline_"
+        "Container", back_populates="ProcessingPipeline"
     )
 
 
@@ -3279,14 +3239,14 @@ class ScheduleComponent(Base):
     offset_hours: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     inspectionTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
-    InspectionType_: Mapped["InspectionType"] = relationship(
+    InspectionType: Mapped["InspectionType"] = relationship(
         "InspectionType", back_populates="ScheduleComponent"
     )
-    Schedule_: Mapped["Schedule"] = relationship(
+    Schedule: Mapped["Schedule"] = relationship(
         "Schedule", back_populates="ScheduleComponent"
     )
     ContainerInspection: Mapped[List["ContainerInspection"]] = relationship(
-        "ContainerInspection", back_populates="ScheduleComponent_"
+        "ContainerInspection", back_populates="ScheduleComponent"
     )
 
 
@@ -3316,7 +3276,7 @@ class ScreeningInput(Base):
     )
     xmlSampleInformation: Mapped[Optional[bytes]] = mapped_column(LONGBLOB)
 
-    Screening_: Mapped["Screening"] = relationship(
+    Screening: Mapped["Screening"] = relationship(
         "Screening", back_populates="ScreeningInput"
     )
 
@@ -3364,7 +3324,7 @@ class ScreeningOutputLattice(Base):
         TINYINT(1), server_default=text("0")
     )
 
-    ScreeningOutput_: Mapped["ScreeningOutput"] = relationship(
+    ScreeningOutput: Mapped["ScreeningOutput"] = relationship(
         "ScreeningOutput", back_populates="ScreeningOutputLattice"
     )
 
@@ -3398,10 +3358,10 @@ class ScreeningRank(Base):
     rankValue: Mapped[Optional[float]] = mapped_column(Float)
     rankInformation: Mapped[Optional[str]] = mapped_column(String(1024))
 
-    Screening_: Mapped["Screening"] = relationship(
+    Screening: Mapped["Screening"] = relationship(
         "Screening", back_populates="ScreeningRank"
     )
-    ScreeningRankSet_: Mapped["ScreeningRankSet"] = relationship(
+    ScreeningRankSet: Mapped["ScreeningRankSet"] = relationship(
         "ScreeningRankSet", back_populates="ScreeningRank"
     )
 
@@ -3424,9 +3384,7 @@ class SpaceGroup(Base):
         INTEGER(10), primary_key=True, comment="Primary key"
     )
     MX_used: Mapped[int] = mapped_column(
-        TINYINT(1),
-        server_default=text("0"),
-        comment="1 if used in the crystal form",
+        TINYINT(1), server_default=text("0"), comment="1 if used in the crystal form"
     )
     spaceGroupNumber: Mapped[Optional[int]] = mapped_column(
         INTEGER(10), comment="ccp4 number pr IUCR"
@@ -3446,127 +3404,23 @@ class SpaceGroup(Base):
     pointGroup: Mapped[Optional[str]] = mapped_column(String(45), comment="point group")
     geometryClassnameId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
-    GeometryClassname_: Mapped["GeometryClassname"] = relationship(
+    GeometryClassname: Mapped["GeometryClassname"] = relationship(
         "GeometryClassname", back_populates="SpaceGroup"
     )
     ModelBuilding: Mapped[List["ModelBuilding"]] = relationship(
-        "ModelBuilding", back_populates="SpaceGroup_"
+        "ModelBuilding", back_populates="SpaceGroup"
     )
     Phasing: Mapped[List["Phasing"]] = relationship(
-        "Phasing", back_populates="SpaceGroup_"
+        "Phasing", back_populates="SpaceGroup"
     )
     PhasingStep: Mapped[List["PhasingStep"]] = relationship(
-        "PhasingStep", back_populates="SpaceGroup_"
+        "PhasingStep", back_populates="SpaceGroup"
     )
     PreparePhasingData: Mapped[List["PreparePhasingData"]] = relationship(
-        "PreparePhasingData", back_populates="SpaceGroup_"
+        "PreparePhasingData", back_populates="SpaceGroup"
     )
     SubstructureDetermination: Mapped[List["SubstructureDetermination"]] = relationship(
-        "SubstructureDetermination", back_populates="SpaceGroup_"
-    )
-
-
-class Tomogram(Base):
-    __tablename__ = "Tomogram"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["autoProcProgramId"],
-            ["AutoProcProgram.autoProcProgramId"],
-            ondelete="SET NULL",
-            onupdate="CASCADE",
-            name="Tomogram_fk_autoProcProgramId",
-        ),
-        ForeignKeyConstraint(
-            ["dataCollectionId"],
-            ["DataCollection.dataCollectionId"],
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-            name="Tomogram_fk_dataCollectionId",
-        ),
-        Index("Tomogram_fk_autoProcProgramId", "autoProcProgramId"),
-        Index("Tomogram_fk_dataCollectionId", "dataCollectionId"),
-        {
-            "comment": "For storing per-sample, per-position data analysis results "
-            "(reconstruction)"
-        },
-    )
-
-    tomogramId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
-    dataCollectionId: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11), comment="FK to\xa0DataCollection\xa0table"
-    )
-    autoProcProgramId: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10),
-        comment="FK, gives processing times/status and software information",
-    )
-    volumeFile: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment=".mrc\xa0file representing the reconstructed tomogram volume",
-    )
-    stackFile: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment=".mrc\xa0file containing the motion corrected images ordered by angle used as input for the reconstruction",
-    )
-    sizeX: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
-    sizeY: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
-    sizeZ: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
-    pixelSpacing: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Angstrom/pixel conversion factor"
-    )
-    residualErrorMean: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Alignment error, unit: nm"
-    )
-    residualErrorSD: Mapped[Optional[float]] = mapped_column(
-        Float, comment="Standard deviation of the alignment error, unit: nm"
-    )
-    xAxisCorrection: Mapped[Optional[float]] = mapped_column(
-        Float, comment="X axis angle (etomo), unit: degrees"
-    )
-    tiltAngleOffset: Mapped[Optional[float]] = mapped_column(
-        Float, comment="tilt Axis offset (etomo), unit: degrees"
-    )
-    zShift: Mapped[Optional[float]] = mapped_column(
-        Float, comment="shift to center volumen in Z (etomo)"
-    )
-    fileDirectory: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Directory path for files referenced by this table"
-    )
-    centralSliceImage: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Tomogram central slice file"
-    )
-    tomogramMovie: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="Movie traversing the tomogram across an axis"
-    )
-    xyShiftPlot: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="XY shift plot file"
-    )
-    projXY: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="XY projection file"
-    )
-    projXZ: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="XZ projection file"
-    )
-    recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime,
-        server_default=text("current_timestamp()"),
-        comment="Creation or last update date/time",
-    )
-    globalAlignmentQuality: Mapped[Optional[float]] = mapped_column(
-        Float,
-        comment="Quality of fit metric for the alignment of the tilt series corresponding to this tomogram",
-    )
-
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
-        "AutoProcProgram", back_populates="Tomogram"
-    )
-    DataCollection_: Mapped["DataCollection"] = relationship(
-        "DataCollection", back_populates="Tomogram"
-    )
-    ProcessedTomogram: Mapped[List["ProcessedTomogram"]] = relationship(
-        "ProcessedTomogram", back_populates="Tomogram_"
-    )
-    TiltImageAlignment: Mapped[List["TiltImageAlignment"]] = relationship(
-        "TiltImageAlignment", back_populates="Tomogram_"
+        "SubstructureDetermination", back_populates="SpaceGroup"
     )
 
 
@@ -3593,16 +3447,13 @@ class UserGroupHasLDAPSearchParameters(Base):
     userGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     ldapSearchParametersId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     name: Mapped[str] = mapped_column(
-        String(200),
-        primary_key=True,
-        comment="Name of the object we search for",
+        String(200), primary_key=True, comment="Name of the object we search for"
     )
 
-    LDAPSearchParameters_: Mapped["LDAPSearchParameters"] = relationship(
-        "LDAPSearchParameters",
-        back_populates="UserGroup_has_LDAPSearchParameters",
+    LDAPSearchParameters: Mapped["LDAPSearchParameters"] = relationship(
+        "LDAPSearchParameters", back_populates="UserGroup_has_LDAPSearchParameters"
     )
-    UserGroup_: Mapped["UserGroup"] = relationship(
+    UserGroup: Mapped["UserGroup"] = relationship(
         "UserGroup", back_populates="UserGroup_has_LDAPSearchParameters"
     )
 
@@ -3655,20 +3506,18 @@ class XRFFluorescenceMappingROI(Base):
     g: Mapped[Optional[int]] = mapped_column(TINYINT(3), comment="G colour component")
     b: Mapped[Optional[int]] = mapped_column(TINYINT(3), comment="B colour component")
     blSampleId: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10),
-        comment="ROIs can be created within the context of a sample",
+        INTEGER(10), comment="ROIs can be created within the context of a sample"
     )
     scalar: Mapped[Optional[str]] = mapped_column(
         String(50),
         comment="For ROIs that are not an element, i.e. could be a scan counter instead",
     )
 
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="XRFFluorescenceMappingROI"
     )
     XRFFluorescenceMapping: Mapped[List["XRFFluorescenceMapping"]] = relationship(
-        "XRFFluorescenceMapping",
-        back_populates="XRFFluorescenceMappingROI_",
+        "XRFFluorescenceMapping", back_populates="XRFFluorescenceMappingROI"
     )
 
 
@@ -3699,7 +3548,7 @@ class ZcZocaloBuffer(Base):
         comment="Context-dependent reference to primary key IDs in other ISPyB tables",
     )
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="zc_ZocaloBuffer"
     )
 
@@ -3731,8 +3580,7 @@ class AutoProcScalingStatistics(Base):
         comment="Scaling statistics type",
     )
     autoProcScalingId: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10),
-        comment="Related autoProcScaling item (used by foreign key)",
+        INTEGER(10), comment="Related autoProcScaling item (used by foreign key)"
     )
     comments: Mapped[Optional[str]] = mapped_column(String(255), comment="Comments...")
     resolutionLimitLow: Mapped[Optional[float]] = mapped_column(
@@ -3778,9 +3626,7 @@ class AutoProcScalingStatistics(Base):
         DateTime, comment="Creation or last update date/time"
     )
     anomalous: Mapped[Optional[int]] = mapped_column(
-        TINYINT(1),
-        server_default=text("0"),
-        comment="boolean type:0 noanoum - 1 anoum",
+        TINYINT(1), server_default=text("0"), comment="boolean type:0 noanoum - 1 anoum"
     )
     ccHalf: Mapped[Optional[float]] = mapped_column(
         Float, comment="information from XDS"
@@ -3790,7 +3636,7 @@ class AutoProcScalingStatistics(Base):
         Float, comment="Resolution where I/Sigma(I) equals 2"
     )
 
-    AutoProcScaling_: Mapped["AutoProcScaling"] = relationship(
+    AutoProcScaling: Mapped["AutoProcScaling"] = relationship(
         "AutoProcScaling", back_populates="AutoProcScalingStatistics"
     )
 
@@ -3833,10 +3679,10 @@ class AutoProcScalingHasInt(Base):
         DateTime, comment="Creation or last update date/time"
     )
 
-    AutoProcIntegration_: Mapped["AutoProcIntegration"] = relationship(
+    AutoProcIntegration: Mapped["AutoProcIntegration"] = relationship(
         "AutoProcIntegration", back_populates="AutoProcScaling_has_Int"
     )
-    AutoProcScaling_: Mapped["AutoProcScaling"] = relationship(
+    AutoProcScaling: Mapped["AutoProcScaling"] = relationship(
         "AutoProcScaling", back_populates="AutoProcScaling_has_Int"
     )
 
@@ -3864,8 +3710,7 @@ class AutoProcStatus(Base):
         comment="autoprocessing step",
     )
     status: Mapped[str] = mapped_column(
-        Enum("Launched", "Successful", "Failed"),
-        comment="autoprocessing status",
+        Enum("Launched", "Successful", "Failed"), comment="autoprocessing status"
     )
     bltimeStamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP,
@@ -3873,7 +3718,7 @@ class AutoProcStatus(Base):
     )
     comments: Mapped[Optional[str]] = mapped_column(String(1024), comment="comments")
 
-    AutoProcIntegration_: Mapped["AutoProcIntegration"] = relationship(
+    AutoProcIntegration: Mapped["AutoProcIntegration"] = relationship(
         "AutoProcIntegration", back_populates="AutoProcStatus"
     )
 
@@ -3902,9 +3747,7 @@ class BFSubcomponent(Base):
     __tablename__ = "BF_subcomponent"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["componentId"],
-            ["BF_component.componentId"],
-            name="bf_subcomponent_FK1",
+            ["componentId"], ["BF_component.componentId"], name="bf_subcomponent_FK1"
         ),
         Index("bf_subcomponent_FK1", "componentId"),
     )
@@ -3942,10 +3785,7 @@ class BLSampleImageHasAutoScoreClass(Base):
             onupdate="CASCADE",
             name="BLSampleImage_has_AutoScoreClass_fk1",
         ),
-        Index(
-            "BLSampleImage_has_AutoScoreClass_fk2",
-            "blSampleImageAutoScoreClassId",
-        ),
+        Index("BLSampleImage_has_AutoScoreClass_fk2", "blSampleImageAutoScoreClassId"),
         {
             "comment": "Many-to-many relationship between drop images and thing being "
             "scored, as well as the actual probability (score) that the drop "
@@ -3959,11 +3799,10 @@ class BLSampleImageHasAutoScoreClass(Base):
     )
     probability: Mapped[Optional[float]] = mapped_column(Float)
 
-    BLSampleImageAutoScoreClass_: Mapped["BLSampleImageAutoScoreClass"] = relationship(
-        "BLSampleImageAutoScoreClass",
-        back_populates="BLSampleImage_has_AutoScoreClass",
+    BLSampleImageAutoScoreClass: Mapped["BLSampleImageAutoScoreClass"] = relationship(
+        "BLSampleImageAutoScoreClass", back_populates="BLSampleImage_has_AutoScoreClass"
     )
-    BLSampleImage_: Mapped["BLSampleImage"] = relationship(
+    BLSampleImage: Mapped["BLSampleImage"] = relationship(
         "BLSampleImage", back_populates="BLSampleImage_has_AutoScoreClass"
     )
 
@@ -3992,10 +3831,10 @@ class ContainerReport(Base):
     attachmentFilePath: Mapped[Optional[str]] = mapped_column(String(255))
     recordTimestamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
 
-    ContainerRegistry_: Mapped["ContainerRegistry"] = relationship(
+    ContainerRegistry: Mapped["ContainerRegistry"] = relationship(
         "ContainerRegistry", back_populates="ContainerReport"
     )
-    Person_: Mapped["Person"] = relationship("Person", back_populates="ContainerReport")
+    Person: Mapped["Person"] = relationship("Person", back_populates="ContainerReport")
 
 
 class DataCollectionComment(Base):
@@ -4028,10 +3867,10 @@ class DataCollectionComment(Base):
     comments: Mapped[Optional[str]] = mapped_column(String(4000))
     modTime: Mapped[Optional[datetime.date]] = mapped_column(Date)
 
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="DataCollectionComment"
     )
-    Person_: Mapped["Person"] = relationship(
+    Person: Mapped["Person"] = relationship(
         "Person", back_populates="DataCollectionComment"
     )
 
@@ -4068,14 +3907,14 @@ class MXMRRun(Base):
     )
     autoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="MXMRRun"
     )
-    AutoProcScaling_: Mapped["AutoProcScaling"] = relationship(
+    AutoProcScaling: Mapped["AutoProcScaling"] = relationship(
         "AutoProcScaling", back_populates="MXMRRun"
     )
     MXMRRunBlob: Mapped[List["MXMRRunBlob"]] = relationship(
-        "MXMRRunBlob", back_populates="MXMRRun_"
+        "MXMRRunBlob", back_populates="MXMRRun"
     )
 
 
@@ -4126,13 +3965,13 @@ class ModelBuilding(Base):
         DateTime, comment="Creation or last update date/time"
     )
 
-    PhasingAnalysis_: Mapped["PhasingAnalysis"] = relationship(
+    PhasingAnalysis: Mapped["PhasingAnalysis"] = relationship(
         "PhasingAnalysis", back_populates="ModelBuilding"
     )
-    PhasingProgramRun_: Mapped["PhasingProgramRun"] = relationship(
+    PhasingProgramRun: Mapped["PhasingProgramRun"] = relationship(
         "PhasingProgramRun", back_populates="ModelBuilding"
     )
-    SpaceGroup_: Mapped["SpaceGroup"] = relationship(
+    SpaceGroup: Mapped["SpaceGroup"] = relationship(
         "SpaceGroup", back_populates="ModelBuilding"
     )
 
@@ -4161,10 +4000,10 @@ class PDBEntryHasAutoProcProgram(Base):
     autoProcProgramId: Mapped[int] = mapped_column(INTEGER(11))
     distance: Mapped[Optional[float]] = mapped_column(Float)
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="PDBEntry_has_AutoProcProgram"
     )
-    PDBEntry_: Mapped["PDBEntry"] = relationship(
+    PDBEntry: Mapped["PDBEntry"] = relationship(
         "PDBEntry", back_populates="PDBEntry_has_AutoProcProgram"
     )
 
@@ -4224,13 +4063,13 @@ class Phasing(Base):
         DateTime, server_default=text("current_timestamp()")
     )
 
-    PhasingAnalysis_: Mapped["PhasingAnalysis"] = relationship(
+    PhasingAnalysis: Mapped["PhasingAnalysis"] = relationship(
         "PhasingAnalysis", back_populates="Phasing"
     )
-    PhasingProgramRun_: Mapped["PhasingProgramRun"] = relationship(
+    PhasingProgramRun: Mapped["PhasingProgramRun"] = relationship(
         "PhasingProgramRun", back_populates="Phasing"
     )
-    SpaceGroup_: Mapped["SpaceGroup"] = relationship(
+    SpaceGroup: Mapped["SpaceGroup"] = relationship(
         "SpaceGroup", back_populates="Phasing"
     )
 
@@ -4275,17 +4114,17 @@ class PhasingStep(Base):
     lowRes: Mapped[Optional[str]] = mapped_column(String(45))
     highRes: Mapped[Optional[str]] = mapped_column(String(45))
 
-    AutoProcScaling_: Mapped["AutoProcScaling"] = relationship(
+    AutoProcScaling: Mapped["AutoProcScaling"] = relationship(
         "AutoProcScaling", back_populates="PhasingStep"
     )
-    PhasingProgramRun_: Mapped["PhasingProgramRun"] = relationship(
+    PhasingProgramRun: Mapped["PhasingProgramRun"] = relationship(
         "PhasingProgramRun", back_populates="PhasingStep"
     )
-    SpaceGroup_: Mapped["SpaceGroup"] = relationship(
+    SpaceGroup: Mapped["SpaceGroup"] = relationship(
         "SpaceGroup", back_populates="PhasingStep"
     )
     PhasingStatistics: Mapped[List["PhasingStatistics"]] = relationship(
-        "PhasingStatistics", back_populates="PhasingStep_"
+        "PhasingStatistics", back_populates="PhasingStep"
     )
 
 
@@ -4327,10 +4166,10 @@ class PhasingHasScaling(Base):
         DateTime, server_default=text("current_timestamp()")
     )
 
-    AutoProcScaling_: Mapped["AutoProcScaling"] = relationship(
+    AutoProcScaling: Mapped["AutoProcScaling"] = relationship(
         "AutoProcScaling", back_populates="Phasing_has_Scaling"
     )
-    PhasingAnalysis_: Mapped["PhasingAnalysis"] = relationship(
+    PhasingAnalysis: Mapped["PhasingAnalysis"] = relationship(
         "PhasingAnalysis", back_populates="Phasing_has_Scaling"
     )
     PhasingStatistics: Mapped[List["PhasingStatistics"]] = relationship(
@@ -4338,10 +4177,10 @@ class PhasingHasScaling(Base):
         foreign_keys="[PhasingStatistics.phasingHasScalingId1]",
         back_populates="Phasing_has_Scaling",
     )
-    PhasingStatistics_: Mapped[List["PhasingStatistics"]] = relationship(
+    PhasingStatistics: Mapped[List["PhasingStatistics"]] = relationship(
         "PhasingStatistics",
         foreign_keys="[PhasingStatistics.phasingHasScalingId2]",
-        back_populates="Phasing_has_Scaling_",
+        back_populates="Phasing_has_Scaling",
     )
 
 
@@ -4392,48 +4231,14 @@ class PreparePhasingData(Base):
         DateTime, comment="Creation or last update date/time"
     )
 
-    PhasingAnalysis_: Mapped["PhasingAnalysis"] = relationship(
+    PhasingAnalysis: Mapped["PhasingAnalysis"] = relationship(
         "PhasingAnalysis", back_populates="PreparePhasingData"
     )
-    PhasingProgramRun_: Mapped["PhasingProgramRun"] = relationship(
+    PhasingProgramRun: Mapped["PhasingProgramRun"] = relationship(
         "PhasingProgramRun", back_populates="PreparePhasingData"
     )
-    SpaceGroup_: Mapped["SpaceGroup"] = relationship(
+    SpaceGroup: Mapped["SpaceGroup"] = relationship(
         "SpaceGroup", back_populates="PreparePhasingData"
-    )
-
-
-class ProcessedTomogram(Base):
-    __tablename__ = "ProcessedTomogram"
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["tomogramId"],
-            ["Tomogram.tomogramId"],
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-            name="ProcessedTomogram_ibfk_1",
-        ),
-        Index("tomogramId", "tomogramId"),
-        {
-            "comment": "Indicates the sample's location on a multi-sample pin, where 1 is "
-            "closest to the pin base or a sample's position in a cryo-EM "
-            "cassette"
-        },
-    )
-
-    processedTomogramId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
-    tomogramId: Mapped[int] = mapped_column(
-        INTEGER(11), comment="references Tomogram table"
-    )
-    filePath: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="location on disk for the tomogram file"
-    )
-    processingType: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="nature of the processed tomogram"
-    )
-
-    Tomogram_: Mapped["Tomogram"] = relationship(
-        "Tomogram", back_populates="ProcessedTomogram"
     )
 
 
@@ -4450,39 +4255,35 @@ class Project(Base):
     acronym: Mapped[Optional[str]] = mapped_column(String(100))
     owner: Mapped[Optional[str]] = mapped_column(String(50))
 
-    BLSample_: Mapped[List["BLSample"]] = relationship(
+    BLSample: Mapped[List["BLSample"]] = relationship(
         "BLSample", secondary="Project_has_BLSample", back_populates="Project"
     )
-    Person_: Mapped[List["Person"]] = relationship(
+    Person: Mapped[List["Person"]] = relationship(
         "Person", secondary="Project_has_Person", back_populates="Project"
     )
-    Person1: Mapped["Person"] = relationship("Person", back_populates="Project_")
+    Person: Mapped["Person"] = relationship("Person", back_populates="Project")
     Protein: Mapped[List["Protein"]] = relationship(
-        "Protein", secondary="Project_has_Protein", back_populates="Project_"
+        "Protein", secondary="Project_has_Protein", back_populates="Project"
     )
     BLSession: Mapped[List["BLSession"]] = relationship(
-        "BLSession", secondary="Project_has_Session", back_populates="Project_"
+        "BLSession", secondary="Project_has_Session", back_populates="Project"
     )
     Shipping: Mapped[List["Shipping"]] = relationship(
-        "Shipping", secondary="Project_has_Shipping", back_populates="Project_"
+        "Shipping", secondary="Project_has_Shipping", back_populates="Project"
     )
     XFEFluorescenceSpectrum: Mapped[List["XFEFluorescenceSpectrum"]] = relationship(
         "XFEFluorescenceSpectrum",
         secondary="Project_has_XFEFSpectrum",
-        back_populates="Project_",
+        back_populates="Project",
     )
     Project_has_User: Mapped[List["ProjectHasUser"]] = relationship(
-        "ProjectHasUser", back_populates="Project_"
+        "ProjectHasUser", back_populates="Project"
     )
     DataCollectionGroup: Mapped[List["DataCollectionGroup"]] = relationship(
-        "DataCollectionGroup",
-        secondary="Project_has_DCGroup",
-        back_populates="Project_",
+        "DataCollectionGroup", secondary="Project_has_DCGroup", back_populates="Project"
     )
     EnergyScan: Mapped[List["EnergyScan"]] = relationship(
-        "EnergyScan",
-        secondary="Project_has_EnergyScan",
-        back_populates="Project_",
+        "EnergyScan", secondary="Project_has_EnergyScan", back_populates="Project"
     )
 
 
@@ -4498,10 +4299,7 @@ class Proposal(Base):
         ),
         Index("Proposal_FKIndex1", "personId"),
         Index(
-            "Proposal_FKIndexCodeNumber",
-            "proposalCode",
-            "proposalNumber",
-            unique=True,
+            "Proposal_FKIndexCodeNumber", "proposalCode", "proposalNumber", unique=True
         ),
     )
 
@@ -4521,46 +4319,46 @@ class Proposal(Base):
         Enum("Open", "Closed", "Cancelled"), server_default=text("'Open'")
     )
 
-    Person_: Mapped["Person"] = relationship("Person", back_populates="Proposal")
+    Person: Mapped["Person"] = relationship("Person", back_populates="Proposal")
     BLSampleGroup: Mapped[List["BLSampleGroup"]] = relationship(
-        "BLSampleGroup", back_populates="Proposal_"
+        "BLSampleGroup", back_populates="Proposal"
     )
     BLSession: Mapped[List["BLSession"]] = relationship(
-        "BLSession", back_populates="Proposal_"
+        "BLSession", back_populates="Proposal"
     )
     Component: Mapped[List["Component"]] = relationship(
-        "Component", back_populates="Proposal_"
+        "Component", back_populates="Proposal"
     )
     ContainerRegistry_has_Proposal: Mapped[List["ContainerRegistryHasProposal"]] = (
-        relationship("ContainerRegistryHasProposal", back_populates="Proposal_")
+        relationship("ContainerRegistryHasProposal", back_populates="Proposal")
     )
     DiffractionPlan: Mapped[List["DiffractionPlan"]] = relationship(
-        "DiffractionPlan", back_populates="Proposal_"
+        "DiffractionPlan", back_populates="Proposal"
     )
     LabContact: Mapped[List["LabContact"]] = relationship(
-        "LabContact", back_populates="Proposal_"
+        "LabContact", back_populates="Proposal"
     )
     ProposalHasPerson: Mapped[List["ProposalHasPerson"]] = relationship(
-        "ProposalHasPerson", back_populates="Proposal_"
+        "ProposalHasPerson", back_populates="Proposal"
     )
     Protein: Mapped[List["Protein"]] = relationship(
-        "Protein", back_populates="Proposal_"
+        "Protein", back_populates="Proposal"
     )
     SW_onceToken: Mapped[List["SWOnceToken"]] = relationship(
-        "SWOnceToken", back_populates="Proposal_"
+        "SWOnceToken", back_populates="Proposal"
     )
-    Screen: Mapped[List["Screen"]] = relationship("Screen", back_populates="Proposal_")
+    Screen: Mapped[List["Screen"]] = relationship("Screen", back_populates="Proposal")
     DewarRegistry: Mapped[List["DewarRegistry"]] = relationship(
-        "DewarRegistry", back_populates="Proposal_"
+        "DewarRegistry", back_populates="Proposal"
     )
     Shipping: Mapped[List["Shipping"]] = relationship(
-        "Shipping", back_populates="Proposal_"
+        "Shipping", back_populates="Proposal"
     )
     CourierTermsAccepted: Mapped[List["CourierTermsAccepted"]] = relationship(
-        "CourierTermsAccepted", back_populates="Proposal_"
+        "CourierTermsAccepted", back_populates="Proposal"
     )
     DewarRegistry_has_Proposal: Mapped[List["DewarRegistryHasProposal"]] = relationship(
-        "DewarRegistryHasProposal", back_populates="Proposal_"
+        "DewarRegistryHasProposal", back_populates="Proposal"
     )
 
 
@@ -4615,13 +4413,13 @@ class SubstructureDetermination(Base):
         DateTime, comment="Creation or last update date/time"
     )
 
-    PhasingAnalysis_: Mapped["PhasingAnalysis"] = relationship(
+    PhasingAnalysis: Mapped["PhasingAnalysis"] = relationship(
         "PhasingAnalysis", back_populates="SubstructureDetermination"
     )
-    PhasingProgramRun_: Mapped["PhasingProgramRun"] = relationship(
+    PhasingProgramRun: Mapped["PhasingProgramRun"] = relationship(
         "PhasingProgramRun", back_populates="SubstructureDetermination"
     )
-    SpaceGroup_: Mapped["SpaceGroup"] = relationship(
+    SpaceGroup: Mapped["SpaceGroup"] = relationship(
         "SpaceGroup", back_populates="SubstructureDetermination"
     )
 
@@ -4698,12 +4496,12 @@ class BLSampleGroup(Base):
         INTEGER(10), comment="Sample group owner"
     )
 
-    Person_: Mapped["Person"] = relationship("Person", back_populates="BLSampleGroup")
-    Proposal_: Mapped["Proposal"] = relationship(
+    Person: Mapped["Person"] = relationship("Person", back_populates="BLSampleGroup")
+    Proposal: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="BLSampleGroup"
     )
     BLSampleGroup_has_BLSample: Mapped[List["BLSampleGroupHasBLSample"]] = relationship(
-        "BLSampleGroupHasBLSample", back_populates="BLSampleGroup_"
+        "BLSampleGroupHasBLSample", back_populates="BLSampleGroup"
     )
 
 
@@ -4776,49 +4574,49 @@ class BLSession(Base):
         comment="ERA in user admin system",
     )
 
-    Project_: Mapped[List["Project"]] = relationship(
+    Project: Mapped[List["Project"]] = relationship(
         "Project", secondary="Project_has_Session", back_populates="BLSession"
     )
-    BeamCalendar_: Mapped["BeamCalendar"] = relationship(
+    BeamCalendar: Mapped["BeamCalendar"] = relationship(
         "BeamCalendar", back_populates="BLSession"
     )
-    BeamLineSetup_: Mapped["BeamLineSetup"] = relationship(
+    BeamLineSetup: Mapped["BeamLineSetup"] = relationship(
         "BeamLineSetup", back_populates="BLSession"
     )
-    Proposal_: Mapped["Proposal"] = relationship("Proposal", back_populates="BLSession")
+    Proposal: Mapped["Proposal"] = relationship("Proposal", back_populates="BLSession")
     Shipping: Mapped[List["Shipping"]] = relationship(
-        "Shipping", secondary="ShippingHasSession", back_populates="BLSession_"
+        "Shipping", secondary="ShippingHasSession", back_populates="BLSession"
     )
     BF_fault: Mapped[List["BFFault"]] = relationship(
-        "BFFault", back_populates="BLSession_"
+        "BFFault", back_populates="BLSession"
     )
     BLSession_has_SCPosition: Mapped[List["BLSessionHasSCPosition"]] = relationship(
-        "BLSessionHasSCPosition", back_populates="BLSession_"
+        "BLSessionHasSCPosition", back_populates="BLSession"
     )
     BeamlineAction: Mapped[List["BeamlineAction"]] = relationship(
-        "BeamlineAction", back_populates="BLSession_"
+        "BeamlineAction", back_populates="BLSession"
     )
     DataCollectionGroup: Mapped[List["DataCollectionGroup"]] = relationship(
-        "DataCollectionGroup", back_populates="BLSession_"
+        "DataCollectionGroup", back_populates="BLSession"
     )
     EnergyScan: Mapped[List["EnergyScan"]] = relationship(
-        "EnergyScan", back_populates="BLSession_"
+        "EnergyScan", back_populates="BLSession"
     )
     RobotAction: Mapped[List["RobotAction"]] = relationship(
-        "RobotAction", back_populates="BLSession_"
+        "RobotAction", back_populates="BLSession"
     )
     SessionType: Mapped[List["SessionType"]] = relationship(
-        "SessionType", back_populates="BLSession_"
+        "SessionType", back_populates="BLSession"
     )
     Session_has_Person: Mapped[List["SessionHasPerson"]] = relationship(
-        "SessionHasPerson", back_populates="BLSession_"
+        "SessionHasPerson", back_populates="BLSession"
     )
     XFEFluorescenceSpectrum: Mapped[List["XFEFluorescenceSpectrum"]] = relationship(
-        "XFEFluorescenceSpectrum", back_populates="BLSession_"
+        "XFEFluorescenceSpectrum", back_populates="BLSession"
     )
-    Dewar: Mapped[List["Dewar"]] = relationship("Dewar", back_populates="BLSession_")
+    Dewar: Mapped[List["Dewar"]] = relationship("Dewar", back_populates="BLSession")
     Container: Mapped[List["Container"]] = relationship(
-        "Container", back_populates="BLSession_"
+        "Container", back_populates="BLSession"
     )
 
 
@@ -4851,16 +4649,16 @@ class Component(Base):
     proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     composition: Mapped[Optional[str]] = mapped_column(String(255))
 
-    ComponentType_: Mapped["ComponentType"] = relationship(
+    ComponentType: Mapped["ComponentType"] = relationship(
         "ComponentType", back_populates="Component"
     )
-    Proposal_: Mapped["Proposal"] = relationship("Proposal", back_populates="Component")
-    Event: Mapped[List["Event"]] = relationship("Event", back_populates="Component_")
+    Proposal: Mapped["Proposal"] = relationship("Proposal", back_populates="Component")
+    Event: Mapped[List["Event"]] = relationship("Event", back_populates="Component")
     SampleComposition: Mapped[List["SampleComposition"]] = relationship(
-        "SampleComposition", back_populates="Component_"
+        "SampleComposition", back_populates="Component"
     )
     CrystalComposition: Mapped[List["CrystalComposition"]] = relationship(
-        "CrystalComposition", back_populates="Component_"
+        "CrystalComposition", back_populates="Component"
     )
 
 
@@ -4884,12 +4682,7 @@ class ContainerRegistryHasProposal(Base):
         ),
         Index("ContainerRegistry_has_Proposal_ibfk2", "proposalId"),
         Index("ContainerRegistry_has_Proposal_ibfk3", "personId"),
-        Index(
-            "containerRegistryId",
-            "containerRegistryId",
-            "proposalId",
-            unique=True,
-        ),
+        Index("containerRegistryId", "containerRegistryId", "proposalId", unique=True),
     )
 
     containerRegistryHasProposalId: Mapped[int] = mapped_column(
@@ -4904,13 +4697,13 @@ class ContainerRegistryHasProposal(Base):
         DateTime, server_default=text("current_timestamp()")
     )
 
-    ContainerRegistry_: Mapped["ContainerRegistry"] = relationship(
+    ContainerRegistry: Mapped["ContainerRegistry"] = relationship(
         "ContainerRegistry", back_populates="ContainerRegistry_has_Proposal"
     )
-    Person_: Mapped["Person"] = relationship(
+    Person: Mapped["Person"] = relationship(
         "Person", back_populates="ContainerRegistry_has_Proposal"
     )
-    Proposal_: Mapped["Proposal"] = relationship(
+    Proposal: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="ContainerRegistry_has_Proposal"
     )
 
@@ -5023,12 +4816,10 @@ class DiffractionPlan(Base):
     kappaStrategyOption: Mapped[Optional[str]] = mapped_column(String(45))
     numberOfPositions: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     minDimAccrossSpindleAxis: Mapped[Optional[decimal.Decimal]] = mapped_column(
-        Double(asdecimal=True),
-        comment="minimum dimension accross the spindle axis",
+        Double(asdecimal=True), comment="minimum dimension accross the spindle axis"
     )
     maxDimAccrossSpindleAxis: Mapped[Optional[decimal.Decimal]] = mapped_column(
-        Double(asdecimal=True),
-        comment="maximum dimension accross the spindle axis",
+        Double(asdecimal=True), comment="maximum dimension accross the spindle axis"
     )
     radiationSensitivityBeta: Mapped[Optional[decimal.Decimal]] = mapped_column(
         Double(asdecimal=True)
@@ -5106,44 +4897,44 @@ class DiffractionPlan(Base):
         comment="JSON serialised scan parameters, useful for parameters without designated columns",
     )
 
-    BLSample_: Mapped[List["BLSample"]] = relationship(
+    BLSample: Mapped[List["BLSample"]] = relationship(
         "BLSample", back_populates="DiffractionPlan"
     )
-    BLSubSample_: Mapped[List["BLSubSample"]] = relationship(
+    BLSubSample: Mapped[List["BLSubSample"]] = relationship(
         "BLSubSample", back_populates="DiffractionPlan"
     )
-    DataCollection_: Mapped[List["DataCollection"]] = relationship(
+    DataCollection: Mapped[List["DataCollection"]] = relationship(
         "DataCollection", back_populates="DiffractionPlan"
     )
-    Detector_: Mapped["Detector"] = relationship(
+    Detector: Mapped["Detector"] = relationship(
         "Detector", back_populates="DiffractionPlan"
     )
-    ExperimentType_: Mapped["ExperimentType"] = relationship(
+    ExperimentType: Mapped["ExperimentType"] = relationship(
         "ExperimentType", back_populates="DiffractionPlan"
     )
-    Proposal_: Mapped["Proposal"] = relationship(
+    Proposal: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="DiffractionPlan"
     )
-    PurificationColumn_: Mapped["PurificationColumn"] = relationship(
+    PurificationColumn: Mapped["PurificationColumn"] = relationship(
         "PurificationColumn", back_populates="DiffractionPlan"
     )
     BLSample_has_DataCollectionPlan: Mapped[List["BLSampleHasDataCollectionPlan"]] = (
-        relationship("BLSampleHasDataCollectionPlan", back_populates="DiffractionPlan_")
+        relationship("BLSampleHasDataCollectionPlan", back_populates="DiffractionPlan")
     )
     Crystal: Mapped[List["Crystal"]] = relationship(
-        "Crystal", back_populates="DiffractionPlan_"
+        "Crystal", back_populates="DiffractionPlan"
     )
     DataCollectionPlan_has_Detector: Mapped[List["DataCollectionPlanHasDetector"]] = (
-        relationship("DataCollectionPlanHasDetector", back_populates="DiffractionPlan_")
+        relationship("DataCollectionPlanHasDetector", back_populates="DiffractionPlan")
     )
     ExperimentKindDetails: Mapped[List["ExperimentKindDetails"]] = relationship(
-        "ExperimentKindDetails", back_populates="DiffractionPlan_"
+        "ExperimentKindDetails", back_populates="DiffractionPlan"
     )
     ScanParametersModel: Mapped[List["ScanParametersModel"]] = relationship(
-        "ScanParametersModel", back_populates="DiffractionPlan_"
+        "ScanParametersModel", back_populates="DiffractionPlan"
     )
     ContainerQueueSample: Mapped[List["ContainerQueueSample"]] = relationship(
-        "ContainerQueueSample", back_populates="DiffractionPlan_"
+        "ContainerQueueSample", back_populates="DiffractionPlan"
     )
 
 
@@ -5188,25 +4979,23 @@ class LabContact(Base):
     courierAccount: Mapped[Optional[str]] = mapped_column(String(45))
     billingReference: Mapped[Optional[str]] = mapped_column(String(45))
 
-    Person_: Mapped["Person"] = relationship("Person", back_populates="LabContact")
-    Proposal_: Mapped["Proposal"] = relationship(
-        "Proposal", back_populates="LabContact"
-    )
+    Person: Mapped["Person"] = relationship("Person", back_populates="LabContact")
+    Proposal: Mapped["Proposal"] = relationship("Proposal", back_populates="LabContact")
     DewarRegistry: Mapped[List["DewarRegistry"]] = relationship(
-        "DewarRegistry", back_populates="LabContact_"
+        "DewarRegistry", back_populates="LabContact"
     )
     Shipping: Mapped[List["Shipping"]] = relationship(
         "Shipping",
         foreign_keys="[Shipping.returnLabContactId]",
-        back_populates="LabContact_",
+        back_populates="LabContact",
     )
-    Shipping_: Mapped[List["Shipping"]] = relationship(
+    Shipping: Mapped[List["Shipping"]] = relationship(
         "Shipping",
         foreign_keys="[Shipping.sendingLabContactId]",
-        back_populates="LabContact1",
+        back_populates="LabContact",
     )
     DewarRegistry_has_Proposal: Mapped[List["DewarRegistryHasProposal"]] = relationship(
-        "DewarRegistryHasProposal", back_populates="LabContact_"
+        "DewarRegistryHasProposal", back_populates="LabContact"
     )
 
 
@@ -5263,7 +5052,7 @@ class MXMRRunBlob(Base):
         comment="Type of electron density map corresponding to this blob",
     )
 
-    MXMRRun_: Mapped["MXMRRun"] = relationship("MXMRRun", back_populates="MXMRRunBlob")
+    MXMRRun: Mapped["MXMRRun"] = relationship("MXMRRun", back_populates="MXMRRunBlob")
 
 
 class PhasingStatistics(Base):
@@ -5314,8 +5103,7 @@ class PhasingStatistics(Base):
         Double(asdecimal=True), comment="low resolution cutoff of this binfloat"
     )
     highRes: Mapped[Optional[decimal.Decimal]] = mapped_column(
-        Double(asdecimal=True),
-        comment="high resolution cutoff of this binfloat",
+        Double(asdecimal=True), comment="high resolution cutoff of this binfloat"
     )
     metric: Mapped[Optional[str]] = mapped_column(
         Enum(
@@ -5349,12 +5137,12 @@ class PhasingStatistics(Base):
         foreign_keys=[phasingHasScalingId1],
         back_populates="PhasingStatistics",
     )
-    Phasing_has_Scaling_: Mapped["PhasingHasScaling"] = relationship(
+    Phasing_has_Scaling: Mapped["PhasingHasScaling"] = relationship(
         "PhasingHasScaling",
         foreign_keys=[phasingHasScalingId2],
-        back_populates="PhasingStatistics_",
+        back_populates="PhasingStatistics",
     )
-    PhasingStep_: Mapped["PhasingStep"] = relationship(
+    PhasingStep: Mapped["PhasingStep"] = relationship(
         "PhasingStep", back_populates="PhasingStatistics"
     )
 
@@ -5416,7 +5204,7 @@ class ProjectHasUser(Base):
     projectid: Mapped[int] = mapped_column(INTEGER(11))
     username: Mapped[Optional[str]] = mapped_column(String(15))
 
-    Project_: Mapped["Project"] = relationship(
+    Project: Mapped["Project"] = relationship(
         "Project", back_populates="Project_has_User"
     )
 
@@ -5425,9 +5213,7 @@ class ProposalHasPerson(Base):
     __tablename__ = "ProposalHasPerson"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["personId"],
-            ["Person.personId"],
-            name="fk_ProposalHasPerson_Personal",
+            ["personId"], ["Person.personId"], name="fk_ProposalHasPerson_Personal"
         ),
         ForeignKeyConstraint(
             ["proposalId"],
@@ -5451,10 +5237,10 @@ class ProposalHasPerson(Base):
         )
     )
 
-    Person_: Mapped["Person"] = relationship(
+    Person: Mapped["Person"] = relationship(
         "Person", back_populates="ProposalHasPerson"
     )
-    Proposal_: Mapped["Proposal"] = relationship(
+    Proposal: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="ProposalHasPerson"
     )
 
@@ -5529,35 +5315,31 @@ class Protein(Base):
     abundance: Mapped[Optional[float]] = mapped_column(Float, comment="Deprecated")
     isotropy: Mapped[Optional[str]] = mapped_column(Enum("isotropic", "anisotropic"))
 
-    Project_: Mapped[List["Project"]] = relationship(
+    Project: Mapped[List["Project"]] = relationship(
         "Project", secondary="Project_has_Protein", back_populates="Protein"
     )
-    ComponentType_: Mapped["ComponentType"] = relationship(
+    ComponentType: Mapped["ComponentType"] = relationship(
         "ComponentType", back_populates="Protein"
     )
-    ConcentrationType_: Mapped["ConcentrationType"] = relationship(
+    ConcentrationType: Mapped["ConcentrationType"] = relationship(
         "ConcentrationType", back_populates="Protein"
     )
-    Proposal_: Mapped["Proposal"] = relationship("Proposal", back_populates="Protein")
-    ComponentSubType_: Mapped[List["ComponentSubType"]] = relationship(
-        "ComponentSubType",
-        secondary="Component_has_SubType",
-        back_populates="Protein",
+    Proposal: Mapped["Proposal"] = relationship("Proposal", back_populates="Protein")
+    ComponentSubType: Mapped[List["ComponentSubType"]] = relationship(
+        "ComponentSubType", secondary="Component_has_SubType", back_populates="Protein"
     )
     ComponentLattice: Mapped[List["ComponentLattice"]] = relationship(
-        "ComponentLattice", back_populates="Protein_"
+        "ComponentLattice", back_populates="Protein"
     )
-    Crystal: Mapped[List["Crystal"]] = relationship(
-        "Crystal", back_populates="Protein_"
-    )
+    Crystal: Mapped[List["Crystal"]] = relationship("Crystal", back_populates="Protein")
     Protein_has_PDB: Mapped[List["ProteinHasPDB"]] = relationship(
-        "ProteinHasPDB", back_populates="Protein_"
+        "ProteinHasPDB", back_populates="Protein"
     )
     BLSampleType_has_Component: Mapped[List["BLSampleTypeHasComponent"]] = relationship(
-        "BLSampleTypeHasComponent", back_populates="Protein_"
+        "BLSampleTypeHasComponent", back_populates="Protein"
     )
     ScreenComponent: Mapped[List["ScreenComponent"]] = relationship(
-        "ScreenComponent", back_populates="Protein_"
+        "ScreenComponent", back_populates="Protein"
     )
 
 
@@ -5588,8 +5370,8 @@ class SWOnceToken(Base):
     proposalId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     validity: Mapped[Optional[str]] = mapped_column(String(200))
 
-    Person_: Mapped["Person"] = relationship("Person", back_populates="SW_onceToken")
-    Proposal_: Mapped["Proposal"] = relationship(
+    Person: Mapped["Person"] = relationship("Person", back_populates="SW_onceToken")
+    Proposal: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="SW_onceToken"
     )
 
@@ -5616,15 +5398,15 @@ class Screen(Base):
     global_: Mapped[Optional[int]] = mapped_column("global", TINYINT(1))
     containerTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    ContainerType_: Mapped["ContainerType"] = relationship(
+    ContainerType: Mapped["ContainerType"] = relationship(
         "ContainerType", back_populates="Screen"
     )
-    Proposal_: Mapped["Proposal"] = relationship("Proposal", back_populates="Screen")
+    Proposal: Mapped["Proposal"] = relationship("Proposal", back_populates="Screen")
     ScreenComponentGroup: Mapped[List["ScreenComponentGroup"]] = relationship(
-        "ScreenComponentGroup", back_populates="Screen_"
+        "ScreenComponentGroup", back_populates="Screen"
     )
     Container: Mapped[List["Container"]] = relationship(
-        "Container", back_populates="Screen_"
+        "Container", back_populates="Screen"
     )
 
 
@@ -5637,9 +5419,7 @@ class BFFault(Base):
             ["sessionId"], ["BLSession.sessionId"], name="bf_fault_FK1"
         ),
         ForeignKeyConstraint(
-            ["subcomponentId"],
-            ["BF_subcomponent.subcomponentId"],
-            name="bf_fault_FK2",
+            ["subcomponentId"], ["BF_subcomponent.subcomponentId"], name="bf_fault_FK2"
         ),
         Index("bf_fault_FK1", "sessionId"),
         Index("bf_fault_FK2", "subcomponentId"),
@@ -5668,13 +5448,13 @@ class BFFault(Base):
     personId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     assigneeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    Person_: Mapped["Person"] = relationship(
+    Person: Mapped["Person"] = relationship(
         "Person", foreign_keys=[assigneeId], back_populates="BF_fault"
     )
-    Person1: Mapped["Person"] = relationship(
-        "Person", foreign_keys=[personId], back_populates="BF_fault_"
+    Person: Mapped["Person"] = relationship(
+        "Person", foreign_keys=[personId], back_populates="BF_fault"
     )
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="BF_fault"
     )
     BF_subcomponent: Mapped["BFSubcomponent"] = relationship(
@@ -5712,13 +5492,13 @@ class BLSampleGroupHasBLSample(Base):
     )
     blSampleTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    BLSampleGroup_: Mapped["BLSampleGroup"] = relationship(
+    BLSampleGroup: Mapped["BLSampleGroup"] = relationship(
         "BLSampleGroup", back_populates="BLSampleGroup_has_BLSample"
     )
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="BLSampleGroup_has_BLSample"
     )
-    BLSampleType_: Mapped["BLSampleType"] = relationship(
+    BLSampleType: Mapped["BLSampleType"] = relationship(
         "BLSampleType", back_populates="BLSampleGroup_has_BLSample"
     )
 
@@ -5743,10 +5523,10 @@ class BLSampleHasDataCollectionPlan(Base):
     dataCollectionPlanId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     planOrder: Mapped[Optional[int]] = mapped_column(SMALLINT(5))
 
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="BLSample_has_DataCollectionPlan"
     )
-    DiffractionPlan_: Mapped["DiffractionPlan"] = relationship(
+    DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
         "DiffractionPlan", back_populates="BLSample_has_DataCollectionPlan"
     )
 
@@ -5773,7 +5553,7 @@ class BLSessionHasSCPosition(Base):
         SMALLINT(5), comment="Position of sample within container"
     )
 
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="BLSession_has_SCPosition"
     )
 
@@ -5804,7 +5584,7 @@ class BeamlineAction(Base):
         Enum("PAUSED", "RUNNING", "TERMINATED", "COMPLETE", "ERROR", "EPICSFAIL")
     )
 
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="BeamlineAction"
     )
 
@@ -5813,9 +5593,7 @@ class ComponentLattice(Base):
     __tablename__ = "ComponentLattice"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["componentId"],
-            ["Protein.proteinId"],
-            name="ComponentLattice_ibfk1",
+            ["componentId"], ["Protein.proteinId"], name="ComponentLattice_ibfk1"
         ),
         Index("ComponentLattice_ibfk1", "componentId"),
     )
@@ -5834,7 +5612,7 @@ class ComponentLattice(Base):
         Double(asdecimal=True)
     )
 
-    Protein_: Mapped["Protein"] = relationship(
+    Protein: Mapped["Protein"] = relationship(
         "Protein", back_populates="ComponentLattice"
     )
 
@@ -5918,21 +5696,21 @@ class Crystal(Base):
     abundance: Mapped[Optional[float]] = mapped_column(Float)
     theoreticalDensity: Mapped[Optional[float]] = mapped_column(Float)
 
-    BLSample_: Mapped[List["BLSample"]] = relationship(
+    BLSample: Mapped[List["BLSample"]] = relationship(
         "BLSample", back_populates="Crystal"
     )
-    DiffractionPlan_: Mapped["DiffractionPlan"] = relationship(
+    DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
         "DiffractionPlan", back_populates="Crystal"
     )
-    Protein_: Mapped["Protein"] = relationship("Protein", back_populates="Crystal")
+    Protein: Mapped["Protein"] = relationship("Protein", back_populates="Crystal")
     BLSampleType_has_Component: Mapped[List["BLSampleTypeHasComponent"]] = relationship(
-        "BLSampleTypeHasComponent", back_populates="Crystal_"
+        "BLSampleTypeHasComponent", back_populates="Crystal"
     )
     CrystalComposition: Mapped[List["CrystalComposition"]] = relationship(
-        "CrystalComposition", back_populates="Crystal_"
+        "CrystalComposition", back_populates="Crystal"
     )
     Crystal_has_UUID: Mapped[List["CrystalHasUUID"]] = relationship(
-        "CrystalHasUUID", back_populates="Crystal_"
+        "CrystalHasUUID", back_populates="Crystal"
     )
 
 
@@ -6042,34 +5820,32 @@ class DataCollectionGroup(Base):
     scanParameters: Mapped[Optional[str]] = mapped_column(LONGTEXT)
     experimentTypeId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    DataCollection_: Mapped[List["DataCollection"]] = relationship(
+    DataCollection: Mapped[List["DataCollection"]] = relationship(
         "DataCollection", back_populates="DataCollectionGroup"
     )
-    Screening_: Mapped[List["Screening"]] = relationship(
+    Screening: Mapped[List["Screening"]] = relationship(
         "Screening", back_populates="DataCollectionGroup"
     )
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="DataCollectionGroup"
     )
-    ExperimentType_: Mapped["ExperimentType"] = relationship(
+    ExperimentType: Mapped["ExperimentType"] = relationship(
         "ExperimentType", back_populates="DataCollectionGroup"
     )
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="DataCollectionGroup"
     )
-    Project_: Mapped[List["Project"]] = relationship(
-        "Project",
-        secondary="Project_has_DCGroup",
-        back_populates="DataCollectionGroup",
+    Project: Mapped[List["Project"]] = relationship(
+        "Project", secondary="Project_has_DCGroup", back_populates="DataCollectionGroup"
     )
     Atlas: Mapped[List["Atlas"]] = relationship(
-        "Atlas", back_populates="DataCollectionGroup_"
+        "Atlas", back_populates="DataCollectionGroup"
     )
     GridInfo: Mapped[List["GridInfo"]] = relationship(
-        "GridInfo", back_populates="DataCollectionGroup_"
+        "GridInfo", back_populates="DataCollectionGroup"
     )
     XrayCentring: Mapped[List["XrayCentring"]] = relationship(
-        "XrayCentring", back_populates="DataCollectionGroup_"
+        "XrayCentring", back_populates="DataCollectionGroup"
     )
 
 
@@ -6088,10 +5864,7 @@ class DataCollectionPlanHasDetector(Base):
         ),
         Index("DataCollectionPlan_has_Detector_ibfk2", "detectorId"),
         Index(
-            "dataCollectionPlanId",
-            "dataCollectionPlanId",
-            "detectorId",
-            unique=True,
+            "dataCollectionPlanId", "dataCollectionPlanId", "detectorId", unique=True
         ),
     )
 
@@ -6106,10 +5879,10 @@ class DataCollectionPlanHasDetector(Base):
     distance: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
     roll: Mapped[Optional[decimal.Decimal]] = mapped_column(Double(asdecimal=True))
 
-    DiffractionPlan_: Mapped["DiffractionPlan"] = relationship(
+    DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
         "DiffractionPlan", back_populates="DataCollectionPlan_has_Detector"
     )
-    Detector_: Mapped["Detector"] = relationship(
+    Detector: Mapped["Detector"] = relationship(
         "Detector", back_populates="DataCollectionPlan_has_Detector"
     )
 
@@ -6148,17 +5921,17 @@ class DewarRegistry(Base):
         comment="Dewar serial number as given by manufacturer. Used to be typically 5 or 6 digits, more likely to be 11 alphanumeric chars in future",
     )
 
-    LabContact_: Mapped["LabContact"] = relationship(
+    LabContact: Mapped["LabContact"] = relationship(
         "LabContact", back_populates="DewarRegistry"
     )
-    Proposal_: Mapped["Proposal"] = relationship(
+    Proposal: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="DewarRegistry"
     )
     DewarRegistry_has_Proposal: Mapped[List["DewarRegistryHasProposal"]] = relationship(
-        "DewarRegistryHasProposal", back_populates="DewarRegistry_"
+        "DewarRegistryHasProposal", back_populates="DewarRegistry"
     )
     DewarReport: Mapped[List["DewarReport"]] = relationship(
-        "DewarReport", back_populates="DewarRegistry_"
+        "DewarReport", back_populates="DewarRegistry"
     )
 
 
@@ -6220,22 +5993,18 @@ class EnergyScan(Base):
     workingDirectory: Mapped[Optional[str]] = mapped_column(String(45))
     blSubSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
-    BLSample_: Mapped["BLSample"] = relationship(
-        "BLSample", back_populates="EnergyScan"
-    )
-    BLSubSample_: Mapped["BLSubSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship("BLSample", back_populates="EnergyScan")
+    BLSubSample: Mapped["BLSubSample"] = relationship(
         "BLSubSample", back_populates="EnergyScan"
     )
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="EnergyScan"
     )
-    Project_: Mapped[List["Project"]] = relationship(
-        "Project",
-        secondary="Project_has_EnergyScan",
-        back_populates="EnergyScan",
+    Project: Mapped[List["Project"]] = relationship(
+        "Project", secondary="Project_has_EnergyScan", back_populates="EnergyScan"
     )
     BLSample_has_EnergyScan: Mapped[List["BLSampleHasEnergyScan"]] = relationship(
-        "BLSampleHasEnergyScan", back_populates="EnergyScan_"
+        "BLSampleHasEnergyScan", back_populates="EnergyScan"
     )
 
 
@@ -6284,11 +6053,11 @@ class Event(Base):
         Float, comment="Number of repetitions if applicable."
     )
 
-    Component_: Mapped["Component"] = relationship("Component", back_populates="Event")
-    EventChain_: Mapped["EventChain"] = relationship(
+    Component: Mapped["Component"] = relationship("Component", back_populates="Event")
+    EventChain: Mapped["EventChain"] = relationship(
         "EventChain", back_populates="Event"
     )
-    EventType_: Mapped["EventType"] = relationship("EventType", back_populates="Event")
+    EventType: Mapped["EventType"] = relationship("EventType", back_populates="Event")
 
 
 class ExperimentKindDetails(Base):
@@ -6311,7 +6080,7 @@ class ExperimentKindDetails(Base):
     dataCollectionKind: Mapped[Optional[str]] = mapped_column(String(45))
     wedgeValue: Mapped[Optional[float]] = mapped_column(Float)
 
-    DiffractionPlan_: Mapped["DiffractionPlan"] = relationship(
+    DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
         "DiffractionPlan", back_populates="ExperimentKindDetails"
     )
 
@@ -6375,8 +6144,8 @@ class ProteinHasPDB(Base):
     proteinid: Mapped[int] = mapped_column(INTEGER(11))
     pdbid: Mapped[int] = mapped_column(INTEGER(11))
 
-    PDB_: Mapped["PDB"] = relationship("PDB", back_populates="Protein_has_PDB")
-    Protein_: Mapped["Protein"] = relationship(
+    PDB: Mapped["PDB"] = relationship("PDB", back_populates="Protein_has_PDB")
+    Protein: Mapped["Protein"] = relationship(
         "Protein", back_populates="Protein_has_PDB"
     )
 
@@ -6409,14 +6178,7 @@ class RobotAction(Base):
         Enum("LOAD", "UNLOAD", "DISPOSE", "STORE", "WASH", "ANNEAL", "MOSAIC")
     )
     status: Mapped[Optional[str]] = mapped_column(
-        Enum(
-            "SUCCESS",
-            "ERROR",
-            "CRITICAL",
-            "WARNING",
-            "EPICSFAIL",
-            "COMMANDNOTSENT",
-        )
+        Enum("SUCCESS", "ERROR", "CRITICAL", "WARNING", "EPICSFAIL", "COMMANDNOTSENT")
     )
     message: Mapped[Optional[str]] = mapped_column(String(255))
     containerLocation: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
@@ -6425,10 +6187,10 @@ class RobotAction(Base):
     xtalSnapshotBefore: Mapped[Optional[str]] = mapped_column(String(255))
     xtalSnapshotAfter: Mapped[Optional[str]] = mapped_column(String(255))
 
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="RobotAction"
     )
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="RobotAction"
     )
 
@@ -6437,14 +6199,10 @@ class SampleComposition(Base):
     __tablename__ = "SampleComposition"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["blSampleId"],
-            ["BLSample.blSampleId"],
-            name="SampleComposition_ibfk_2",
+            ["blSampleId"], ["BLSample.blSampleId"], name="SampleComposition_ibfk_2"
         ),
         ForeignKeyConstraint(
-            ["componentId"],
-            ["Component.componentId"],
-            name="SampleComposition_ibfk_1",
+            ["componentId"], ["Component.componentId"], name="SampleComposition_ibfk_1"
         ),
         ForeignKeyConstraint(
             ["concentrationTypeId"],
@@ -6471,13 +6229,13 @@ class SampleComposition(Base):
     ratio: Mapped[Optional[float]] = mapped_column(Float)
     pH: Mapped[Optional[float]] = mapped_column(Float)
 
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="SampleComposition"
     )
-    Component_: Mapped["Component"] = relationship(
+    Component: Mapped["Component"] = relationship(
         "Component", back_populates="SampleComposition"
     )
-    ConcentrationType_: Mapped["ConcentrationType"] = relationship(
+    ConcentrationType: Mapped["ConcentrationType"] = relationship(
         "ConcentrationType", back_populates="SampleComposition"
     )
 
@@ -6513,10 +6271,10 @@ class ScanParametersModel(Base):
         MEDIUMINT(8), comment="Duration for parameter change in seconds"
     )
 
-    DiffractionPlan_: Mapped["DiffractionPlan"] = relationship(
+    DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
         "DiffractionPlan", back_populates="ScanParametersModel"
     )
-    ScanParametersService_: Mapped["ScanParametersService"] = relationship(
+    ScanParametersService: Mapped["ScanParametersService"] = relationship(
         "ScanParametersService", back_populates="ScanParametersModel"
     )
 
@@ -6534,14 +6292,14 @@ class ScreenComponentGroup(Base):
     screenId: Mapped[int] = mapped_column(INTEGER(11))
     position: Mapped[Optional[int]] = mapped_column(SMALLINT(6))
 
-    BLSample_: Mapped[List["BLSample"]] = relationship(
+    BLSample: Mapped[List["BLSample"]] = relationship(
         "BLSample", back_populates="ScreenComponentGroup"
     )
-    Screen_: Mapped["Screen"] = relationship(
+    Screen: Mapped["Screen"] = relationship(
         "Screen", back_populates="ScreenComponentGroup"
     )
     ScreenComponent: Mapped[List["ScreenComponent"]] = relationship(
-        "ScreenComponent", back_populates="ScreenComponentGroup_"
+        "ScreenComponent", back_populates="ScreenComponentGroup"
     )
 
 
@@ -6562,7 +6320,7 @@ class SessionType(Base):
     sessionId: Mapped[int] = mapped_column(INTEGER(10))
     typeName: Mapped[str] = mapped_column(String(31))
 
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="SessionType"
     )
 
@@ -6610,10 +6368,10 @@ class SessionHasPerson(Base):
     )
     remote: Mapped[Optional[int]] = mapped_column(TINYINT(1), server_default=text("0"))
 
-    Person_: Mapped["Person"] = relationship(
+    Person: Mapped["Person"] = relationship(
         "Person", back_populates="Session_has_Person"
     )
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="Session_has_Person"
     )
 
@@ -6707,8 +6465,7 @@ class Shipping(Base):
         Time, comment="Confirmed courier call-in time"
     )
     deliveryAgent_productcode: Mapped[Optional[str]] = mapped_column(
-        String(10),
-        comment="A code that identifies which shipment service was used",
+        String(10), comment="A code that identifies which shipment service was used"
     )
     deliveryAgent_flightCodePersonId: Mapped[Optional[int]] = mapped_column(
         INTEGER(10), comment="The person who created the AWB (for auditing)"
@@ -6721,32 +6478,27 @@ class Shipping(Base):
         String(50), server_default=text("current_user()")
     )
     externalShippingIdToSynchrotron: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11),
-        comment="ID for shipping to synchrotron in external application",
+        INTEGER(11), comment="ID for shipping to synchrotron in external application"
     )
 
-    Project_: Mapped[List["Project"]] = relationship(
+    Project: Mapped[List["Project"]] = relationship(
         "Project", secondary="Project_has_Shipping", back_populates="Shipping"
     )
-    BLSession_: Mapped[List["BLSession"]] = relationship(
+    BLSession: Mapped[List["BLSession"]] = relationship(
         "BLSession", secondary="ShippingHasSession", back_populates="Shipping"
     )
-    Person_: Mapped["Person"] = relationship("Person", back_populates="Shipping")
-    Proposal_: Mapped["Proposal"] = relationship("Proposal", back_populates="Shipping")
-    LabContact_: Mapped["LabContact"] = relationship(
-        "LabContact",
-        foreign_keys=[returnLabContactId],
-        back_populates="Shipping",
+    Person: Mapped["Person"] = relationship("Person", back_populates="Shipping")
+    Proposal: Mapped["Proposal"] = relationship("Proposal", back_populates="Shipping")
+    LabContact: Mapped["LabContact"] = relationship(
+        "LabContact", foreign_keys=[returnLabContactId], back_populates="Shipping"
     )
-    LabContact1: Mapped["LabContact"] = relationship(
-        "LabContact",
-        foreign_keys=[sendingLabContactId],
-        back_populates="Shipping_",
+    LabContact: Mapped["LabContact"] = relationship(
+        "LabContact", foreign_keys=[sendingLabContactId], back_populates="Shipping"
     )
     CourierTermsAccepted: Mapped[List["CourierTermsAccepted"]] = relationship(
-        "CourierTermsAccepted", back_populates="Shipping_"
+        "CourierTermsAccepted", back_populates="Shipping"
     )
-    Dewar: Mapped[List["Dewar"]] = relationship("Dewar", back_populates="Shipping_")
+    Dewar: Mapped[List["Dewar"]] = relationship("Dewar", back_populates="Shipping")
 
 
 class XFEFluorescenceSpectrum(Base):
@@ -6803,18 +6555,18 @@ class XFEFluorescenceSpectrum(Base):
     )
     workingDirectory: Mapped[Optional[str]] = mapped_column(String(512))
 
-    Project_: Mapped[List["Project"]] = relationship(
+    Project: Mapped[List["Project"]] = relationship(
         "Project",
         secondary="Project_has_XFEFSpectrum",
         back_populates="XFEFluorescenceSpectrum",
     )
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="XFEFluorescenceSpectrum"
     )
-    BLSubSample_: Mapped["BLSubSample"] = relationship(
+    BLSubSample: Mapped["BLSubSample"] = relationship(
         "BLSubSample", back_populates="XFEFluorescenceSpectrum"
     )
-    BLSession_: Mapped["BLSession"] = relationship(
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="XFEFluorescenceSpectrum"
     )
 
@@ -6838,11 +6590,11 @@ class Atlas(Base):
     pixelSize: Mapped[float] = mapped_column(Float, comment="pixel size of atlas image")
     cassetteSlot: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    DataCollectionGroup_: Mapped["DataCollectionGroup"] = relationship(
+    DataCollectionGroup: Mapped["DataCollectionGroup"] = relationship(
         "DataCollectionGroup", back_populates="Atlas"
     )
     GridSquare: Mapped[List["GridSquare"]] = relationship(
-        "GridSquare", back_populates="Atlas_"
+        "GridSquare", back_populates="Atlas"
     )
 
 
@@ -6870,10 +6622,10 @@ class BLSampleTypeHasComponent(Base):
     componentId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     abundance: Mapped[Optional[float]] = mapped_column(Float)
 
-    Crystal_: Mapped["Crystal"] = relationship(
+    Crystal: Mapped["Crystal"] = relationship(
         "Crystal", back_populates="BLSampleType_has_Component"
     )
-    Protein_: Mapped["Protein"] = relationship(
+    Protein: Mapped["Protein"] = relationship(
         "Protein", back_populates="BLSampleType_has_Component"
     )
 
@@ -6903,10 +6655,10 @@ class BLSampleHasEnergyScan(Base):
     energyScanId: Mapped[int] = mapped_column(INTEGER(10), server_default=text("0"))
     blSampleHasEnergyScanId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
 
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="BLSample_has_EnergyScan"
     )
-    EnergyScan_: Mapped["EnergyScan"] = relationship(
+    EnergyScan: Mapped["EnergyScan"] = relationship(
         "EnergyScan", back_populates="BLSample_has_EnergyScan"
     )
 
@@ -6915,14 +6667,10 @@ class CourierTermsAccepted(Base):
     __tablename__ = "CourierTermsAccepted"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["personId"],
-            ["Person.personId"],
-            name="CourierTermsAccepted_ibfk_2",
+            ["personId"], ["Person.personId"], name="CourierTermsAccepted_ibfk_2"
         ),
         ForeignKeyConstraint(
-            ["proposalId"],
-            ["Proposal.proposalId"],
-            name="CourierTermsAccepted_ibfk_1",
+            ["proposalId"], ["Proposal.proposalId"], name="CourierTermsAccepted_ibfk_1"
         ),
         ForeignKeyConstraint(
             ["shippingId"],
@@ -6946,13 +6694,13 @@ class CourierTermsAccepted(Base):
     )
     shippingId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
-    Person_: Mapped["Person"] = relationship(
+    Person: Mapped["Person"] = relationship(
         "Person", back_populates="CourierTermsAccepted"
     )
-    Proposal_: Mapped["Proposal"] = relationship(
+    Proposal: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="CourierTermsAccepted"
     )
-    Shipping_: Mapped["Shipping"] = relationship(
+    Shipping: Mapped["Shipping"] = relationship(
         "Shipping", back_populates="CourierTermsAccepted"
     )
 
@@ -6961,9 +6709,7 @@ class CrystalComposition(Base):
     __tablename__ = "CrystalComposition"
     __table_args__ = (
         ForeignKeyConstraint(
-            ["componentId"],
-            ["Component.componentId"],
-            name="CrystalComposition_ibfk_1",
+            ["componentId"], ["Component.componentId"], name="CrystalComposition_ibfk_1"
         ),
         ForeignKeyConstraint(
             ["concentrationTypeId"],
@@ -6971,9 +6717,7 @@ class CrystalComposition(Base):
             name="CrystalComposition_ibfk_3",
         ),
         ForeignKeyConstraint(
-            ["crystalId"],
-            ["Crystal.crystalId"],
-            name="CrystalComposition_ibfk_2",
+            ["crystalId"], ["Crystal.crystalId"], name="CrystalComposition_ibfk_2"
         ),
         Index("componentId", "componentId"),
         Index("concentrationTypeId", "concentrationTypeId"),
@@ -6995,13 +6739,13 @@ class CrystalComposition(Base):
     ratio: Mapped[Optional[float]] = mapped_column(Float)
     pH: Mapped[Optional[float]] = mapped_column(Float)
 
-    Component_: Mapped["Component"] = relationship(
+    Component: Mapped["Component"] = relationship(
         "Component", back_populates="CrystalComposition"
     )
-    ConcentrationType_: Mapped["ConcentrationType"] = relationship(
+    ConcentrationType: Mapped["ConcentrationType"] = relationship(
         "ConcentrationType", back_populates="CrystalComposition"
     )
-    Crystal_: Mapped["Crystal"] = relationship(
+    Crystal: Mapped["Crystal"] = relationship(
         "Crystal", back_populates="CrystalComposition"
     )
 
@@ -7025,7 +6769,7 @@ class CrystalHasUUID(Base):
     UUID: Mapped[Optional[str]] = mapped_column(String(45))
     imageURL: Mapped[Optional[str]] = mapped_column(String(255))
 
-    Crystal_: Mapped["Crystal"] = relationship(
+    Crystal: Mapped["Crystal"] = relationship(
         "Crystal", back_populates="Crystal_has_UUID"
     )
 
@@ -7086,25 +6830,22 @@ class Dewar(Base):
         String(50), server_default=text("current_user()")
     )
     externalShippingIdFromSynchrotron: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11),
-        comment="ID for shipping from synchrotron in external application",
+        INTEGER(11), comment="ID for shipping from synchrotron in external application"
     )
 
-    BLSession_: Mapped["BLSession"] = relationship("BLSession", back_populates="Dewar")
-    Shipping_: Mapped["Shipping"] = relationship("Shipping", back_populates="Dewar")
+    BLSession: Mapped["BLSession"] = relationship("BLSession", back_populates="Dewar")
+    Shipping: Mapped["Shipping"] = relationship("Shipping", back_populates="Dewar")
     Container: Mapped[List["Container"]] = relationship(
-        "Container",
-        foreign_keys="[Container.currentDewarId]",
-        back_populates="Dewar_",
+        "Container", foreign_keys="[Container.currentDewarId]", back_populates="Dewar"
     )
-    Container_: Mapped[List["Container"]] = relationship(
-        "Container", foreign_keys="[Container.dewarId]", back_populates="Dewar1"
+    Container: Mapped[List["Container"]] = relationship(
+        "Container", foreign_keys="[Container.dewarId]", back_populates="Dewar"
     )
     DewarTransportHistory: Mapped[List["DewarTransportHistory"]] = relationship(
-        "DewarTransportHistory", back_populates="Dewar_"
+        "DewarTransportHistory", back_populates="Dewar"
     )
     ContainerHistory: Mapped[List["ContainerHistory"]] = relationship(
-        "ContainerHistory", back_populates="Dewar_"
+        "ContainerHistory", back_populates="Dewar"
     )
 
 
@@ -7123,9 +6864,7 @@ class DewarRegistryHasProposal(Base):
             name="DewarRegistry_has_Proposal_ibfk4",
         ),
         ForeignKeyConstraint(
-            ["personId"],
-            ["Person.personId"],
-            name="DewarRegistry_has_Proposal_ibfk3",
+            ["personId"], ["Person.personId"], name="DewarRegistry_has_Proposal_ibfk3"
         ),
         ForeignKeyConstraint(
             ["proposalId"],
@@ -7153,16 +6892,16 @@ class DewarRegistryHasProposal(Base):
         INTEGER(11), comment="Owner of the dewar"
     )
 
-    DewarRegistry_: Mapped["DewarRegistry"] = relationship(
+    DewarRegistry: Mapped["DewarRegistry"] = relationship(
         "DewarRegistry", back_populates="DewarRegistry_has_Proposal"
     )
-    LabContact_: Mapped["LabContact"] = relationship(
+    LabContact: Mapped["LabContact"] = relationship(
         "LabContact", back_populates="DewarRegistry_has_Proposal"
     )
-    Person_: Mapped["Person"] = relationship(
+    Person: Mapped["Person"] = relationship(
         "Person", back_populates="DewarRegistry_has_Proposal"
     )
-    Proposal_: Mapped["Proposal"] = relationship(
+    Proposal: Mapped["Proposal"] = relationship(
         "Proposal", back_populates="DewarRegistry_has_Proposal"
     )
 
@@ -7187,7 +6926,7 @@ class DewarReport(Base):
     report: Mapped[Optional[str]] = mapped_column(Text)
     attachment: Mapped[Optional[str]] = mapped_column(String(255))
 
-    DewarRegistry_: Mapped["DewarRegistry"] = relationship(
+    DewarRegistry: Mapped["DewarRegistry"] = relationship(
         "DewarRegistry", back_populates="DewarReport"
     )
 
@@ -7255,14 +6994,14 @@ class GridInfo(Base):
     micronsPerPixelX: Mapped[Optional[float]] = mapped_column(Float)
     micronsPerPixelY: Mapped[Optional[float]] = mapped_column(Float)
 
-    DataCollectionGroup_: Mapped["DataCollectionGroup"] = relationship(
+    DataCollectionGroup: Mapped["DataCollectionGroup"] = relationship(
         "DataCollectionGroup", back_populates="GridInfo"
     )
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="GridInfo"
     )
     XRFFluorescenceMapping: Mapped[List["XRFFluorescenceMapping"]] = relationship(
-        "XRFFluorescenceMapping", back_populates="GridInfo_"
+        "XRFFluorescenceMapping", back_populates="GridInfo"
     )
 
 
@@ -7337,12 +7076,7 @@ t_Project_has_XFEFSpectrum = Table(
     "Project_has_XFEFSpectrum",
     Base.metadata,
     Column("projectId", INTEGER(11), primary_key=True, nullable=False),
-    Column(
-        "xfeFluorescenceSpectrumId",
-        INTEGER(11),
-        primary_key=True,
-        nullable=False,
-    ),
+    Column("xfeFluorescenceSpectrumId", INTEGER(11), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["projectId"],
         ["Project.projectId"],
@@ -7380,10 +7114,10 @@ class ScreenComponent(Base):
     concentration: Mapped[Optional[float]] = mapped_column(Float)
     pH: Mapped[Optional[float]] = mapped_column(Float)
 
-    Protein_: Mapped["Protein"] = relationship(
+    Protein: Mapped["Protein"] = relationship(
         "Protein", back_populates="ScreenComponent"
     )
-    ScreenComponentGroup_: Mapped["ScreenComponentGroup"] = relationship(
+    ScreenComponentGroup: Mapped["ScreenComponentGroup"] = relationship(
         "ScreenComponentGroup", back_populates="ScreenComponent"
     )
 
@@ -7432,11 +7166,11 @@ class XrayCentring(Base):
     status: Mapped[Optional[str]] = mapped_column(Enum("success", "failed", "pending"))
     xrayCentringType: Mapped[Optional[str]] = mapped_column(Enum("2d", "3d"))
 
-    DataCollectionGroup_: Mapped["DataCollectionGroup"] = relationship(
+    DataCollectionGroup: Mapped["DataCollectionGroup"] = relationship(
         "DataCollectionGroup", back_populates="XrayCentring"
     )
     XrayCentringResult: Mapped[List["XrayCentringResult"]] = relationship(
-        "XrayCentringResult", back_populates="XrayCentring_"
+        "XrayCentringResult", back_populates="XrayCentring"
     )
 
 
@@ -7454,9 +7188,7 @@ class Container(Base):
             name="Container_ibfk10",
         ),
         ForeignKeyConstraint(
-            ["currentDewarId"],
-            ["Dewar.dewarId"],
-            name="Container_fk_currentDewarId",
+            ["currentDewarId"], ["Dewar.dewarId"], name="Container_fk_currentDewarId"
         ),
         ForeignKeyConstraint(
             ["dewarId"],
@@ -7558,58 +7290,56 @@ class Container(Base):
         String(50), server_default=text("current_user()")
     )
 
-    BLSample_: Mapped[List["BLSample"]] = relationship(
+    BLSample: Mapped[List["BLSample"]] = relationship(
         "BLSample", back_populates="Container"
     )
-    ContainerRegistry_: Mapped["ContainerRegistry"] = relationship(
+    ContainerRegistry: Mapped["ContainerRegistry"] = relationship(
         "ContainerRegistry", back_populates="Container"
     )
-    ContainerType_: Mapped["ContainerType"] = relationship(
+    ContainerType: Mapped["ContainerType"] = relationship(
         "ContainerType", back_populates="Container"
     )
-    Dewar_: Mapped["Dewar"] = relationship(
+    Dewar: Mapped["Dewar"] = relationship(
         "Dewar", foreign_keys=[currentDewarId], back_populates="Container"
     )
-    Dewar1: Mapped["Dewar"] = relationship(
-        "Dewar", foreign_keys=[dewarId], back_populates="Container_"
+    Dewar: Mapped["Dewar"] = relationship(
+        "Dewar", foreign_keys=[dewarId], back_populates="Container"
     )
-    ExperimentType_: Mapped["ExperimentType"] = relationship(
+    ExperimentType: Mapped["ExperimentType"] = relationship(
         "ExperimentType", back_populates="Container"
     )
-    Imager_: Mapped["Imager"] = relationship(
+    Imager: Mapped["Imager"] = relationship(
         "Imager", foreign_keys=[imagerId], back_populates="Container"
     )
-    Person_: Mapped["Person"] = relationship("Person", back_populates="Container")
+    Person: Mapped["Person"] = relationship("Person", back_populates="Container")
     Container: Mapped["Container"] = relationship(
-        "Container",
-        remote_side=[containerId],
-        back_populates="Container_reverse",
+        "Container", remote_side=[containerId], back_populates="Container_reverse"
     )
     Container_reverse: Mapped[List["Container"]] = relationship(
         "Container", remote_side=[parentContainerId], back_populates="Container"
     )
-    ProcessingPipeline_: Mapped["ProcessingPipeline"] = relationship(
+    ProcessingPipeline: Mapped["ProcessingPipeline"] = relationship(
         "ProcessingPipeline", back_populates="Container"
     )
-    Imager1: Mapped["Imager"] = relationship(
-        "Imager", foreign_keys=[requestedImagerId], back_populates="Container_"
+    Imager: Mapped["Imager"] = relationship(
+        "Imager", foreign_keys=[requestedImagerId], back_populates="Container"
     )
-    Schedule_: Mapped["Schedule"] = relationship("Schedule", back_populates="Container")
-    Screen_: Mapped["Screen"] = relationship("Screen", back_populates="Container")
-    BLSession_: Mapped["BLSession"] = relationship(
+    Schedule: Mapped["Schedule"] = relationship("Schedule", back_populates="Container")
+    Screen: Mapped["Screen"] = relationship("Screen", back_populates="Container")
+    BLSession: Mapped["BLSession"] = relationship(
         "BLSession", back_populates="Container"
     )
     BF_automationFault: Mapped[List["BFAutomationFault"]] = relationship(
-        "BFAutomationFault", back_populates="Container_"
+        "BFAutomationFault", back_populates="Container"
     )
     ContainerHistory: Mapped[List["ContainerHistory"]] = relationship(
-        "ContainerHistory", back_populates="Container_"
+        "ContainerHistory", back_populates="Container"
     )
     ContainerInspection: Mapped[List["ContainerInspection"]] = relationship(
-        "ContainerInspection", back_populates="Container_"
+        "ContainerInspection", back_populates="Container"
     )
     ContainerQueue: Mapped[List["ContainerQueue"]] = relationship(
-        "ContainerQueue", back_populates="Container_"
+        "ContainerQueue", back_populates="Container"
     )
 
 
@@ -7632,7 +7362,7 @@ class DewarTransportHistory(Base):
     arrivalDate: Mapped[datetime.datetime] = mapped_column(DateTime)
     dewarId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    Dewar_: Mapped["Dewar"] = relationship(
+    Dewar: Mapped["Dewar"] = relationship(
         "Dewar", back_populates="DewarTransportHistory"
     )
 
@@ -7662,12 +7392,10 @@ class GridSquare(Base):
         String(255), comment="path to grid square image"
     )
     pixelLocationX: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11),
-        comment="pixel location of grid square centre on atlas image (x)",
+        INTEGER(11), comment="pixel location of grid square centre on atlas image (x)"
     )
     pixelLocationY: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11),
-        comment="pixel location of grid square centre on atlas image (y)",
+        INTEGER(11), comment="pixel location of grid square centre on atlas image (y)"
     )
     height: Mapped[Optional[int]] = mapped_column(
         INTEGER(11), comment="grid square height on atlas image in pixels"
@@ -7691,9 +7419,12 @@ class GridSquare(Base):
         Float, comment="pixel size of grid square image"
     )
 
-    Atlas_: Mapped["Atlas"] = relationship("Atlas", back_populates="GridSquare")
+    Atlas: Mapped["Atlas"] = relationship("Atlas", back_populates="GridSquare")
     FoilHole: Mapped[List["FoilHole"]] = relationship(
-        "FoilHole", back_populates="GridSquare_"
+        "FoilHole", back_populates="GridSquare"
+    )
+    Tomogram: Mapped[List["Tomogram"]] = relationship(
+        "Tomogram", back_populates="GridSquare"
     )
 
 
@@ -7706,9 +7437,7 @@ class XRFFluorescenceMapping(Base):
             name="XRFFluorescenceMapping_ibfk3",
         ),
         ForeignKeyConstraint(
-            ["gridInfoId"],
-            ["GridInfo.gridInfoId"],
-            name="XRFFluorescenceMapping_ibfk2",
+            ["gridInfoId"], ["GridInfo.gridInfoId"], name="XRFFluorescenceMapping_ibfk2"
         ),
         ForeignKeyConstraint(
             ["xrfFluorescenceMappingROIId"],
@@ -7738,8 +7467,7 @@ class XRFFluorescenceMapping(Base):
         Float, server_default=text("1"), comment="Display opacity"
     )
     points: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11),
-        comment="The number of points available, for realtime feedback",
+        INTEGER(11), comment="The number of points available, for realtime feedback"
     )
     colourMap: Mapped[Optional[str]] = mapped_column(
         String(20), comment="Colour map for displaying the data"
@@ -7754,29 +7482,29 @@ class XRFFluorescenceMapping(Base):
         INTEGER(10), comment="Related autoproc programid"
     )
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="XRFFluorescenceMapping"
     )
-    GridInfo_: Mapped["GridInfo"] = relationship(
+    GridInfo: Mapped["GridInfo"] = relationship(
         "GridInfo", back_populates="XRFFluorescenceMapping"
     )
-    XRFFluorescenceMappingROI_: Mapped["XRFFluorescenceMappingROI"] = relationship(
+    XRFFluorescenceMappingROI: Mapped["XRFFluorescenceMappingROI"] = relationship(
         "XRFFluorescenceMappingROI", back_populates="XRFFluorescenceMapping"
     )
     XFEFluorescenceComposite: Mapped[List["XFEFluorescenceComposite"]] = relationship(
         "XFEFluorescenceComposite",
         foreign_keys="[XFEFluorescenceComposite.b]",
-        back_populates="XRFFluorescenceMapping_",
+        back_populates="XRFFluorescenceMapping",
     )
-    XFEFluorescenceComposite_: Mapped[List["XFEFluorescenceComposite"]] = relationship(
+    XFEFluorescenceComposite: Mapped[List["XFEFluorescenceComposite"]] = relationship(
         "XFEFluorescenceComposite",
         foreign_keys="[XFEFluorescenceComposite.g]",
-        back_populates="XRFFluorescenceMapping1",
+        back_populates="XRFFluorescenceMapping",
     )
-    XFEFluorescenceComposite1: Mapped[List["XFEFluorescenceComposite"]] = relationship(
+    XFEFluorescenceComposite: Mapped[List["XFEFluorescenceComposite"]] = relationship(
         "XFEFluorescenceComposite",
         foreign_keys="[XFEFluorescenceComposite.r]",
-        back_populates="XRFFluorescenceMapping2",
+        back_populates="XRFFluorescenceMapping",
     )
 
 
@@ -7823,8 +7551,7 @@ class XrayCentringResult(Base):
         comment="z-coordinate of the voxel with the maximum value within this crystal volume",
     )
     numberOfVoxels: Mapped[Optional[int]] = mapped_column(
-        INTEGER(11),
-        comment="Number of voxels within the specified bounding box",
+        INTEGER(11), comment="Number of voxels within the specified bounding box"
     )
     totalCount: Mapped[Optional[float]] = mapped_column(
         Float,
@@ -7861,7 +7588,7 @@ class XrayCentringResult(Base):
         INTEGER(11), comment="to be removed"
     )
 
-    XrayCentring_: Mapped["XrayCentring"] = relationship(
+    XrayCentring: Mapped["XrayCentring"] = relationship(
         "XrayCentring", back_populates="XrayCentringResult"
     )
 
@@ -7875,9 +7602,7 @@ class BFAutomationFault(Base):
             name="BF_automationFault_ibfk1",
         ),
         ForeignKeyConstraint(
-            ["containerId"],
-            ["Container.containerId"],
-            name="BF_automationFault_ibfk2",
+            ["containerId"], ["Container.containerId"], name="BF_automationFault_ibfk2"
         ),
         Index("BF_automationFault_ibfk1", "automationErrorId"),
         Index("BF_automationFault_ibfk2", "containerId"),
@@ -7896,7 +7621,7 @@ class BFAutomationFault(Base):
     BF_automationError: Mapped["BFAutomationError"] = relationship(
         "BFAutomationError", back_populates="BF_automationFault"
     )
-    Container_: Mapped["Container"] = relationship(
+    Container: Mapped["Container"] = relationship(
         "Container", back_populates="BF_automationFault"
     )
 
@@ -7912,9 +7637,7 @@ class ContainerHistory(Base):
             name="ContainerHistory_ibfk1",
         ),
         ForeignKeyConstraint(
-            ["currentDewarId"],
-            ["Dewar.dewarId"],
-            name="ContainerHistory_fk_dewarId",
+            ["currentDewarId"], ["Dewar.dewarId"], name="ContainerHistory_fk_dewarId"
         ),
         Index("ContainerHistory_fk_dewarId", "currentDewarId"),
         Index("ContainerHistory_ibfk1", "containerId"),
@@ -7933,10 +7656,10 @@ class ContainerHistory(Base):
         comment="The dewar with which the container was associated at the creation of this row",
     )
 
-    Container_: Mapped["Container"] = relationship(
+    Container: Mapped["Container"] = relationship(
         "Container", back_populates="ContainerHistory"
     )
-    Dewar_: Mapped["Dewar"] = relationship("Dewar", back_populates="ContainerHistory")
+    Dewar: Mapped["Dewar"] = relationship("Dewar", back_populates="ContainerHistory")
 
 
 class ContainerInspection(Base):
@@ -7987,19 +7710,19 @@ class ContainerInspection(Base):
     scheduledTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
     completedTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
 
-    BLSampleImage_: Mapped[List["BLSampleImage"]] = relationship(
+    BLSampleImage: Mapped[List["BLSampleImage"]] = relationship(
         "BLSampleImage", back_populates="ContainerInspection"
     )
-    Container_: Mapped["Container"] = relationship(
+    Container: Mapped["Container"] = relationship(
         "Container", back_populates="ContainerInspection"
     )
-    Imager_: Mapped["Imager"] = relationship(
+    Imager: Mapped["Imager"] = relationship(
         "Imager", back_populates="ContainerInspection"
     )
-    InspectionType_: Mapped["InspectionType"] = relationship(
+    InspectionType: Mapped["InspectionType"] = relationship(
         "InspectionType", back_populates="ContainerInspection"
     )
-    ScheduleComponent_: Mapped["ScheduleComponent"] = relationship(
+    ScheduleComponent: Mapped["ScheduleComponent"] = relationship(
         "ScheduleComponent", back_populates="ContainerInspection"
     )
 
@@ -8033,12 +7756,12 @@ class ContainerQueue(Base):
     personId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     completedTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(TIMESTAMP)
 
-    Container_: Mapped["Container"] = relationship(
+    Container: Mapped["Container"] = relationship(
         "Container", back_populates="ContainerQueue"
     )
-    Person_: Mapped["Person"] = relationship("Person", back_populates="ContainerQueue")
+    Person: Mapped["Person"] = relationship("Person", back_populates="ContainerQueue")
     ContainerQueueSample: Mapped[List["ContainerQueueSample"]] = relationship(
-        "ContainerQueueSample", back_populates="ContainerQueue_"
+        "ContainerQueueSample", back_populates="ContainerQueue"
     )
 
 
@@ -8091,10 +7814,126 @@ class FoilHole(Base):
         Float, comment="pixel size of foil hole image"
     )
 
-    GridSquare_: Mapped["GridSquare"] = relationship(
+    GridSquare: Mapped["GridSquare"] = relationship(
         "GridSquare", back_populates="FoilHole"
     )
-    Movie: Mapped[List["Movie"]] = relationship("Movie", back_populates="FoilHole_")
+    Movie: Mapped[List["Movie"]] = relationship("Movie", back_populates="FoilHole")
+
+
+class Tomogram(Base):
+    __tablename__ = "Tomogram"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["autoProcProgramId"],
+            ["AutoProcProgram.autoProcProgramId"],
+            ondelete="SET NULL",
+            onupdate="CASCADE",
+            name="Tomogram_fk_autoProcProgramId",
+        ),
+        ForeignKeyConstraint(
+            ["dataCollectionId"],
+            ["DataCollection.dataCollectionId"],
+            ondelete="CASCADE",
+            onupdate="CASCADE",
+            name="Tomogram_fk_dataCollectionId",
+        ),
+        ForeignKeyConstraint(
+            ["gridSquareId"],
+            ["GridSquare.gridSquareId"],
+            name="Tomogram_fk_gridSquareId",
+        ),
+        Index("Tomogram_fk_autoProcProgramId", "autoProcProgramId"),
+        Index("Tomogram_fk_dataCollectionId", "dataCollectionId"),
+        Index("Tomogram_fk_gridSquareId", "gridSquareId"),
+        {
+            "comment": "For storing per-sample, per-position data analysis results "
+            "(reconstruction)"
+        },
+    )
+
+    tomogramId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    dataCollectionId: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="FK to\xa0DataCollection\xa0table"
+    )
+    autoProcProgramId: Mapped[Optional[int]] = mapped_column(
+        INTEGER(10),
+        comment="FK, gives processing times/status and software information",
+    )
+    volumeFile: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        comment=".mrc\xa0file representing the reconstructed tomogram volume",
+    )
+    stackFile: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        comment=".mrc\xa0file containing the motion corrected images ordered by angle used as input for the reconstruction",
+    )
+    sizeX: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
+    sizeY: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
+    sizeZ: Mapped[Optional[int]] = mapped_column(INTEGER(11), comment="unit: pixels")
+    pixelSpacing: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Angstrom/pixel conversion factor"
+    )
+    residualErrorMean: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Alignment error, unit: nm"
+    )
+    residualErrorSD: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Standard deviation of the alignment error, unit: nm"
+    )
+    xAxisCorrection: Mapped[Optional[float]] = mapped_column(
+        Float, comment="X axis angle (etomo), unit: degrees"
+    )
+    tiltAngleOffset: Mapped[Optional[float]] = mapped_column(
+        Float, comment="tilt Axis offset (etomo), unit: degrees"
+    )
+    zShift: Mapped[Optional[float]] = mapped_column(
+        Float, comment="shift to center volumen in Z (etomo)"
+    )
+    fileDirectory: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Directory path for files referenced by this table"
+    )
+    centralSliceImage: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Tomogram central slice file"
+    )
+    tomogramMovie: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="Movie traversing the tomogram across an axis"
+    )
+    xyShiftPlot: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="XY shift plot file"
+    )
+    projXY: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="XY projection file"
+    )
+    projXZ: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="XZ projection file"
+    )
+    recordTimeStamp: Mapped[Optional[datetime.datetime]] = mapped_column(
+        DateTime,
+        server_default=text("current_timestamp()"),
+        comment="Creation or last update date/time",
+    )
+    globalAlignmentQuality: Mapped[Optional[float]] = mapped_column(
+        Float,
+        comment="Quality of fit metric for the alignment of the tilt series corresponding to this tomogram",
+    )
+    gridSquareId: Mapped[Optional[int]] = mapped_column(
+        INTEGER(11), comment="FK, references medium mag map in GridSquare"
+    )
+
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
+        "AutoProcProgram", back_populates="Tomogram"
+    )
+    DataCollection: Mapped["DataCollection"] = relationship(
+        "DataCollection", back_populates="Tomogram"
+    )
+    GridSquare: Mapped["GridSquare"] = relationship(
+        "GridSquare", back_populates="Tomogram"
+    )
+    ProcessedTomogram: Mapped[List["ProcessedTomogram"]] = relationship(
+        "ProcessedTomogram", back_populates="Tomogram"
+    )
+    TiltImageAlignment: Mapped[List["TiltImageAlignment"]] = relationship(
+        "TiltImageAlignment", back_populates="Tomogram"
+    )
 
 
 class XFEFluorescenceComposite(Base):
@@ -8143,20 +7982,20 @@ class XFEFluorescenceComposite(Base):
         Float, server_default=text("1"), comment="Total map opacity"
     )
 
-    XRFFluorescenceMapping_: Mapped["XRFFluorescenceMapping"] = relationship(
+    XRFFluorescenceMapping: Mapped["XRFFluorescenceMapping"] = relationship(
         "XRFFluorescenceMapping",
         foreign_keys=[b],
         back_populates="XFEFluorescenceComposite",
     )
-    XRFFluorescenceMapping1: Mapped["XRFFluorescenceMapping"] = relationship(
+    XRFFluorescenceMapping: Mapped["XRFFluorescenceMapping"] = relationship(
         "XRFFluorescenceMapping",
         foreign_keys=[g],
-        back_populates="XFEFluorescenceComposite_",
+        back_populates="XFEFluorescenceComposite",
     )
-    XRFFluorescenceMapping2: Mapped["XRFFluorescenceMapping"] = relationship(
+    XRFFluorescenceMapping: Mapped["XRFFluorescenceMapping"] = relationship(
         "XRFFluorescenceMapping",
         foreign_keys=[r],
-        back_populates="XFEFluorescenceComposite1",
+        back_populates="XFEFluorescenceComposite",
     )
 
 
@@ -8209,16 +8048,16 @@ class ContainerQueueSample(Base):
     dataCollectionPlanId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     blSampleId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    BLSample_: Mapped["BLSample"] = relationship(
+    BLSample: Mapped["BLSample"] = relationship(
         "BLSample", back_populates="ContainerQueueSample"
     )
-    BLSubSample_: Mapped["BLSubSample"] = relationship(
+    BLSubSample: Mapped["BLSubSample"] = relationship(
         "BLSubSample", back_populates="ContainerQueueSample"
     )
-    ContainerQueue_: Mapped["ContainerQueue"] = relationship(
+    ContainerQueue: Mapped["ContainerQueue"] = relationship(
         "ContainerQueue", back_populates="ContainerQueueSample"
     )
-    DiffractionPlan_: Mapped["DiffractionPlan"] = relationship(
+    DiffractionPlan: Mapped["DiffractionPlan"] = relationship(
         "DiffractionPlan", back_populates="ContainerQueueSample"
     )
 
@@ -8268,15 +8107,49 @@ class Movie(Base):
     foilHoleId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     templateLabel: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="Movie"
     )
-    FoilHole_: Mapped["FoilHole"] = relationship("FoilHole", back_populates="Movie")
+    FoilHole: Mapped["FoilHole"] = relationship("FoilHole", back_populates="Movie")
     MotionCorrection: Mapped[List["MotionCorrection"]] = relationship(
-        "MotionCorrection", back_populates="Movie_"
+        "MotionCorrection", back_populates="Movie"
     )
     TiltImageAlignment: Mapped[List["TiltImageAlignment"]] = relationship(
-        "TiltImageAlignment", back_populates="Movie_"
+        "TiltImageAlignment", back_populates="Movie"
+    )
+
+
+class ProcessedTomogram(Base):
+    __tablename__ = "ProcessedTomogram"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tomogramId"],
+            ["Tomogram.tomogramId"],
+            ondelete="CASCADE",
+            onupdate="CASCADE",
+            name="ProcessedTomogram_ibfk_1",
+        ),
+        Index("tomogramId", "tomogramId"),
+        {
+            "comment": "Indicates the sample's location on a multi-sample pin, where 1 is "
+            "closest to the pin base or a sample's position in a cryo-EM "
+            "cassette"
+        },
+    )
+
+    processedTomogramId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
+    tomogramId: Mapped[int] = mapped_column(
+        INTEGER(11), comment="references Tomogram table"
+    )
+    filePath: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="location on disk for the tomogram file"
+    )
+    processingType: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="nature of the processed tomogram"
+    )
+
+    Tomogram: Mapped["Tomogram"] = relationship(
+        "Tomogram", back_populates="ProcessedTomogram"
     )
 
 
@@ -8341,8 +8214,7 @@ class MotionCorrection(Base):
         MEDIUMINT(8), comment="Number of patches used in y (for motioncor2)"
     )
     fftFullPath: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment="Full path to the jpg image of the raw micrograph FFT",
+        String(255), comment="Full path to the jpg image of the raw micrograph FFT"
     )
     fftCorrectedFullPath: Mapped[Optional[str]] = mapped_column(
         String(255),
@@ -8351,19 +8223,19 @@ class MotionCorrection(Base):
     comments: Mapped[Optional[str]] = mapped_column(String(255))
     movieId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="MotionCorrection"
     )
-    DataCollection_: Mapped["DataCollection"] = relationship(
+    DataCollection: Mapped["DataCollection"] = relationship(
         "DataCollection", back_populates="MotionCorrection"
     )
-    Movie_: Mapped["Movie"] = relationship("Movie", back_populates="MotionCorrection")
-    CTF: Mapped[List["CTF"]] = relationship("CTF", back_populates="MotionCorrection_")
+    Movie: Mapped["Movie"] = relationship("Movie", back_populates="MotionCorrection")
+    CTF: Mapped[List["CTF"]] = relationship("CTF", back_populates="MotionCorrection")
     ParticlePicker: Mapped[List["ParticlePicker"]] = relationship(
-        "ParticlePicker", back_populates="MotionCorrection_"
+        "ParticlePicker", back_populates="MotionCorrection"
     )
     RelativeIceThickness: Mapped[List["RelativeIceThickness"]] = relationship(
-        "RelativeIceThickness", back_populates="MotionCorrection_"
+        "RelativeIceThickness", back_populates="MotionCorrection"
     )
 
 
@@ -8416,8 +8288,8 @@ class TiltImageAlignment(Base):
         Float, comment="Residual error, unit: nm"
     )
 
-    Movie_: Mapped["Movie"] = relationship("Movie", back_populates="TiltImageAlignment")
-    Tomogram_: Mapped["Tomogram"] = relationship(
+    Movie: Mapped["Movie"] = relationship("Movie", back_populates="TiltImageAlignment")
+    Tomogram: Mapped["Tomogram"] = relationship(
         "Tomogram", back_populates="TiltImageAlignment"
     )
 
@@ -8472,10 +8344,10 @@ class CTF(Base):
     )
     comments: Mapped[Optional[str]] = mapped_column(String(255))
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="CTF"
     )
-    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
+    MotionCorrection: Mapped["MotionCorrection"] = relationship(
         "MotionCorrection", back_populates="CTF"
     )
 
@@ -8513,14 +8385,14 @@ class ParticlePicker(Base):
         comment="Generated summary micrograph image with highlighted particles",
     )
 
-    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
+    MotionCorrection: Mapped["MotionCorrection"] = relationship(
         "MotionCorrection", back_populates="ParticlePicker"
     )
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="ParticlePicker"
     )
     ParticleClassificationGroup: Mapped[List["ParticleClassificationGroup"]] = (
-        relationship("ParticleClassificationGroup", back_populates="ParticlePicker_")
+        relationship("ParticleClassificationGroup", back_populates="ParticlePicker")
     )
 
 
@@ -8558,10 +8430,10 @@ class RelativeIceThickness(Base):
         Float, comment="Minimum relative ice thickness, Unitless"
     )
 
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="RelativeIceThickness"
     )
-    MotionCorrection_: Mapped["MotionCorrection"] = relationship(
+    MotionCorrection: Mapped["MotionCorrection"] = relationship(
         "MotionCorrection", back_populates="RelativeIceThickness"
     )
 
@@ -8582,10 +8454,7 @@ class ParticleClassificationGroup(Base):
             onupdate="CASCADE",
             name="ParticleClassificationGroup_fk_programId",
         ),
-        Index(
-            "ParticleClassificationGroup_fk_particlePickerId",
-            "particlePickerId",
-        ),
+        Index("ParticleClassificationGroup_fk_particlePickerId", "particlePickerId"),
         Index("ParticleClassificationGroup_fk_programId", "programId"),
     )
 
@@ -8595,28 +8464,28 @@ class ParticleClassificationGroup(Base):
     particlePickerId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     programId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     type: Mapped[Optional[str]] = mapped_column(
-        Enum("2D", "3D"),
-        comment="Indicates the type of particle classification",
+        Enum("2D", "3D"), comment="Indicates the type of particle classification"
     )
     batchNumber: Mapped[Optional[int]] = mapped_column(
         INTEGER(10), comment="Corresponding to batch number"
     )
     numberOfParticlesPerBatch: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10),
-        comment="total number of particles per batch (a large integer)",
+        INTEGER(10), comment="total number of particles per batch (a large integer)"
     )
     numberOfClassesPerBatch: Mapped[Optional[int]] = mapped_column(INTEGER(10))
     symmetry: Mapped[Optional[str]] = mapped_column(String(20))
+    binnedPixelSize: Mapped[Optional[float]] = mapped_column(
+        Float, comment="Binned pixel size. Unit: Angstroms"
+    )
 
-    ParticlePicker_: Mapped["ParticlePicker"] = relationship(
+    ParticlePicker: Mapped["ParticlePicker"] = relationship(
         "ParticlePicker", back_populates="ParticleClassificationGroup"
     )
-    AutoProcProgram_: Mapped["AutoProcProgram"] = relationship(
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
         "AutoProcProgram", back_populates="ParticleClassificationGroup"
     )
     ParticleClassification: Mapped[List["ParticleClassification"]] = relationship(
-        "ParticleClassification",
-        back_populates="ParticleClassificationGroup_",
+        "ParticleClassification", back_populates="ParticleClassificationGroup"
     )
 
 
@@ -8639,8 +8508,7 @@ class ParticleClassification(Base):
 
     particleClassificationId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     classNumber: Mapped[Optional[int]] = mapped_column(
-        INTEGER(10),
-        comment="Identified of the class. A unique ID given by Relion",
+        INTEGER(10), comment="Identified of the class. A unique ID given by Relion"
     )
     classImageFullPath: Mapped[Optional[str]] = mapped_column(
         String(255), comment="The PNG of the class"
@@ -8680,17 +8548,16 @@ class ParticleClassification(Base):
         comment="Quadratic coefficient of quadratic fit to refinement resolution against the logarithm of the number of particles",
     )
 
-    CryoemInitialModel_: Mapped[List["CryoemInitialModel"]] = relationship(
+    CryoemInitialModel: Mapped[List["CryoemInitialModel"]] = relationship(
         "CryoemInitialModel",
         secondary="ParticleClassification_has_CryoemInitialModel",
         back_populates="ParticleClassification",
     )
-    ParticleClassificationGroup_: Mapped["ParticleClassificationGroup"] = relationship(
-        "ParticleClassificationGroup",
-        back_populates="ParticleClassification",
+    ParticleClassificationGroup: Mapped["ParticleClassificationGroup"] = relationship(
+        "ParticleClassificationGroup", back_populates="ParticleClassification"
     )
     BFactorFit: Mapped[List["BFactorFit"]] = relationship(
-        "BFactorFit", back_populates="ParticleClassification_"
+        "BFactorFit", back_populates="ParticleClassification"
     )
 
 
@@ -8713,8 +8580,7 @@ class BFactorFit(Base):
     bFactorFitId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     particleClassificationId: Mapped[int] = mapped_column(INTEGER(11))
     resolution: Mapped[Optional[float]] = mapped_column(
-        Float,
-        comment="Resolution of a refined map using a given number of particles",
+        Float, comment="Resolution of a refined map using a given number of particles"
     )
     numberOfParticles: Mapped[Optional[int]] = mapped_column(
         INTEGER(10), comment="Number of particles used in refinement"
@@ -8724,7 +8590,7 @@ class BFactorFit(Base):
         comment="Number of particles in the batch that the B-factor analysis was performed on",
     )
 
-    ParticleClassification_: Mapped["ParticleClassification"] = relationship(
+    ParticleClassification: Mapped["ParticleClassification"] = relationship(
         "ParticleClassification", back_populates="BFactorFit"
     )
 
@@ -8732,12 +8598,7 @@ class BFactorFit(Base):
 t_ParticleClassification_has_CryoemInitialModel = Table(
     "ParticleClassification_has_CryoemInitialModel",
     Base.metadata,
-    Column(
-        "particleClassificationId",
-        INTEGER(10),
-        primary_key=True,
-        nullable=False,
-    ),
+    Column("particleClassificationId", INTEGER(10), primary_key=True, nullable=False),
     Column("cryoemInitialModelId", INTEGER(10), primary_key=True, nullable=False),
     ForeignKeyConstraint(
         ["cryoemInitialModelId"],
