@@ -15,7 +15,7 @@ class GenericUser:
     familyName: str
     title: str
     givenName: str
-    email: str
+    email: str | None = None
     permissions: list[str]
 
 
