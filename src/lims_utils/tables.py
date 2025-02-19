@@ -1,10 +1,13 @@
 # type: ignore
 # ruff: noqa: E501
 
+import datetime
+import decimal
 from typing import List, Optional
 
 from sqlalchemy import (
     BINARY,
+    TIMESTAMP,
     Column,
     Computed,
     Date,
@@ -16,7 +19,6 @@ from sqlalchemy import (
     Index,
     LargeBinary,
     String,
-    TIMESTAMP,
     Table,
     Text,
     Time,
@@ -33,8 +35,6 @@ from sqlalchemy.dialects.mysql import (
     VARCHAR,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-import datetime
-import decimal
 
 
 class Base(DeclarativeBase):
