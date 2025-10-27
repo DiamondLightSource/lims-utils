@@ -15,7 +15,7 @@ description = "Commonly used utility functions for Expeye and adjacent projects/
 dependencies = [
     "SQLAlchemy~=2.0.16",
     "pydantic>=2.8.2,<2.13.0",
-    "fastapi>=0.104.1,<0.120.0",
+    "fastapi>=0.104.1,<0.121.0",
     "pydantic-settings>=2.1,<2.12"
 ]
 dynamic = ["version"]
