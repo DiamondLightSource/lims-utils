@@ -57,8 +57,6 @@ class CookieOrHTTPBearer(HTTPBearer):
 
         if not (authorization and scheme and credentials):
             if self.auto_error:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
-                )
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
         return await super().__call__(request)
