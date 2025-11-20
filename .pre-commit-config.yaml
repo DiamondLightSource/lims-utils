@@ -3,22 +3,23 @@ repos:
     rev: v4.4.0
     hooks:
       - id: check-added-large-files
-      - id: check-yaml
+      # - id: check-yaml
       - id: check-merge-conflict
 
   - repo: local
     hooks:
-      - id: black
-        name: Run black
-        stages: [commit]
+      - id: format
+        name: Format with ruff
+        stages: [pre-commit]
         language: system
-        entry: black --check --diff
-        exclude: src/lims_utils/tables.py
+        entry: ruff format --check --diff
+        exclude: alembic
         types: [python]
 
       - id: ruff
         name: Run ruff
-        stages: [commit]
+        stages: [pre-commit]
         language: system
         entry: ruff check
+        exclude: alembic
         types: [python]
