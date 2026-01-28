@@ -204,7 +204,7 @@ class BeamlineStats(Base):
 
 class CalendarHash(Base):
     __tablename__ = "CalendarHash"
-    __table_args__ = {"comment": "Lets people get to their calendars without logging in using a " "private (hash) url"}
+    __table_args__ = {"comment": "Lets people get to their calendars without logging in using a private (hash) url"}
 
     calendarHashId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
     ckey: Mapped[Optional[str]] = mapped_column(String(50))
@@ -407,7 +407,7 @@ class EventType(Base):
     __tablename__ = "EventType"
     __table_args__ = (
         Index("name", "name", unique=True),
-        {"comment": "Defines the list of event types which can occur during a data " "collection."},
+        {"comment": "Defines the list of event types which can occur during a data collection."},
     )
 
     eventTypeId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -537,7 +537,7 @@ class IspybReference(Base):
 
 class LDAPSearchParameters(Base):
     __tablename__ = "LDAPSearchParameters"
-    __table_args__ = {"comment": "All necessary parameters to run an LDAP search, except the search " "base"}
+    __table_args__ = {"comment": "All necessary parameters to run an LDAP search, except the search base"}
 
     ldapSearchParametersId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
     accountType: Mapped[str] = mapped_column(
@@ -837,7 +837,7 @@ class ScreeningRankSet(Base):
 
 class Sleeve(Base):
     __tablename__ = "Sleeve"
-    __table_args__ = {"comment": "Registry of ice-filled sleeves used to cool plates whilst on the " "goniometer"}
+    __table_args__ = {"comment": "Registry of ice-filled sleeves used to cool plates whilst on the goniometer"}
 
     sleeveId: Mapped[int] = mapped_column(
         TINYINT(3),
@@ -1113,7 +1113,7 @@ class LDAPSearchBase(Base):
             name="LDAPSearchBase_fk_ldapSearchParametersId",
         ),
         Index("LDAPSearchBase_fk_ldapSearchParametersId", "ldapSearchParametersId"),
-        {"comment": "LDAP search base and the sequence number in which it should be " "attempted"},
+        {"comment": "LDAP search base and the sequence number in which it should be attempted"},
     )
 
     ldapSearchBaseId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -1237,7 +1237,7 @@ class ProcessingPipeline(Base):
             name="ProcessingPipeline_fk1",
         ),
         Index("ProcessingPipeline_fk1", "processingPipelineCategoryId"),
-        {"comment": "A lookup table for different processing pipelines and their " "categories"},
+        {"comment": "A lookup table for different processing pipelines and their categories"},
     )
 
     processingPipelineId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -1342,7 +1342,7 @@ class UserGroupHasLDAPSearchParameters(Base):
             name="UserGroup_has_LDAPSearchParameters_fk1",
         ),
         Index("UserGroup_has_LDAPSearchParameters_fk2", "ldapSearchParametersId"),
-        {"comment": "Gives the LDAP search parameters needed to find a set of " "usergroup members"},
+        {"comment": "Gives the LDAP search parameters needed to find a set of usergroup members"},
     )
 
     userGroupId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -2071,7 +2071,7 @@ class Component(Base):
         ),
         Index("componentTypeId", "componentTypeId"),
         Index("proposalId", "proposalId"),
-        {"comment": "Description of a component that can be used inside a crystal or a " "sample."},
+        {"comment": "Description of a component that can be used inside a crystal or a sample."},
     )
 
     componentId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -3346,7 +3346,7 @@ class CrystalComposition(Base):
         Index("componentId", "componentId"),
         Index("concentrationTypeId", "concentrationTypeId"),
         Index("crystalId", "crystalId"),
-        {"comment": "Links a crystal to its components with a specified abundance or " "ratio."},
+        {"comment": "Links a crystal to its components with a specified abundance or ratio."},
     )
 
     crystalCompositionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -4430,7 +4430,7 @@ class SampleComposition(Base):
         Index("blSampleId", "blSampleId"),
         Index("componentId", "componentId"),
         Index("concentrationTypeId", "concentrationTypeId"),
-        {"comment": "Links a sample to its components with a specified abundance or " "ratio."},
+        {"comment": "Links a sample to its components with a specified abundance or ratio."},
     )
 
     sampleCompositionId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -4623,7 +4623,7 @@ class BLSampleImageHasPositioner(Base):
         ),
         Index("BLSampleImageHasPositioner_ibfk1", "blSampleImageId"),
         Index("BLSampleImageHasPositioner_ibfk2", "positionerId"),
-        {"comment": "Allows a BLSampleImage to store motor positions along with the " "image"},
+        {"comment": "Allows a BLSampleImage to store motor positions along with the image"},
     )
 
     blSampleImageHasPositionerId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
@@ -5222,7 +5222,7 @@ class GridSquare(Base):
             name="GridSquare_fk_atlasId",
         ),
         Index("GridSquare_fk_atlasId", "atlasId"),
-        {"comment": "Details of a Cryo-EM grid square including image captured at grid " "square magnification"},
+        {"comment": "Details of a Cryo-EM grid square including image captured at grid square magnification"},
     )
 
     gridSquareId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -6409,7 +6409,7 @@ class Tomogram(Base):
         Index("Tomogram_fk_autoProcProgramId", "autoProcProgramId"),
         Index("Tomogram_fk_dataCollectionId", "dataCollectionId"),
         Index("Tomogram_fk_gridSquareId", "gridSquareId"),
-        {"comment": "For storing per-sample, per-position data analysis results " "(reconstruction)"},
+        {"comment": "For storing per-sample, per-position data analysis results (reconstruction)"},
     )
 
     tomogramId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -6494,7 +6494,7 @@ class XRFFluorescenceMapping(Base):
         Index("XRFFluorescenceMapping_ibfk1", "xrfFluorescenceMappingROIId"),
         Index("XRFFluorescenceMapping_ibfk2", "gridInfoId"),
         Index("XRFFluorescenceMapping_ibfk3", "autoProcProgramId"),
-        {"comment": "An XRF map generated from an XRF Mapping ROI based on data from a " "gridscan of a sample"},
+        {"comment": "An XRF map generated from an XRF Mapping ROI based on data from a gridscan of a sample"},
     )
 
     xrfFluorescenceMappingId: Mapped[int] = mapped_column(INTEGER(11), primary_key=True)
@@ -7025,7 +7025,7 @@ class XFEFluorescenceComposite(Base):
         Index("XFEFluorescenceComposite_ibfk1", "r"),
         Index("XFEFluorescenceComposite_ibfk2", "g"),
         Index("XFEFluorescenceComposite_ibfk3", "b"),
-        {"comment": "A composite XRF map composed of three XRFFluorescenceMapping " "entries creating r, g, b layers"},
+        {"comment": "A composite XRF map composed of three XRFFluorescenceMapping entries creating r, g, b layers"},
     )
 
     xfeFluorescenceCompositeId: Mapped[int] = mapped_column(INTEGER(10), primary_key=True)
