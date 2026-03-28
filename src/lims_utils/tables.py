@@ -1,7 +1,7 @@
 # type: ignore
 # ruff: noqa: E501
 
-__schema_version__ = "4.11.0"
+__schema_version__ = "4.12.0"
 import datetime
 import decimal
 from typing import List, Optional
@@ -5876,11 +5876,17 @@ class AutoProcProgram(Base):
     __tablename__ = "AutoProcProgram"
     __table_args__ = (
         ForeignKeyConstraint(
+            ["parentAutoProcProgramId"],
+            ["AutoProcProgram.autoProcProgramId"],
+            name="AutoProcProgram_fk_parentAutoProcProgramId",
+        ),
+        ForeignKeyConstraint(
             ["processingJobId"],
             ["ProcessingJob.processingJobId"],
             name="AutoProcProgram_FK2",
         ),
         Index("AutoProcProgram_FK2", "processingJobId"),
+        Index("AutoProcProgram_fk_parentAutoProcProgramId", "parentAutoProcProgramId"),
     )
 
     autoProcProgramId: Mapped[int] = mapped_column(
@@ -5902,7 +5908,18 @@ class AutoProcProgram(Base):
     )
     processingJobId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
     processingPipelineId: Mapped[Optional[int]] = mapped_column(INTEGER(11))
+    parentAutoProcProgramId: Mapped[Optional[int]] = mapped_column(INTEGER(10))
 
+    AutoProcProgram: Mapped["AutoProcProgram"] = relationship(
+        "AutoProcProgram",
+        remote_side=[autoProcProgramId],
+        back_populates="AutoProcProgram_reverse",
+    )
+    AutoProcProgram_reverse: Mapped[List["AutoProcProgram"]] = relationship(
+        "AutoProcProgram",
+        remote_side=[parentAutoProcProgramId],
+        back_populates="AutoProcProgram",
+    )
     ProcessingJob: Mapped["ProcessingJob"] = relationship("ProcessingJob", back_populates="AutoProcProgram")
     AutoProcIntegration: Mapped[List["AutoProcIntegration"]] = relationship(
         "AutoProcIntegration", back_populates="AutoProcProgram"
@@ -6815,6 +6832,29 @@ class ProcessedTomogram(Base):
     tomogramId: Mapped[int] = mapped_column(INTEGER(11), comment="references Tomogram table")
     filePath: Mapped[Optional[str]] = mapped_column(String(255), comment="location on disk for the tomogram file")
     processingType: Mapped[Optional[str]] = mapped_column(String(255), comment="nature of the processed tomogram")
+    feature: Mapped[Optional[str]] = mapped_column(
+        Enum(
+            "Membrane",
+            "Microtubule",
+            "Ribosome",
+            "Tric",
+            "Actin",
+            "Cytoplasm",
+            "Cytoplasmic granule",
+            "Lipid droplet",
+            "Mitochondrial granule",
+            "Mitochondrion",
+            "Npc",
+            "Nuclear envelope",
+            "Nucleus",
+            "Prohibitin",
+            "Proteasome",
+            "Vault",
+            "Vimentin",
+            "Void",
+        ),
+        comment="Tomogram feature",
+    )
 
     Tomogram: Mapped["Tomogram"] = relationship("Tomogram", back_populates="ProcessedTomogram")
 
