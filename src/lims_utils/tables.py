@@ -4280,6 +4280,12 @@ class Atlas(Base):
         ),
         comment="Collection mode",
     )
+    atlasType: Mapped[Optional[str]] = mapped_column(
+        Enum(
+            "ROI",
+            "Tilescan",
+        ),
+    )
 
     DataCollectionGroup: Mapped["DataCollectionGroup"] = relationship("DataCollectionGroup", back_populates="Atlas")
     GridSquare: Mapped[List["GridSquare"]] = relationship("GridSquare", back_populates="Atlas")
