@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from fastapi import HTTPException, Request, status
+from fastapi import HTTPException, status
+from fastapi.requests import HTTPConnection
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.security.utils import get_authorization_scheme_param
 
@@ -47,7 +48,7 @@ class CookieOrHTTPBearer(HTTPBearer):
 
         self.cookie_key = cookie_key
 
-    async def __call__(self, request: Request):
+    async def __call__(self, request: HTTPConnection):
         token = request.cookies.get(self.cookie_key)
         if token is not None:
             return HTTPAuthorizationCredentials(scheme="cookie", credentials=token)
