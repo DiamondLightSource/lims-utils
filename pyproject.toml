@@ -58,6 +58,7 @@ ignore_missing_imports = true # Ignore missing stubs in imported modules
 addopts = """
     --tb=native -vv --doctest-modules --doctest-glob="*.rst"
     """
+asyncio_default_fixture_loop_scope = "session"
 # https://iscinumpy.gitlab.io/post/bound-version-constraints/#watch-for-warnings
 filterwarnings = "error"
 # Doctest python code in docs, python code in src docstrings, test functions in tests
