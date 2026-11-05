@@ -49,6 +49,19 @@ def test_paginate_reverse(mock_session):
     assert query_eq(mock_session.call_args.args[0], query.limit(20).offset(80))
 
 
+@patch.object(fs, "execute")
+def test_paginate_reverse_underflow(mock_session):
+    """Should catch underflow if page is negative and absolute value is greater than total pages"""
+
+    mock_session.return_value.all.return_value = []
+    with get_session(lambda: fs):
+        # Page total is 5
+        response = db.paginate(query, 20, -8, precounted_total=100)
+        assert response.page == 0
+
+    assert query_eq(mock_session.call_args.args[0], query.limit(20).offset(0))
+
+
 def test_total_zero():
     """Should return empty list if total is 0"""
 
