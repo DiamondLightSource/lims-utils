@@ -70,7 +70,8 @@ class Database:
 
         if total:
             if page < 0:
-                page = (total // limit) + page
+                actual_page = (total // limit) + page
+                page = 0 if actual_page < 0 else actual_page
 
             new_query = query.limit(limit).offset((page) * limit)
 
