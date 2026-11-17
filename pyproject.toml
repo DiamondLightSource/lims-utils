@@ -72,7 +72,8 @@ omit = [
     "__init__.py",
     "__main__.py",
     "_version.py",
-    "tables.py"
+    "tables.py",
+    "expeye_client",
 ]
 
 [tool.coverage.paths]
