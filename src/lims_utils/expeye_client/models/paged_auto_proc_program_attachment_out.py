@@ -56,7 +56,7 @@ class PagedAutoProcProgramAttachmentOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.auto_proc_program_attachment_out import AutoProcProgramAttachmentOut  # noqa: PLC0415
+        from ..models.auto_proc_program_attachment_out import AutoProcProgramAttachmentOut
 
         d = dict(src_dict)
         items = []

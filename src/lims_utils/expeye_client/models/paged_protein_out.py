@@ -56,7 +56,7 @@ class PagedProteinOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.protein_out import ProteinOut  # noqa: PLC0415
+        from ..models.protein_out import ProteinOut
 
         d = dict(src_dict)
         items = []

@@ -87,8 +87,8 @@ class SessionEventWithChildrenOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.auto_proc_program_scaling_out import AutoProcProgramScalingOut  # noqa: PLC0415
-        from ..models.session_event_out import SessionEventOut  # noqa: PLC0415
+        from ..models.auto_proc_program_scaling_out import AutoProcProgramScalingOut
+        from ..models.session_event_out import SessionEventOut
 
         d = dict(src_dict)
         type_ = d.pop("type")

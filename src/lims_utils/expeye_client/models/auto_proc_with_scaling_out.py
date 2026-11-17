@@ -46,7 +46,7 @@ class AutoProcWithScalingOut:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.auto_proc_scaling_statistics_out import AutoProcScalingStatisticsOut  # noqa: PLC0415
+        from ..models.auto_proc_scaling_statistics_out import AutoProcScalingStatisticsOut
 
         auto_proc_id = self.auto_proc_id
 
@@ -148,7 +148,7 @@ class AutoProcWithScalingOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.auto_proc_scaling_statistics_out import AutoProcScalingStatisticsOut  # noqa: PLC0415
+        from ..models.auto_proc_scaling_statistics_out import AutoProcScalingStatisticsOut
 
         d = dict(src_dict)
         auto_proc_id = d.pop("autoProcId")

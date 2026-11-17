@@ -56,7 +56,7 @@ class PagedMillingStepOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.milling_step_out import MillingStepOut  # noqa: PLC0415
+        from ..models.milling_step_out import MillingStepOut
 
         d = dict(src_dict)
         items = []

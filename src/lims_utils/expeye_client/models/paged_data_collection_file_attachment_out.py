@@ -56,7 +56,7 @@ class PagedDataCollectionFileAttachmentOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.data_collection_file_attachment_out import DataCollectionFileAttachmentOut  # noqa: PLC0415
+        from ..models.data_collection_file_attachment_out import DataCollectionFileAttachmentOut
 
         d = dict(src_dict)
         items = []

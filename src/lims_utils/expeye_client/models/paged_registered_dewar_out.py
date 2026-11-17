@@ -56,7 +56,7 @@ class PagedRegisteredDewarOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.registered_dewar_out import RegisteredDewarOut  # noqa: PLC0415
+        from ..models.registered_dewar_out import RegisteredDewarOut
 
         d = dict(src_dict)
         items = []

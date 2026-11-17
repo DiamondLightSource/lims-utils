@@ -56,7 +56,7 @@ class PagedGridSquareOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.grid_square_out import GridSquareOut  # noqa: PLC0415
+        from ..models.grid_square_out import GridSquareOut
 
         d = dict(src_dict)
         items = []

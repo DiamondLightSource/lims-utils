@@ -55,7 +55,7 @@ class DewarOptional:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.dewar_optional_extra_type_0_type_0 import DewarOptionalExtraType0Type0  # noqa: PLC0415
+        from ..models.dewar_optional_extra_type_0_type_0 import DewarOptionalExtraType0Type0
 
         weight: float | None | Unset
         if isinstance(self.weight, Unset):
@@ -189,7 +189,7 @@ class DewarOptional:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.dewar_optional_extra_type_0_type_0 import DewarOptionalExtraType0Type0  # noqa: PLC0415
+        from ..models.dewar_optional_extra_type_0_type_0 import DewarOptionalExtraType0Type0
 
         d = dict(src_dict)
 

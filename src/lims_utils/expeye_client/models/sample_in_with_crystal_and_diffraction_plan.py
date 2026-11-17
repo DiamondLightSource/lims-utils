@@ -60,8 +60,8 @@ class SampleInWithCrystalAndDiffractionPlan:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.crystal_with_protein import CrystalWithProtein  # noqa: PLC0415
-        from ..models.diffraction_plan_in import DiffractionPlanIn  # noqa: PLC0415
+        from ..models.crystal_with_protein import CrystalWithProtein
+        from ..models.diffraction_plan_in import DiffractionPlanIn
 
         diffraction_plan_id: int | None | Unset
         if isinstance(self.diffraction_plan_id, Unset):
@@ -217,9 +217,9 @@ class SampleInWithCrystalAndDiffractionPlan:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.crystal_with_protein import CrystalWithProtein  # noqa: PLC0415
-        from ..models.diffraction_plan_in import DiffractionPlanIn  # noqa: PLC0415
-        from ..models.sample_image_in import SampleImageIn  # noqa: PLC0415
+        from ..models.crystal_with_protein import CrystalWithProtein
+        from ..models.diffraction_plan_in import DiffractionPlanIn
+        from ..models.sample_image_in import SampleImageIn
 
         d = dict(src_dict)
 

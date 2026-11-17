@@ -79,9 +79,9 @@ class MxLimsPuck:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_puck_containerref import MxLimsPuckContainerref  # noqa: PLC0415
-        from ..models.mx_lims_puck_identifiers import MxLimsPuckIdentifiers  # noqa: PLC0415
-        from ..models.mx_lims_puck_urls import MxLimsPuckUrls  # noqa: PLC0415
+        from ..models.mx_lims_puck_containerref import MxLimsPuckContainerref
+        from ..models.mx_lims_puck_identifiers import MxLimsPuckIdentifiers
+        from ..models.mx_lims_puck_urls import MxLimsPuckUrls
 
         d = dict(src_dict)
         mxlims_type = d.pop("mxlimsType")

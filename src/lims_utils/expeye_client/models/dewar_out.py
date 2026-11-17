@@ -59,7 +59,7 @@ class DewarOut:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.dewar_out_extra_type_0_type_0 import DewarOutExtraType0Type0  # noqa: PLC0415
+        from ..models.dewar_out_extra_type_0_type_0 import DewarOutExtraType0Type0
 
         dewar_id = self.dewar_id
 
@@ -202,7 +202,7 @@ class DewarOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.dewar_out_extra_type_0_type_0 import DewarOutExtraType0Type0  # noqa: PLC0415
+        from ..models.dewar_out_extra_type_0_type_0 import DewarOutExtraType0Type0
 
         d = dict(src_dict)
         dewar_id = d.pop("dewarId")

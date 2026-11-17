@@ -44,7 +44,9 @@ class ShipmentWithChildrenIn:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.shipment_with_children_in_extra_type_0_type_0 import ShipmentWithChildrenInExtraType0Type0  # noqa: PLC0415
+        from ..models.shipment_with_children_in_extra_type_0_type_0 import (
+            ShipmentWithChildrenInExtraType0Type0,
+        )
 
         children = []
         for children_item_data in self.children:
@@ -127,8 +129,10 @@ class ShipmentWithChildrenIn:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.dewar_with_children_in import DewarWithChildrenIn  # noqa: PLC0415
-        from ..models.shipment_with_children_in_extra_type_0_type_0 import ShipmentWithChildrenInExtraType0Type0  # noqa: PLC0415
+        from ..models.dewar_with_children_in import DewarWithChildrenIn
+        from ..models.shipment_with_children_in_extra_type_0_type_0 import (
+            ShipmentWithChildrenInExtraType0Type0,
+        )
 
         d = dict(src_dict)
         children = []

@@ -79,9 +79,9 @@ class MxLimsShipment:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_contact import MxLimsContact  # noqa: PLC0415
-        from ..models.mx_lims_shipment_identifiers import MxLimsShipmentIdentifiers  # noqa: PLC0415
-        from ..models.mx_lims_shipment_urls import MxLimsShipmentUrls  # noqa: PLC0415
+        from ..models.mx_lims_contact import MxLimsContact
+        from ..models.mx_lims_shipment_identifiers import MxLimsShipmentIdentifiers
+        from ..models.mx_lims_shipment_urls import MxLimsShipmentUrls
 
         d = dict(src_dict)
         mxlims_type = d.pop("mxlimsType")

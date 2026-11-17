@@ -149,8 +149,12 @@ class DiffractionPlanIn:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.diffraction_plan_in_scan_parameters_type_0_type_0 import DiffractionPlanInScanParametersType0Type0  # noqa: PLC0415
-        from ..models.string_serialised_strategy_option_type_0 import StringSerialisedStrategyOptionType0  # noqa: PLC0415
+        from ..models.diffraction_plan_in_scan_parameters_type_0_type_0 import (
+            DiffractionPlanInScanParametersType0Type0,
+        )
+        from ..models.string_serialised_strategy_option_type_0 import (
+            StringSerialisedStrategyOptionType0,
+        )
 
         name: None | str | Unset
         if isinstance(self.name, Unset):
@@ -652,8 +656,12 @@ class DiffractionPlanIn:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.diffraction_plan_in_scan_parameters_type_0_type_0 import DiffractionPlanInScanParametersType0Type0  # noqa: PLC0415
-        from ..models.string_serialised_strategy_option_type_0 import StringSerialisedStrategyOptionType0  # noqa: PLC0415
+        from ..models.diffraction_plan_in_scan_parameters_type_0_type_0 import (
+            DiffractionPlanInScanParametersType0Type0,
+        )
+        from ..models.string_serialised_strategy_option_type_0 import (
+            StringSerialisedStrategyOptionType0,
+        )
 
         d = dict(src_dict)
 

@@ -48,7 +48,9 @@ class ShipmentWithChildrenOut:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.shipment_with_children_out_extra_type_0_type_0 import ShipmentWithChildrenOutExtraType0Type0  # noqa: PLC0415
+        from ..models.shipment_with_children_out_extra_type_0_type_0 import (
+            ShipmentWithChildrenOutExtraType0Type0,
+        )
 
         shipping_id = self.shipping_id
 
@@ -145,8 +147,10 @@ class ShipmentWithChildrenOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.dewar_with_children_out import DewarWithChildrenOut  # noqa: PLC0415
-        from ..models.shipment_with_children_out_extra_type_0_type_0 import ShipmentWithChildrenOutExtraType0Type0  # noqa: PLC0415
+        from ..models.dewar_with_children_out import DewarWithChildrenOut
+        from ..models.shipment_with_children_out_extra_type_0_type_0 import (
+            ShipmentWithChildrenOutExtraType0Type0,
+        )
 
         d = dict(src_dict)
         shipping_id = d.pop("shippingId")

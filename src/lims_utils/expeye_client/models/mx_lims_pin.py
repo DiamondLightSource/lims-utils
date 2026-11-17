@@ -91,10 +91,10 @@ class MxLimsPin:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_pin_containerref import MxLimsPinContainerref  # noqa: PLC0415
-        from ..models.mx_lims_pin_identifiers import MxLimsPinIdentifiers  # noqa: PLC0415
-        from ..models.mx_lims_pin_sampleref import MxLimsPinSampleref  # noqa: PLC0415
-        from ..models.mx_lims_pin_urls import MxLimsPinUrls  # noqa: PLC0415
+        from ..models.mx_lims_pin_containerref import MxLimsPinContainerref
+        from ..models.mx_lims_pin_identifiers import MxLimsPinIdentifiers
+        from ..models.mx_lims_pin_sampleref import MxLimsPinSampleref
+        from ..models.mx_lims_pin_urls import MxLimsPinUrls
 
         d = dict(src_dict)
         uuid = UUID(d.pop("uuid"))

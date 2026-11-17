@@ -27,7 +27,7 @@ class MxLimsFullShipmentPuck:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_puck import MxLimsPuck  # noqa: PLC0415
+        from ..models.mx_lims_puck import MxLimsPuck
 
         d = dict(src_dict)
         mx_lims_full_shipment_puck = cls()

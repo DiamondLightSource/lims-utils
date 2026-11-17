@@ -56,7 +56,9 @@ class PagedProcessingJobWithAutoProcProgramOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.processing_job_with_auto_proc_program_out import ProcessingJobWithAutoProcProgramOut  # noqa: PLC0415
+        from ..models.processing_job_with_auto_proc_program_out import (
+            ProcessingJobWithAutoProcProgramOut,
+        )
 
         d = dict(src_dict)
         items = []

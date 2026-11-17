@@ -74,9 +74,13 @@ class MxLimsMacromoleculeSample:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_macromolecule_sample_identifiers import MxLimsMacromoleculeSampleIdentifiers  # noqa: PLC0415
-        from ..models.mx_lims_macromolecule_sample_parentsampleref import MxLimsMacromoleculeSampleParentsampleref  # noqa: PLC0415
-        from ..models.mx_lims_macromolecule_sample_urls import MxLimsMacromoleculeSampleUrls  # noqa: PLC0415
+        from ..models.mx_lims_macromolecule_sample_identifiers import (
+            MxLimsMacromoleculeSampleIdentifiers,
+        )
+        from ..models.mx_lims_macromolecule_sample_parentsampleref import (
+            MxLimsMacromoleculeSampleParentsampleref,
+        )
+        from ..models.mx_lims_macromolecule_sample_urls import MxLimsMacromoleculeSampleUrls
 
         d = dict(src_dict)
         mxlims_type = d.pop("mxlimsType")

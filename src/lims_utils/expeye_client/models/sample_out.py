@@ -69,8 +69,8 @@ class SampleOut:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.crystal_out import CrystalOut  # noqa: PLC0415
-        from ..models.diffraction_plan_out import DiffractionPlanOut  # noqa: PLC0415
+        from ..models.crystal_out import CrystalOut
+        from ..models.diffraction_plan_out import DiffractionPlanOut
 
         bl_sample_id = self.bl_sample_id
 
@@ -251,9 +251,9 @@ class SampleOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.crystal_out import CrystalOut  # noqa: PLC0415
-        from ..models.diffraction_plan_out import DiffractionPlanOut  # noqa: PLC0415
-        from ..models.sample_image_in import SampleImageIn  # noqa: PLC0415
+        from ..models.crystal_out import CrystalOut
+        from ..models.diffraction_plan_out import DiffractionPlanOut
+        from ..models.sample_image_in import SampleImageIn
 
         d = dict(src_dict)
         bl_sample_id = d.pop("blSampleId")

@@ -51,7 +51,7 @@ class UserGroupLDAPSearchParams:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.ldap_search_params import LDAPSearchParams  # noqa: PLC0415
+        from ..models.ldap_search_params import LDAPSearchParams
 
         d = dict(src_dict)
         user_group_id = d.pop("userGroupId")

@@ -47,8 +47,8 @@ class LaserActionOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.laser_parameters_out import LaserParametersOut  # noqa: PLC0415
-        from ..models.laser_point_out import LaserPointOut  # noqa: PLC0415
+        from ..models.laser_parameters_out import LaserParametersOut
+        from ..models.laser_point_out import LaserPointOut
 
         d = dict(src_dict)
         parameters = LaserParametersOut.from_dict(d.pop("parameters"))

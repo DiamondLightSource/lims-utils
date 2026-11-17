@@ -38,7 +38,7 @@ class ProcessingJobParametersIn:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.processing_job_parameters_in_items import ProcessingJobParametersInItems  # noqa: PLC0415
+        from ..models.processing_job_parameters_in_items import ProcessingJobParametersInItems
 
         d = dict(src_dict)
         items = ProcessingJobParametersInItems.from_dict(d.pop("items"))

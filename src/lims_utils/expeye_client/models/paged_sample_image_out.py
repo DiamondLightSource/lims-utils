@@ -56,7 +56,7 @@ class PagedSampleImageOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.sample_image_out import SampleImageOut  # noqa: PLC0415
+        from ..models.sample_image_out import SampleImageOut
 
         d = dict(src_dict)
         items = []

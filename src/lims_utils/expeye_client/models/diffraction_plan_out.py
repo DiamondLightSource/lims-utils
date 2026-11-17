@@ -155,9 +155,9 @@ class DiffractionPlanOut:
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.diffraction_plan_out_scan_parameters_type_0_type_0 import (
-            DiffractionPlanOutScanParametersType0Type0,  # noqa: PLC0415
+            DiffractionPlanOutScanParametersType0Type0,
         )
-        from ..models.strategy_option import StrategyOption  # noqa: PLC0415
+        from ..models.strategy_option import StrategyOption
 
         diffraction_plan_id = self.diffraction_plan_id
 
@@ -669,9 +669,9 @@ class DiffractionPlanOut:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.diffraction_plan_out_scan_parameters_type_0_type_0 import (
-            DiffractionPlanOutScanParametersType0Type0,  # noqa: PLC0415
+            DiffractionPlanOutScanParametersType0Type0,
         )
-        from ..models.strategy_option import StrategyOption  # noqa: PLC0415
+        from ..models.strategy_option import StrategyOption
 
         d = dict(src_dict)
         diffraction_plan_id = d.pop("diffractionPlanId")

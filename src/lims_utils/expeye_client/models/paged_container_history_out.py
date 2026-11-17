@@ -56,7 +56,7 @@ class PagedContainerHistoryOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.container_history_out import ContainerHistoryOut  # noqa: PLC0415
+        from ..models.container_history_out import ContainerHistoryOut
 
         d = dict(src_dict)
         items = []

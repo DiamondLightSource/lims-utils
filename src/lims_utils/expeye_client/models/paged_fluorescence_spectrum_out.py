@@ -56,7 +56,7 @@ class PagedFluorescenceSpectrumOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.fluorescence_spectrum_out import FluorescenceSpectrumOut  # noqa: PLC0415
+        from ..models.fluorescence_spectrum_out import FluorescenceSpectrumOut
 
         d = dict(src_dict)
         items = []

@@ -56,7 +56,7 @@ class PagedSessionOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.session_out import SessionOut  # noqa: PLC0415
+        from ..models.session_out import SessionOut
 
         d = dict(src_dict)
         items = []

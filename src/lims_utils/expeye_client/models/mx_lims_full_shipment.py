@@ -75,12 +75,14 @@ class MxLimsFullShipment:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_full_shipment_dewar import MxLimsFullShipmentDewar  # noqa: PLC0415
-        from ..models.mx_lims_full_shipment_macromolecule import MxLimsFullShipmentMacromolecule  # noqa: PLC0415
-        from ..models.mx_lims_full_shipment_macromoleculesample import MxLimsFullShipmentMacromoleculesample  # noqa: PLC0415
-        from ..models.mx_lims_full_shipment_pin import MxLimsFullShipmentPin  # noqa: PLC0415
-        from ..models.mx_lims_full_shipment_puck import MxLimsFullShipmentPuck  # noqa: PLC0415
-        from ..models.mx_lims_full_shipment_shipment import MxLimsFullShipmentShipment  # noqa: PLC0415
+        from ..models.mx_lims_full_shipment_dewar import MxLimsFullShipmentDewar
+        from ..models.mx_lims_full_shipment_macromolecule import MxLimsFullShipmentMacromolecule
+        from ..models.mx_lims_full_shipment_macromoleculesample import (
+            MxLimsFullShipmentMacromoleculesample,
+        )
+        from ..models.mx_lims_full_shipment_pin import MxLimsFullShipmentPin
+        from ..models.mx_lims_full_shipment_puck import MxLimsFullShipmentPuck
+        from ..models.mx_lims_full_shipment_shipment import MxLimsFullShipmentShipment
 
         d = dict(src_dict)
         version = MxLimsFullShipmentVersion(d.pop("version"))

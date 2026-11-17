@@ -56,7 +56,7 @@ class PagedProposalOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.proposal_out import ProposalOut  # noqa: PLC0415
+        from ..models.proposal_out import ProposalOut
 
         d = dict(src_dict)
         items = []

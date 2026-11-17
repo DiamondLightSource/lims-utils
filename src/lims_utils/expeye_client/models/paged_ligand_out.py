@@ -56,7 +56,7 @@ class PagedLigandOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.ligand_out import LigandOut  # noqa: PLC0415
+        from ..models.ligand_out import LigandOut
 
         d = dict(src_dict)
         items = []

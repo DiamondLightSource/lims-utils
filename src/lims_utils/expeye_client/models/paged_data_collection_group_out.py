@@ -56,7 +56,7 @@ class PagedDataCollectionGroupOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.data_collection_group_out import DataCollectionGroupOut  # noqa: PLC0415
+        from ..models.data_collection_group_out import DataCollectionGroupOut
 
         d = dict(src_dict)
         items = []

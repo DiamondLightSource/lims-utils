@@ -68,8 +68,8 @@ class MxLimsMacromolecule:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_macromolecule_identifiers import MxLimsMacromoleculeIdentifiers  # noqa: PLC0415
-        from ..models.mx_lims_macromolecule_urls import MxLimsMacromoleculeUrls  # noqa: PLC0415
+        from ..models.mx_lims_macromolecule_identifiers import MxLimsMacromoleculeIdentifiers
+        from ..models.mx_lims_macromolecule_urls import MxLimsMacromoleculeUrls
 
         d = dict(src_dict)
         mxlims_type = d.pop("mxlimsType")

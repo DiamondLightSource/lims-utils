@@ -56,7 +56,7 @@ class PagedShipmentOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.shipment_out import ShipmentOut  # noqa: PLC0415
+        from ..models.shipment_out import ShipmentOut
 
         d = dict(src_dict)
         items = []

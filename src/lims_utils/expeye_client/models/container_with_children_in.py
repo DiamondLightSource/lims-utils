@@ -193,7 +193,7 @@ class ContainerWithChildrenIn:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.sample_with_crystal_in import SampleWithCrystalIn  # noqa: PLC0415
+        from ..models.sample_with_crystal_in import SampleWithCrystalIn
 
         d = dict(src_dict)
         children = []

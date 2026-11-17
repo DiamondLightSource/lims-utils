@@ -56,7 +56,7 @@ class PagedFullMovieOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.full_movie_out import FullMovieOut  # noqa: PLC0415
+        from ..models.full_movie_out import FullMovieOut
 
         d = dict(src_dict)
         items = []

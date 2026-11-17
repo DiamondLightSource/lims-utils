@@ -59,7 +59,7 @@ class PersonWithRole:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.person_in import PersonIn  # noqa: PLC0415
+        from ..models.person_in import PersonIn
 
         d = dict(src_dict)
         person = PersonIn.from_dict(d.pop("person"))

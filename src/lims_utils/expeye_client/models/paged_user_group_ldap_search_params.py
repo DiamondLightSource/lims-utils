@@ -56,7 +56,7 @@ class PagedUserGroupLDAPSearchParams:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.user_group_ldap_search_params import UserGroupLDAPSearchParams  # noqa: PLC0415
+        from ..models.user_group_ldap_search_params import UserGroupLDAPSearchParams
 
         d = dict(src_dict)
         items = []

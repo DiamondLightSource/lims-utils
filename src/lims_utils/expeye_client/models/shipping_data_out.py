@@ -68,10 +68,10 @@ class ShippingDataOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.lab_contact_out import LabContactOut  # noqa: PLC0415
-        from ..models.protein_out import ProteinOut  # noqa: PLC0415
-        from ..models.registered_container_out import RegisteredContainerOut  # noqa: PLC0415
-        from ..models.registered_dewar_out import RegisteredDewarOut  # noqa: PLC0415
+        from ..models.lab_contact_out import LabContactOut
+        from ..models.protein_out import ProteinOut
+        from ..models.registered_container_out import RegisteredContainerOut
+        from ..models.registered_dewar_out import RegisteredDewarOut
 
         d = dict(src_dict)
         lab_contacts = []

@@ -188,7 +188,7 @@ class SampleIn:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.sample_image_in import SampleImageIn  # noqa: PLC0415
+        from ..models.sample_image_in import SampleImageIn
 
         d = dict(src_dict)
 

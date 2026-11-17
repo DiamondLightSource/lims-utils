@@ -102,7 +102,7 @@ class ProcessingJobWithAutoProcProgramOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.auto_proc_program_with_auto_proc_out import AutoProcProgramWithAutoProcOut  # noqa: PLC0415
+        from ..models.auto_proc_program_with_auto_proc_out import AutoProcProgramWithAutoProcOut
 
         d = dict(src_dict)
         processing_job_id = d.pop("processingJobId")

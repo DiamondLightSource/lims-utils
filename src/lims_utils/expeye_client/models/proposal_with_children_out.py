@@ -165,7 +165,7 @@ class ProposalWithChildrenOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.shipment_with_children_out import ShipmentWithChildrenOut  # noqa: PLC0415
+        from ..models.shipment_with_children_out import ShipmentWithChildrenOut
 
         d = dict(src_dict)
         proposal_id = d.pop("proposalId")

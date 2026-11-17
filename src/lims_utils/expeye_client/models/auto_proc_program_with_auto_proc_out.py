@@ -184,8 +184,8 @@ class AutoProcProgramWithAutoProcOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.auto_proc_integration_out import AutoProcIntegrationOut  # noqa: PLC0415
-        from ..models.auto_proc_with_scaling_out import AutoProcWithScalingOut  # noqa: PLC0415
+        from ..models.auto_proc_integration_out import AutoProcIntegrationOut
+        from ..models.auto_proc_with_scaling_out import AutoProcWithScalingOut
 
         d = dict(src_dict)
         auto_proc_program_id = d.pop("autoProcProgramId")

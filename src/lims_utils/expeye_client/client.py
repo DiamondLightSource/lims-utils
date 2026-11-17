@@ -20,12 +20,13 @@ class Client:
         ``timeout``: The maximum amount of a time a request can take. API functions will raise
         httpx2.TimeoutException if this is exceeded.
 
-        ``verify_ssl``: Whether or not to verify the SSL certificate of the API server. This should be True in production,
-        but can be set to False for testing purposes.
+        ``verify_ssl``: Whether or not to verify the SSL certificate of the API server. This should be True in
+            but can be set to False for testing purposes.
 
         ``follow_redirects``: Whether or not to follow redirects. Default value is False.
 
-        ``httpx_args``: A dictionary of additional arguments to be passed to the ``httpx2.Client`` and ``httpx2.AsyncClient`` constructor.
+        ``httpx_args``: Additional arguments passed to the ``httpx2.Client`` and
+            ``httpx2.AsyncClient`` constructors.
 
 
     Attributes:
@@ -147,12 +148,13 @@ class AuthenticatedClient:
         ``timeout``: The maximum amount of a time a request can take. API functions will raise
         httpx2.TimeoutException if this is exceeded.
 
-        ``verify_ssl``: Whether or not to verify the SSL certificate of the API server. This should be True in production,
-        but can be set to False for testing purposes.
+        ``verify_ssl``: Whether or not to verify the SSL certificate of the API server. This should be True in
+            but can be set to False for testing purposes.
 
         ``follow_redirects``: Whether or not to follow redirects. Default value is False.
 
-        ``httpx_args``: A dictionary of additional arguments to be passed to the ``httpx2.Client`` and ``httpx2.AsyncClient`` constructor.
+        ``httpx_args``: Additional arguments passed to the ``httpx2.Client`` and
+            ``httpx2.AsyncClient`` constructors.
 
 
     Attributes:

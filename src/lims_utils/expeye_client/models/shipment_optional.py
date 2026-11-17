@@ -41,7 +41,7 @@ class ShipmentOptional:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.shipment_optional_extra_type_0_type_0 import ShipmentOptionalExtraType0Type0  # noqa: PLC0415
+        from ..models.shipment_optional_extra_type_0_type_0 import ShipmentOptionalExtraType0Type0
 
         creation_date: None | str | Unset
         if isinstance(self.creation_date, Unset):
@@ -115,7 +115,7 @@ class ShipmentOptional:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.shipment_optional_extra_type_0_type_0 import ShipmentOptionalExtraType0Type0  # noqa: PLC0415
+        from ..models.shipment_optional_extra_type_0_type_0 import ShipmentOptionalExtraType0Type0
 
         d = dict(src_dict)
 

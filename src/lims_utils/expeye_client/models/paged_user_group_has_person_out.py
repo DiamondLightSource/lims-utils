@@ -56,7 +56,7 @@ class PagedUserGroupHasPersonOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.user_group_has_person_out import UserGroupHasPersonOut  # noqa: PLC0415
+        from ..models.user_group_has_person_out import UserGroupHasPersonOut
 
         d = dict(src_dict)
         items = []

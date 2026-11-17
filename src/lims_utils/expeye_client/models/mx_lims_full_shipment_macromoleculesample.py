@@ -27,7 +27,7 @@ class MxLimsFullShipmentMacromoleculesample:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_macromolecule_sample import MxLimsMacromoleculeSample  # noqa: PLC0415
+        from ..models.mx_lims_macromolecule_sample import MxLimsMacromoleculeSample
 
         d = dict(src_dict)
         mx_lims_full_shipment_macromoleculesample = cls()

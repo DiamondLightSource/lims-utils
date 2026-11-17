@@ -31,7 +31,7 @@ class PagedUnionSessionEventOutSessionEventWithChildrenOut:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.session_event_out import SessionEventOut  # noqa: PLC0415
+        from ..models.session_event_out import SessionEventOut
 
         items = []
         for items_item_data in self.items:
@@ -64,8 +64,8 @@ class PagedUnionSessionEventOutSessionEventWithChildrenOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.session_event_out import SessionEventOut  # noqa: PLC0415
-        from ..models.session_event_with_children_out import SessionEventWithChildrenOut  # noqa: PLC0415
+        from ..models.session_event_out import SessionEventOut
+        from ..models.session_event_with_children_out import SessionEventWithChildrenOut
 
         d = dict(src_dict)
         items = []

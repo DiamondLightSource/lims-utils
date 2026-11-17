@@ -56,7 +56,7 @@ class PagedDiffractionPlanOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.diffraction_plan_out import DiffractionPlanOut  # noqa: PLC0415
+        from ..models.diffraction_plan_out import DiffractionPlanOut
 
         d = dict(src_dict)
         items = []

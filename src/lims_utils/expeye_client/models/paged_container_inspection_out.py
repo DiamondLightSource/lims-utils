@@ -56,7 +56,7 @@ class PagedContainerInspectionOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.container_inspection_out import ContainerInspectionOut  # noqa: PLC0415
+        from ..models.container_inspection_out import ContainerInspectionOut
 
         d = dict(src_dict)
         items = []

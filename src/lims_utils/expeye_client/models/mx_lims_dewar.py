@@ -74,9 +74,9 @@ class MxLimsDewar:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.mx_lims_dewar_containerref import MxLimsDewarContainerref  # noqa: PLC0415
-        from ..models.mx_lims_dewar_identifiers import MxLimsDewarIdentifiers  # noqa: PLC0415
-        from ..models.mx_lims_dewar_urls import MxLimsDewarUrls  # noqa: PLC0415
+        from ..models.mx_lims_dewar_containerref import MxLimsDewarContainerref
+        from ..models.mx_lims_dewar_identifiers import MxLimsDewarIdentifiers
+        from ..models.mx_lims_dewar_urls import MxLimsDewarUrls
 
         d = dict(src_dict)
         mxlims_type = d.pop("mxlimsType")
