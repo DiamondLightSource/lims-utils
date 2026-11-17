@@ -1,0 +1,71 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any, Literal, TypeVar, cast
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+T = TypeVar("T", bound="PersonListStr")
+
+
+@_attrs_define
+class PersonListStr:
+    """
+    Attributes:
+        persons (list[str]):
+        person_as (Literal['fedId']):
+    """
+
+    persons: list[str]
+    person_as: Literal["fedId"]
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        persons = self.persons
+
+        person_as = self.person_as
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "persons": persons,
+                "personAs": person_as,
+            }
+        )
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
+        persons = cast(list[str], d.pop("persons"))
+
+        person_as = cast(Literal["fedId"], d.pop("personAs"))
+        if person_as != "fedId":
+            raise ValueError(f"personAs must match const 'fedId', got '{person_as}'")
+
+        person_list_str = cls(
+            persons=persons,
+            person_as=person_as,
+        )
+
+        person_list_str.additional_properties = d
+        return person_list_str
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties
