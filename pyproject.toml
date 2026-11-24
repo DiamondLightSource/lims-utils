@@ -13,7 +13,7 @@ classifiers = [
 ]
 description = "Commonly used utility functions for Expeye and adjacent projects/APIs."
 dependencies = [
-    "SQLAlchemy~=2.0.16",
+    "SQLAlchemy~=2.1.9",
     "pydantic>=2.8.2,<2.15.0",
     "fastapi>=0.104.1,<0.163.0",
     "pydantic-settings>=2.1,<2.16",
