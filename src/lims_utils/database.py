@@ -66,7 +66,7 @@ class Database:
         else:
             total = self.fast_count(query)
 
-        data: Sequence[Row[Tuple[T]]] | Sequence[T] = []
+        data: Sequence[Row[Tuple[T]]] | Sequence[T] | Sequence[Tuple[T]] = []
 
         if total:
             if page < 0:
